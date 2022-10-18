@@ -218,8 +218,31 @@ get_commit_hash <- function() {
 
 #' @title Checkout GitHub files
 #'
-#' @description checkout anything created by the app. It prevents errors when
+#' @description Checkout anything created by the app. It prevents errors when
 #' changing branches
 checkout_files <- function() {
   system("git checkout .")
+}
+
+#' @title Check and restore renv
+#'
+#' @description Check whether renv is in use in the current branch. Raise error
+#' if renv is not in use or apply renv:restore() in the case the package is
+#' present
+#'
+#' @param branch Commit hash code or branch name. Useful to create an
+#' informative error message
+#' @importFrom glue glue
+#' @importFrom renv activate restore
+restore_env <- function(branch) {
+  # handling renv
+  tryCatch(
+    expr = {
+      activate()
+      restore()
+    },
+    error = function(e) {
+      stop(glue("Unexpected error activating renv in branch {branch}: {e}\n"))
+    }
+  )
 }
