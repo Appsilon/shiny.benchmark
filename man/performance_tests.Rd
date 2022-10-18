@@ -10,6 +10,7 @@ performance_tests(
   shinytest2_dir = NULL,
   app_dir = getwd(),
   port = 3333,
+  use_renv = TRUE,
   debug = FALSE
 )
 }
@@ -23,6 +24,10 @@ performance_tests(
 \item{app_dir}{The path to the application root}
 
 \item{port}{Port to run the app}
+
+\item{use_renv}{In case it is set as TRUE, package will try to apply
+renv::restore() in all branches. Otherwise, the current loaded list of
+packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

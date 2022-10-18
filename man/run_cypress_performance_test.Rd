@@ -4,7 +4,13 @@
 \alias{run_cypress_performance_test}
 \title{Run the performance test based on a single commit using Cypress}
 \usage{
-run_cypress_performance_test(commit, project_path, cypress_file, debug)
+run_cypress_performance_test(
+  commit,
+  project_path,
+  cypress_file,
+  use_renv,
+  debug
+)
 }
 \arguments{
 \item{commit}{A commit hash code or a branch's name}
@@ -12,6 +18,10 @@ run_cypress_performance_test(commit, project_path, cypress_file, debug)
 \item{project_path}{The path to the project with all needed packages installed}
 
 \item{cypress_file}{The path to the .js file conteining cypress tests to be recorded}
+
+\item{use_renv}{In case it is set as TRUE, package will try to apply
+renv::restore() in all branches. Otherwise, the current loaded list of
+packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
