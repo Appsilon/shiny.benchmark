@@ -1,3 +1,18 @@
+#' @title Create a temporary directory to store everything needed by shinytest2
+#'
+#' @param shinytest2_dir The path to the shinytest2 tests
+create_shinytest2_structure <- function(shinytest2_dir) {
+  # temp dir to run the tests
+  dir_tests <- tempdir()
+
+  # copy everything to the temporary directory
+  system(glue("cp -r {shinytest2_dir} {dir_tests}"))
+
+  # returning the project folder
+  message(glue("Structure created at {dir_tests}"))
+  return(dir_tests)
+}
+
 #' @title Create a temporary directory to store everything needed by Cypress
 #'
 #' @param app_dir The path to the application root
@@ -5,16 +20,16 @@
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom jsonlite write_json
-create_tests_structure <- function(app_dir, port, debug) {
+create_cypress_structure <- function(app_dir, port, debug) {
   # temp dir to run the tests
-  dir_cypress <- tempdir()
+  dir_tests <- tempdir()
 
   # node path
-  node_path <- file.path(dir_cypress, "node")
+  node_path <- file.path(dir_tests, "node")
   root_path <- file.path(node_path, "root")
 
   # test path
-  tests_path <- file.path(dir_cypress, "tests")
+  tests_path <- file.path(dir_tests, "tests")
   cypress_path <- file.path(tests_path, "cypress")
   integration_path <- file.path(cypress_path, "integration")
   plugins_path <- file.path(cypress_path, "plugins")
@@ -27,7 +42,7 @@ create_tests_structure <- function(app_dir, port, debug) {
   dir.create(path = plugins_path, showWarnings = FALSE)
 
   # create a path root linked to the main directory app
-  symlink_cmd <- glue("cd {dir_cypress}; ln -s {app_dir} {root_path}")
+  symlink_cmd <- glue("cd {dir_tests}; ln -s {app_dir} {root_path}")
   system(symlink_cmd)
 
   # create the packages.json file
@@ -50,14 +65,14 @@ create_tests_structure <- function(app_dir, port, debug) {
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # returning the project folder
-  message(glue("Structure created at {dir_cypress}"))
-
-  return(dir_cypress)
+  message(glue("Structure created at {dir_tests}"))
+  return(dir_tests)
 }
 
 #' @title Create the list of needed libraries
 #'
 #' @param tests_path The path to project
+#' @param port Port to run the app
 create_node_list <- function(tests_path, port) {
   json_list <- list(
     private = TRUE,
@@ -78,6 +93,7 @@ create_node_list <- function(tests_path, port) {
 #' @title Create the cypress configuration list
 #'
 #' @param plugins_file The path to the Cypress plugins
+#' @param port Port to run the app
 create_cypress_list <- function(plugins_file, port) {
   json_list <- list(
     baseUrl = glue("http://localhost:{port}"),
