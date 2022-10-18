@@ -17,5 +17,9 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
+Suggests:
+  lintr,
+  rcmdcheck,
+  testthat
 Depends:
   R (>= 3.1.0)
