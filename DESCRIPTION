@@ -1,6 +1,6 @@
 Package: shiny.performance
 Title: Compare performance of several versions of a shiny app
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
   c(
     person(given = "Douglas", family = "Azevedo", email = "douglas@appsilon.com", role = "aut"),
@@ -23,6 +23,8 @@ Imports:
   git2r,
   glue,
   jsonlite,
-  stringr
+  shinytest2,
+  stringr,
+  testthat
 Suggests:
   knitr
