@@ -1,4 +1,4 @@
-### Link to issue
+### Link to the Issue
 
 ...
 
