@@ -60,6 +60,7 @@ performance_tests <- function(commit_list, cypress_file, app_dir = getwd(), port
 #' @param txt_file The path to the file where it is aimed to save the times
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom utils read.table
 #' @export
 run_performance_test <- function(commit, project_path, cypress_file, txt_file, debug) {
   files <- create_cypress_tests(project_path = project_path, cypress_file = cypress_file)
