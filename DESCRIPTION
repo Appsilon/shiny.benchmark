@@ -8,14 +8,21 @@ Authors@R:
     person("Developers", "Appsilon", email = "support+opensource@appsilon.com", role = "cre"),
     person(family = "Appsilon Sp. z o.o.", role = "cph")
   )
-Description: Compare performance of several versions of a shiny app based on commit hashs
-License: LGPL-3 + file LICENSE
+Description: Compare performance of several versions of a shiny app based on commit hashs.
+License: LGPL-3
 URL: https://github.com/Appsilon/shiny.performance
 SystemRequirements: yarn 1.22.17 or higher, cypress 9.4.1 or higher, xvfb
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr
 Depends:
   R (>= 3.1.0)
+Imports:
+  git2r,
+  glue,
+  jsonlite,
+  stringr
+Suggests:
+  knitr
