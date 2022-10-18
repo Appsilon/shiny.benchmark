@@ -223,3 +223,12 @@ get_commit_hash <- function() {
 checkout_files <- function() {
   system("git checkout .")
 }
+
+#' @title Checkout GitHub branch
+#'
+#' @description checkout and go to a different branch
+checkout <- function(branch) {
+  system(
+    glue("git checkout {branch}")
+  )
+}

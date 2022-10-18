@@ -7,8 +7,6 @@
 #' @param port Port to run the app
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
-#' @importFrom git2r checkout
-#'
 #' @export
 performance_tests <- function(
     commit_list,
