@@ -5,6 +5,9 @@
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' @param app_dir The path to the application root
 #' @param port Port to run the app
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom git2r checkout
@@ -16,6 +19,7 @@ performance_tests <- function(
     shinytest2_dir = NULL,
     app_dir = getwd(),
     port = 3333,
+    use_renv = TRUE,
     debug = FALSE
 ) {
   # Test whether we have everything we need
@@ -48,6 +52,7 @@ performance_tests <- function(
           FUN = run_cypress_performance_test,
           project_path = project_path,
           cypress_file = cypress_file_cp,
+          use_renv = use_renv,
           debug = debug
         )
       },
@@ -55,8 +60,10 @@ performance_tests <- function(
         message(e)
       },
       finally = {
+        # Restore initital setup
         checkout(branch = current_branch)
         message(glue("Switched back to {current_branch}"))
+        if (use_renv) restore_env(branch = current_branch)
 
         # Cleaning the temporary directory
         unlink(
@@ -80,6 +87,7 @@ performance_tests <- function(
           FUN = run_shinytest2_performance_test,
           app_dir = app_dir,
           project_path = project_path,
+          use_renv = use_renv,
           debug = debug
         )
       },
@@ -87,8 +95,10 @@ performance_tests <- function(
         message(e)
       },
       finally = {
+        # Restore initital setup
         checkout(branch = current_branch)
         message(glue("Switched back to {current_branch}"))
+        if (use_renv) restore_env(branch = current_branch)
 
         # Cleaning the temporary directory
         unlink(x = file.path(project_path, "tests"), recursive = TRUE)
@@ -104,10 +114,14 @@ performance_tests <- function(
 #' @param commit A commit hash code or a branch's name
 #' @param project_path The path to the project with all needed packages installed
 #' @param cypress_file The path to the .js file conteining cypress tests to be recorded
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
-run_cypress_performance_test <- function(commit, project_path, cypress_file, debug) {
+run_cypress_performance_test <- function(commit, project_path, cypress_file, use_renv, debug) {
+  # create cypress test structure
   files <- create_cypress_tests(project_path = project_path, cypress_file = cypress_file)
   js_file <- files$js_file
   txt_file <- files$txt_file
@@ -116,6 +130,9 @@ run_cypress_performance_test <- function(commit, project_path, cypress_file, deb
   checkout(branch = commit)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
+
+  # check if we are able to restore packages using renv
+  if (use_renv) restore_env(branch = commit)
 
   # run tests there
   command <- glue("cd {project_path}; set -eu; exec yarn --cwd node performance-test")
@@ -142,16 +159,22 @@ run_cypress_performance_test <- function(commit, project_path, cypress_file, deb
 #' @param project_path The path to the project with all needed packages installed
 #' @param cypress_file The path to the .js file conteining cypress tests to be recorded
 #' @param txt_file The path to the file where it is aimed to save the times
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom testthat ListReporter
 #' @importFrom shinytest2 test_app
 #' @export
-run_shinytest2_performance_test <- function(commit, app_dir, project_path, debug) {
+run_shinytest2_performance_test <- function(commit, app_dir, project_path, use_renv, debug) {
   # checkout to the desired commit
   checkout(branch = commit)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
+
+  # check if we are able to restore packages using renv
+  if (use_renv) restore_env(branch = commit)
 
   # run tests there
   my_reporter <- ListReporter$new()
