@@ -7,9 +7,11 @@
 create_cypress_tests(project_path, cypress_file)
 }
 \arguments{
-\item{project_path}{The path to the project with all needed packages installed}
+\item{project_path}{The path to the project with all needed packages
+installed}
 
-\item{cypress_file}{The path to the .js file conteining cypress tests to be recorded}
+\item{cypress_file}{The path to the .js file conteining cypress tests to
+be recorded}
 }
 \description{
 Create the cypress files under project directory
