@@ -232,14 +232,15 @@ checkout_files <- function() {
 #'
 #' @param branch Commit hash code or branch name. Useful to create an
 #' informative error message
+#' @param renv_prompt Prompt the user before taking any action?
 #' @importFrom glue glue
 #' @importFrom renv activate restore
-restore_env <- function(branch) {
+restore_env <- function(branch, renv_prompt) {
   # handling renv
   tryCatch(
     expr = {
       activate()
-      restore()
+      restore(prompt = renv_prompt)
     },
     error = function(e) {
       stop(glue("Unexpected error activating renv in branch {branch}: {e}\n"))

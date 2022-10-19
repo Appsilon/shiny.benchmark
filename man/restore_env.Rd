@@ -4,11 +4,13 @@
 \alias{restore_env}
 \title{Check and restore renv}
 \usage{
-restore_env(branch)
+restore_env(branch, renv_prompt)
 }
 \arguments{
 \item{branch}{Commit hash code or branch name. Useful to create an
 informative error message}
+
+\item{renv_prompt}{Prompt the user before taking any action?}
 }
 \description{
 Check whether renv is in use in the current branch. Raise error

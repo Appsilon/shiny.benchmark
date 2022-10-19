@@ -11,6 +11,7 @@ performance_tests(
   app_dir = getwd(),
   port = 3333,
   use_renv = TRUE,
+  renv_prompt = TRUE,
   debug = FALSE
 )
 }
@@ -28,6 +29,8 @@ performance_tests(
 \item{use_renv}{In case it is set as TRUE, package will try to apply
 renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
+
+\item{renv_prompt}{Prompt the user before taking any action?}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
