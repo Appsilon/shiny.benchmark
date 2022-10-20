@@ -7,7 +7,7 @@
 create_shinytest2_structure(app_dir)
 }
 \arguments{
-\item{app_dir}{}
+\item{app_dir}{The path to the application root}
 }
 \description{
 Create a temporary directory to store everything needed by shinytest2

@@ -1,6 +1,6 @@
 #' @title Create a temporary directory to store everything needed by shinytest2
 #'
-#' @param app_dir
+#' @param app_dir The path to the application root
 #'
 #' @importFrom glue glue
 create_shinytest2_structure <- function(app_dir) {
