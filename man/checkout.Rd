@@ -6,6 +6,9 @@
 \usage{
 checkout(branch)
 }
+\arguments{
+\item{branch}{Commit hash code or branch name}
+}
 \description{
 checkout and go to a different branch
 }

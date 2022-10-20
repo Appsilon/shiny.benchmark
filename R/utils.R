@@ -248,6 +248,8 @@ checkout_files <- function() {
 #' @title Checkout GitHub branch
 #'
 #' @description checkout and go to a different branch
+#'
+#' @param branch Commit hash code or branch name
 checkout <- function(branch) {
   system(
     glue("git checkout {branch}")

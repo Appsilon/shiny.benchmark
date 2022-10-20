@@ -11,7 +11,8 @@ run_shinytest2_ptest(commit, app_dir, project_path, debug)
 
 \item{app_dir}{The path to the application root}
 
-\item{project_path}{The path to the project with all needed packages installed}
+\item{project_path}{The path to the project with all needed
+packages installed}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
