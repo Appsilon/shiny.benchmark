@@ -10,17 +10,22 @@
 #' @export
 ptest_shinytest2 <- function(commit_list, shinytest2_dir, app_dir, debug) {
   # creating the structure
-  project_path <- create_shinytest2_structure(shinytest2_dir = shinytest2_dir)
+  project_path <- create_shinytest2_structure(app_dir = app_dir)
+
+  # getting the current branch
+  current_branch <- get_commit_hash()
 
   # apply the tests for each branch/commit
   perf_list <- tryCatch(
     expr = {
-      lapply(
-        X = commit_list,
+      mapply(
+        commit_list,
+        shinytest2_dir,
         FUN = run_shinytest2_ptest,
         app_dir = app_dir,
         project_path = project_path,
-        debug = debug
+        debug = debug,
+        SIMPLIFY = FALSE
       )
     },
     error = function(e) {
@@ -42,23 +47,26 @@ ptest_shinytest2 <- function(commit_list, shinytest2_dir, app_dir, debug) {
 #'
 #' @param commit A commit hash code or a branch's name
 #' @param app_dir The path to the application root
-#' @param project_path The path to the project with all needed
-#' packages installed
+#' @param project_path The path to the project
+#' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom testthat ListReporter
 #' @importFrom shinytest2 test_app
 #' @export
-run_shinytest2_ptest <- function(commit, app_dir, project_path, debug) {
+run_shinytest2_ptest <- function(commit, project_path, app_dir, shinytest2_dir, debug) {
   # checkout to the desired commit
   checkout(branch = commit)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
 
+  # move test files to the project folder
+  tests_dir <- move_shinytest2_tests(project_path = project_path, shinytest2_dir = shinytest2_dir)
+
   # run tests there
   my_reporter <- ListReporter$new()
   test_app(
-    app_dir = app_dir,
+    app_dir = dirname(tests_dir),
     reporter = my_reporter,
     stop_on_failure = FALSE,
     stop_on_warning = FALSE

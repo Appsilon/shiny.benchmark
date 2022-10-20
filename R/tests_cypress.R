@@ -17,15 +17,19 @@ ptest_cypress <- function(commit_list, cypress_file, app_dir, port, debug) {
     debug = debug
   )
 
+  # getting the current branch
+  current_branch <- get_commit_hash()
+
   # apply the tests for each branch/commit
   perf_list <- tryCatch(
     expr = {
       mapply(
         commit_list,
         cypress_file,
-        FUN = run_cypress_performance_test,
+        FUN = run_cypress_ptest,
         project_path = project_path,
-        debug = debug
+        debug = debug,
+        SIMPLIFY = FALSE
       )
     },
     error = function(e) {
@@ -61,6 +65,12 @@ ptest_cypress <- function(commit_list, cypress_file, app_dir, port, debug) {
 #' @importFrom utils read.table
 #' @export
 run_cypress_ptest <- function(commit, project_path, cypress_file, debug) {
+  # checkout to the desired commit
+  checkout(branch = commit)
+  date <- get_commit_date(branch = commit)
+  message(glue("Switched to {commit}"))
+
+  # get Cypress files
   files <- create_cypress_tests(
     project_path = project_path,
     cypress_file = cypress_file
@@ -68,11 +78,6 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, debug) {
 
   js_file <- files$js_file
   txt_file <- files$txt_file
-
-  # checkout to the desired commit
-  checkout(branch = commit)
-  date <- get_commit_date(branch = commit)
-  message(glue("Switched to {commit}"))
 
   # run tests there
   command <- glue(
