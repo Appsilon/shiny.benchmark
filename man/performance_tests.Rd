@@ -18,9 +18,10 @@ performance_tests(
 else you can use with git checkout \link{...}}
 
 \item{cypress_file}{The path to the .js file containing cypress tests to
-be recorded}
+be recorded. It can also be a vector of the same size of commit_list}
 
-\item{shinytest2_dir}{The directory with tests recorded by shinytest2}
+\item{shinytest2_dir}{The directory with tests recorded by shinytest2
+It can also be a vector of the same size of commit_list}
 
 \item{app_dir}{The path to the application root}
 
