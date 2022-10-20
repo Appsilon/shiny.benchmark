@@ -3,7 +3,6 @@
 export(performance_tests)
 export(run_cypress_ptest)
 export(run_shinytest2_ptest)
-importFrom(git2r,checkout)
 importFrom(glue,glue)
 importFrom(jsonlite,write_json)
 importFrom(shinytest2,test_app)
