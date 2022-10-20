@@ -26,7 +26,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # node path
   node_path <- file.path(dir_tests, "node")
-  root_path <- file.path(node_path, "root")
+  root_path <- file.path(node_path, "root") # nolint
 
   # test path
   tests_path <- file.path(dir_tests, "tests")
@@ -72,11 +72,14 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #' @title Create the list of needed libraries
 #'
 #' @param tests_path The path to project
+#' @param port Port to run the app
 create_node_list <- function(tests_path, port) {
   json_list <- list(
     private = TRUE,
     scripts = list(
-      "performance-test" = glue("start-server-and-test run-app http://localhost:{port} run-cypress"),
+      "performance-test" = glue(
+        "start-server-and-test run-app http://localhost:{port} run-cypress"
+      ),
       "run-app" = glue("cd root && Rscript -e 'shiny::runApp(port = {port})'"),
       "run-cypress" = glue("cypress run --project {tests_path}")
     ),
@@ -92,6 +95,7 @@ create_node_list <- function(tests_path, port) {
 #' @title Create the cypress configuration list
 #'
 #' @param plugins_file The path to the Cypress plugins
+#' @param port Port to run the app
 create_cypress_list <- function(plugins_file, port) {
   json_list <- list(
     baseUrl = glue("http://localhost:{port}"),
@@ -109,7 +113,11 @@ create_cypress_plugins <- function() {
   module.exports = (on, config) => {
     on('task', {
       performanceTimes (attributes) {
-        fs.writeFile(attributes.fileOut, `${ attributes.title }; ${ attributes.duration }\n`, { flag: 'a' })
+        fs.writeFile(
+          attributes.fileOut,
+          `${ attributes.title }; ${ attributes.duration }\n`,
+          { flag: 'a' }
+        )
         return null
       }
     })
@@ -120,11 +128,20 @@ create_cypress_plugins <- function() {
 
 #' @title Create the cypress files under project directory
 #'
-#' @param project_path The path to the project with all needed packages installed
-#' @param cypress_file The path to the .js file conteining cypress tests to be recorded
+#' @param project_path The path to the project with all needed packages
+#' installed
+#' @param cypress_file The path to the .js file conteining cypress tests to
+#' be recorded
 create_cypress_tests <- function(project_path, cypress_file) {
   # creating a copy to be able to edit the js file
-  js_file <- file.path(project_path, "tests", "cypress", "integration", "app.spec.js")
+  js_file <- file.path(
+    project_path,
+    "tests",
+    "cypress",
+    "integration",
+    "app.spec.js"
+  )
+
   file.copy(from = cypress_file, to = js_file, overwrite = TRUE)
 
   # file to store the times
@@ -200,7 +217,11 @@ get_commit_hash <- function() {
   )
 
   branch <- str_trim(
-    string = gsub(x = branch[length(branch)], pattern = "\\*\\s", replacement = ""),
+    string = gsub(
+      x = branch[length(branch)],
+      pattern = "\\*\\s",
+      replacement = ""
+    ),
     side = "both"
   )
 
@@ -245,5 +266,16 @@ restore_env <- function(branch, renv_prompt) {
     error = function(e) {
       stop(glue("Unexpected error activating renv in branch {branch}: {e}\n"))
     }
+  )
+}
+
+#' @title Checkout GitHub branch
+#'
+#' @description checkout and go to a different branch
+#'
+#' @param branch Commit hash code or branch name
+checkout <- function(branch) {
+  system(
+    glue("git checkout {branch}")
   )
 }

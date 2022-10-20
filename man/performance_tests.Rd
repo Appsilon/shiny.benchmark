@@ -16,9 +16,11 @@ performance_tests(
 )
 }
 \arguments{
-\item{commit_list}{A list of commit hash codes, branches' names or anything else you can use with git checkout \link{...}}
+\item{commit_list}{A list of commit hash codes, branches' names or anything
+else you can use with git checkout \link{...}}
 
-\item{cypress_file}{The path to the .js file containing cypress tests to be recorded}
+\item{cypress_file}{The path to the .js file containing cypress tests
+to be recorded}
 
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2}
 
