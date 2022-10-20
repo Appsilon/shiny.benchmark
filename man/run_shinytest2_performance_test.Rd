@@ -9,13 +9,11 @@ run_shinytest2_performance_test(commit, app_dir, project_path, debug)
 \arguments{
 \item{commit}{A commit hash code or a branch's name}
 
+\item{app_dir}{The path to the application root}
+
 \item{project_path}{The path to the project with all needed packages installed}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
-
-\item{cypress_file}{The path to the .js file conteining cypress tests to be recorded}
-
-\item{txt_file}{The path to the file where it is aimed to save the times}
 }
 \description{
 Run the performance test based on a single commit using shinytest2

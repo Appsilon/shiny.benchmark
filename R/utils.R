@@ -72,6 +72,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #' @title Create the list of needed libraries
 #'
 #' @param tests_path The path to project
+#' @param port Port to run the app
 create_node_list <- function(tests_path, port) {
   json_list <- list(
     private = TRUE,
@@ -92,6 +93,7 @@ create_node_list <- function(tests_path, port) {
 #' @title Create the cypress configuration list
 #'
 #' @param plugins_file The path to the Cypress plugins
+#' @param port Port to run the app
 create_cypress_list <- function(plugins_file, port) {
   json_list <- list(
     baseUrl = glue("http://localhost:{port}"),

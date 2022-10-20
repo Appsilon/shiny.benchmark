@@ -8,6 +8,8 @@ create_node_list(tests_path, port)
 }
 \arguments{
 \item{tests_path}{The path to project}
+
+\item{port}{Port to run the app}
 }
 \description{
 Create the list of needed libraries
