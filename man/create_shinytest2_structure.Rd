@@ -4,10 +4,10 @@
 \alias{create_shinytest2_structure}
 \title{Create a temporary directory to store everything needed by shinytest2}
 \usage{
-create_shinytest2_structure(shinytest2_dir)
+create_shinytest2_structure(app_dir)
 }
 \arguments{
-\item{shinytest2_dir}{The path to the shinytest2 tests}
+\item{app_dir}{}
 }
 \description{
 Create a temporary directory to store everything needed by shinytest2

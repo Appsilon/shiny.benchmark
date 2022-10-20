@@ -4,15 +4,16 @@
 \alias{run_shinytest2_ptest}
 \title{Run the performance test based on a single commit using shinytest2}
 \usage{
-run_shinytest2_ptest(commit, app_dir, project_path, debug)
+run_shinytest2_ptest(commit, project_path, app_dir, shinytest2_dir, debug)
 }
 \arguments{
 \item{commit}{A commit hash code or a branch's name}
 
+\item{project_path}{The path to the project}
+
 \item{app_dir}{The path to the application root}
 
-\item{project_path}{The path to the project with all needed
-packages installed}
+\item{shinytest2_dir}{The directory with tests recorded by shinytest2}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
