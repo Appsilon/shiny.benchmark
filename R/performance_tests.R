@@ -114,6 +114,7 @@ performance_tests <- function(
 #' be recorded
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom utils read.table
 #' @export
 run_cypress_ptest <- function(commit, project_path, cypress_file, debug) {
   files <- create_cypress_tests(
@@ -154,11 +155,8 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, debug) {
 #' @title Run the performance test based on a single commit using shinytest2
 #'
 #' @param commit A commit hash code or a branch's name
-#' @param project_path The path to the project with all needed packages
-#' installed
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
-#' @param txt_file The path to the file where it is aimed to save the times
+#' @param app_dir The path to the application root
+#' @param project_path The path to the project with all needed packages installed
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom testthat ListReporter

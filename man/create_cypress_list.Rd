@@ -8,6 +8,8 @@ create_cypress_list(plugins_file, port)
 }
 \arguments{
 \item{plugins_file}{The path to the Cypress plugins}
+
+\item{port}{Port to run the app}
 }
 \description{
 Create the cypress configuration list
