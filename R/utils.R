@@ -3,7 +3,7 @@
 #' @param shinytest2_dir The path to the shinytest2 tests
 create_shinytest2_structure <- function(shinytest2_dir) {
   # temp dir to run the tests
-  if (Sys.getenv("shiny_pergformance_run_mode") == "github_actions") {
+  if (Sys.getenv("shiny_pergformance_run_mode") != "github_actions") {
     dir_tests <- tempdir()
   } else {
     dir.create("github_actions")
@@ -27,7 +27,7 @@ create_shinytest2_structure <- function(shinytest2_dir) {
 #' @importFrom jsonlite write_json
 create_cypress_structure <- function(app_dir, port, debug) {
   # temp dir to run the tests
-  if (Sys.getenv("shiny_pergformance_run_mode") == "github_actions") {
+  if (Sys.getenv("shiny_pergformance_run_mode") != "github_actions") {
     dir_tests <- tempdir()
   } else {
     dir.create("github_actions")
