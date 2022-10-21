@@ -42,12 +42,10 @@ jobs:
           bash ./../setting_branches.sh
 
       - name: Install shiny.performance
+        working-directory: ../../../../
         if: ${{ !env.ACT }}
         run: |
-          git clone git@github.com:Appsilon/experimental.performance.git
-          cd experimental.performance
-          R -q --vanilla -e 'devtools::install_local(path = ".", upgrade = "never")'
-          cd .. && rm -rf experimental.performance
+          R CMD build .
 
       - name: Check basic functionality
         run: |
