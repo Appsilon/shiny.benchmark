@@ -4,7 +4,15 @@
 \alias{run_shinytest2_ptest}
 \title{Run the performance test based on a single commit using shinytest2}
 \usage{
-run_shinytest2_ptest(commit, project_path, app_dir, shinytest2_dir, debug)
+run_shinytest2_ptest(
+  commit,
+  project_path,
+  app_dir,
+  shinytest2_dir,
+  use_renv,
+  renv_prompt,
+  debug
+)
 }
 \arguments{
 \item{commit}{A commit hash code or a branch's name}
@@ -14,6 +22,12 @@ run_shinytest2_ptest(commit, project_path, app_dir, shinytest2_dir, debug)
 \item{app_dir}{The path to the application root}
 
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2}
+
+\item{use_renv}{In case it is set as TRUE, package will try to apply
+renv::restore() in all branches. Otherwise, the current loaded list of
+packages will be used in all branches.}
+
+\item{renv_prompt}{Prompt the user before taking any action?}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

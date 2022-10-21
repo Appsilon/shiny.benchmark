@@ -2,12 +2,16 @@
 #'
 #' @param commit_list A list of commit hash codes, branches' names or anything
 #' else you can use with git checkout [...]
-#' @param cypress_file The path to the .js file containing cypress tests to
-#' be recorded. It can also be a vector of the same size of commit_list
+#' @param cypress_file The path to the .js file containing cypress tests
+#' to be recorded. It can also be a vector of the same size of commit_list
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' It can also be a vector of the same size of commit_list
 #' @param app_dir The path to the application root
 #' @param port Port to run the app
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
+#' @param renv_prompt Prompt the user before taking any action?
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
@@ -17,6 +21,8 @@ performance_tests <- function(
     shinytest2_dir = NULL,
     app_dir = getwd(),
     port = 3333,
+    use_renv = TRUE,
+    renv_prompt = TRUE,
     debug = FALSE
 ) {
   # Number of commits to test
@@ -46,6 +52,8 @@ performance_tests <- function(
       cypress_file = cypress_file,
       app_dir = app_dir,
       port = port,
+      use_renv = use_renv,
+      renv_prompt = renv_prompt,
       debug = debug
     )
   } else {
@@ -53,6 +61,8 @@ performance_tests <- function(
       commit_list,
       shinytest2_dir,
       app_dir,
+      use_renv = use_renv,
+      renv_prompt = renv_prompt,
       debug
     )
   }

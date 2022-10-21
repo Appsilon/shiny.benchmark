@@ -4,7 +4,15 @@
 \alias{ptest_cypress}
 \title{Run the performance test based on multiple commits using Cypress}
 \usage{
-ptest_cypress(commit_list, cypress_file, app_dir, port, debug)
+ptest_cypress(
+  commit_list,
+  cypress_file,
+  app_dir,
+  port,
+  use_renv,
+  renv_prompt,
+  debug
+)
 }
 \arguments{
 \item{commit_list}{A list of commit hash codes, branches' names or anything
@@ -16,6 +24,12 @@ be recorded}
 \item{app_dir}{The path to the application root}
 
 \item{port}{Port to run the app}
+
+\item{use_renv}{In case it is set as TRUE, package will try to apply
+renv::restore() in all branches. Otherwise, the current loaded list of
+packages will be used in all branches.}
+
+\item{renv_prompt}{Prompt the user before taking any action?}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

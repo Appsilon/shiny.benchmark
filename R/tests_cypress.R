@@ -6,10 +6,22 @@
 #' be recorded
 #' @param app_dir The path to the application root
 #' @param port Port to run the app
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
+#' @param renv_prompt Prompt the user before taking any action?
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
-ptest_cypress <- function(commit_list, cypress_file, app_dir, port, debug) {
+ptest_cypress <- function(
+    commit_list,
+    cypress_file,
+    app_dir,
+    port,
+    use_renv,
+    renv_prompt,
+    debug
+) {
   # creating the structure
   project_path <- create_cypress_structure(
     app_dir = app_dir,
@@ -36,8 +48,13 @@ ptest_cypress <- function(commit_list, cypress_file, app_dir, port, debug) {
       message(e)
     },
     finally = {
+      # Checkout to the main branch
       checkout(branch = current_branch)
       message(glue("Switched back to {current_branch}"))
+
+      # Restore renv
+      if (use_renv)
+        restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
       unlink(
@@ -60,15 +77,27 @@ ptest_cypress <- function(commit_list, cypress_file, app_dir, port, debug) {
 #' installed
 #' @param cypress_file The path to the .js file conteining cypress tests to
 #' be recorded
+#' @param use_renv In case it is set as TRUE, package will try to apply
+#' renv::restore() in all branches. Otherwise, the current loaded list of
+#' packages will be used in all branches.
+#' @param renv_prompt Prompt the user before taking any action?
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom utils read.table
 #' @export
-run_cypress_ptest <- function(commit, project_path, cypress_file, debug) {
+run_cypress_ptest <- function(
+    commit,
+    project_path,
+    cypress_file,
+    use_renv,
+    renv_prompt,
+    debug
+) {
   # checkout to the desired commit
   checkout(branch = commit)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
+  if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
   # get Cypress files
   files <- create_cypress_tests(
