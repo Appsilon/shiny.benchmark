@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# global varuable for testing
+export shiny_pergformance_run_mode=github_actions
+
 # starting
 git init
 
@@ -35,3 +38,6 @@ R -e 'renv::install("shiny@1.7.0")'
 R -e 'renv::snapshot()'
 git add .
 git commit -m "downgrading shiny"
+
+## Switching back to master
+git checkout master
