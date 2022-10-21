@@ -2,6 +2,7 @@
 
 # starting
 git init
+git config --global advice.detachedHead false
 
 # credentials
 git config --local user.name "$GITHUB_ACTOR"
