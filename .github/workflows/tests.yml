@@ -42,10 +42,9 @@ jobs:
           bash ./../setting_branches.sh
 
       - name: Install shiny.performance
-        working-directory: ../../../../
-        if: ${{ !env.ACT }}
         run: |
-          R CMD build .
+          ls
+          R CMD build ../../../../.
 
       - name: Check basic functionality
         run: |
