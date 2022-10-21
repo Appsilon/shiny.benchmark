@@ -32,12 +32,15 @@ jobs:
 
       - name: Create app structure
         if: always()
-        shell: git status # test
+        run: |
+          bash tests/setting_branches.sh
 
       - name: Check basic functionality
         if: always()
-        shell: Rscript tests/run_tests.R cypress master,develop app/tests/cypress_tests1.js
+        run: |
+          Rscript tests/run_tests.R cypress master,develop app/tests/cypress_tests1.js
 
       - name: Check it again for fun
         if: always()
-        shell: Rscript tests/run_tests.R cypress master,develop app/tests/cypress_tests1.js
+        run: |
+          Rscript tests/run_tests.R cypress master,develop app/tests/cypress_tests1.js

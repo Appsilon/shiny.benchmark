@@ -2,8 +2,6 @@
 args <- commandArgs(trailingOnly = TRUE)
 args <- strsplit(args, ",")
 
-stopifnot(T == F)
-
 # packages
 library(shiny)
 library(testthat)
