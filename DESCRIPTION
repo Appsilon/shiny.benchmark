@@ -26,6 +26,7 @@ Depends:
 Imports:
   glue,
   jsonlite,
+  renv,
   shinytest2,
   stringr,
   testthat
