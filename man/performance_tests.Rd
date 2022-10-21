@@ -10,6 +10,8 @@ performance_tests(
   shinytest2_dir = NULL,
   app_dir = getwd(),
   port = 3333,
+  use_renv = TRUE,
+  renv_prompt = TRUE,
   debug = FALSE
 )
 }
@@ -17,14 +19,20 @@ performance_tests(
 \item{commit_list}{A list of commit hash codes, branches' names or anything
 else you can use with git checkout \link{...}}
 
-\item{cypress_file}{The path to the .js file containing cypress tests to
-be recorded}
+\item{cypress_file}{The path to the .js file containing cypress tests
+to be recorded}
 
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2}
 
 \item{app_dir}{The path to the application root}
 
 \item{port}{Port to run the app}
+
+\item{use_renv}{In case it is set as TRUE, package will try to apply
+renv::restore() in all branches. Otherwise, the current loaded list of
+packages will be used in all branches.}
+
+\item{renv_prompt}{Prompt the user before taking any action?}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

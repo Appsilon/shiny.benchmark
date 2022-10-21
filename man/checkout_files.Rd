@@ -7,6 +7,6 @@
 checkout_files()
 }
 \description{
-checkout anything created by the app. It prevents errors when
+Checkout anything created by the app. It prevents errors when
 changing branches
 }
