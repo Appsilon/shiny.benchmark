@@ -2,10 +2,6 @@ on: push
 
 name: package-usage-tests
 
-defaults:
- run:
-  working-directory: ./.github/workflows/tests/app
-
 jobs:
   main:
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -36,15 +32,18 @@ jobs:
 
       - name: Create app structure
         if: always()
+        working-directory: ./.github/workflows/tests/app
         run: |
-          bash ../setting_branches.sh
+          bash ./../setting_branches.sh
 
       - name: Check basic functionality
         if: always()
+        working-directory: ./.github/workflows/tests/app
         run: |
-          Rscript ../run_tests.R cypress master,develop app/tests/cypress_tests1.js
+          Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js
 
       - name: Check it again for fun
         if: always()
+        working-directory: ./.github/workflows/tests/app
         run: |
-          Rscript ../run_tests.R cypress master,develop app/tests/cypress_tests1.js
+          Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js
