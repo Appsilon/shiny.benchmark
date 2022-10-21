@@ -20,6 +20,9 @@ jobs:
         config:
         - {os: ubuntu-22.04, r: 'release'}
 
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -39,8 +42,9 @@ jobs:
           bash ./../setting_branches.sh
 
       - name: Install shiny.performance
+        if: ${{ !env.ACT }}
         run: |
-          git clone https://github.com/Appsilon/experimental.performance.git
+          git clone git@github.com:Appsilon/experimental.performance.git
           cd experimental.performance
           R -q --vanilla -e 'devtools::install_local(path = ".", upgrade = "never")'
           cd .. && rm -rf experimental.performance
