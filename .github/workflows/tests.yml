@@ -33,8 +33,7 @@ jobs:
       - name: Check the WD
         if: always()
         run: |
-          pwd
-          ls
+          ls -a
 
       - name: Create app structure
         if: always()
