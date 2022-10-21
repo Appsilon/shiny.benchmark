@@ -34,17 +34,22 @@ jobs:
         if: always()
         working-directory: ./.github/workflows/tests/app
         run: |
-          ls -a ..
           bash ./../setting_branches.sh
 
       - name: Check basic functionality
         if: always()
         working-directory: ./.github/workflows/tests/app
         run: |
-          Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js
+          Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js FALSE
 
-      - name: Check it again for fun
+      - name: Check if it fails when renv not present
         if: always()
         working-directory: ./.github/workflows/tests/app
         run: |
-          Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js
+          Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,shiny2 app/tests/cypress_tests1.js FALSE
+
+      - name: Check if it can handle renv
+        if: always()
+        working-directory: ./.github/workflows/tests/app
+        run: |
+          Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,shiny2 app/tests/cypress_tests1.js TRUE

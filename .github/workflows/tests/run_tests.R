@@ -11,7 +11,7 @@ library(shiny.performance)
 type <- args[[1]]
 commit_list <- args[[2]]
 tests <- args[[3]]
-# use_renv <- args[[4]]
+use_renv <- args[[4]]
 
 if (type == "cypress") {
   # run performance check using Cypress
@@ -19,7 +19,7 @@ if (type == "cypress") {
     commit_list = commit_list,
     cypress_file = tests,
     app_dir = "./app/",
-    # use_renv = use_renv,
+    use_renv = use_renv,
     port = 3333,
     debug = FALSE
   )
@@ -29,7 +29,7 @@ if (type == "cypress") {
     commit_list = commit_list,
     shinytest2_dir = tests,
     app_dir = "./app/",
-    # use_renv = use_renv,
+    use_renv = use_renv,
     port = 3333,
     debug = FALSE
   )
