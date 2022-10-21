@@ -45,7 +45,8 @@ create_cypress_structure <- function(app_dir, port, debug) {
   plugins_path <- file.path(cypress_path, "plugins")
 
   # creating paths
-  dir.create(path = node_path, showWarnings = TRUE)
+  dir.create(path = node_path, showWarnings = FALSE)
+  file.exists(node_path)
   dir.create(path = tests_path, showWarnings = FALSE)
   dir.create(path = cypress_path, showWarnings = FALSE)
   dir.create(path = integration_path, showWarnings = FALSE)
