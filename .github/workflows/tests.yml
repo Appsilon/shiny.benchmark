@@ -2,6 +2,10 @@ on: push
 
 name: package-usage-tests
 
+defaults:
+ run:
+  working-directory: ./.github/workflows/tests/app
+
 jobs:
   main:
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -31,25 +35,24 @@ jobs:
           extra-packages: local::. # Necessary to avoid object usage linter errors.
 
       - name: Create app structure
-        if: always()
-        working-directory: ./.github/workflows/tests/app
         run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           bash ./../setting_branches.sh
 
+      - name: Install shiny.performance
+        run: |
+          R -e "install.packages('remotes')"
+          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', ref = 'develop')"
+
       - name: Check basic functionality
-        if: always()
-        working-directory: ./.github/workflows/tests/app
         run: |
           Rscript ./../run_tests.R cypress master,develop app/tests/cypress_tests1.js FALSE
 
       - name: Check if it fails when renv not present
-        if: always()
-        working-directory: ./.github/workflows/tests/app
         run: |
           Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,shiny2 app/tests/cypress_tests1.js FALSE
 
       - name: Check if it can handle renv
-        if: always()
-        working-directory: ./.github/workflows/tests/app
         run: |
           Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,shiny2 app/tests/cypress_tests1.js TRUE
