@@ -39,6 +39,7 @@ jobs:
         if: always()
         working-directory: ./.github/workflows/tests/app
         run: |
+          ls -a
           bash ./../setting_branches.sh
 
       - name: Check basic functionality
