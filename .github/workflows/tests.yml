@@ -6,6 +6,9 @@ defaults:
  run:
   working-directory: ./.github/workflows/tests/app
 
+env:
+  shiny_pergformance_run_mode: github_actions
+
 jobs:
   main:
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
@@ -40,7 +43,6 @@ jobs:
       - name: Create app structure
         run: |
           bash ./../setting_branches.sh
-          echo $shiny_pergformance_run_mode
 
       - name: Install shiny.performance
         run: |

@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# global varuable for testing
-export shiny_pergformance_run_mode=github_actions
-
 # starting
 git init
 
