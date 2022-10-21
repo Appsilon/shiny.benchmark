@@ -18,8 +18,9 @@ if (type == "cypress") {
   out <- shiny.performance::performance_tests(
     commit_list = commit_list,
     cypress_file = tests,
-    app_dir = "./app/",
+    app_dir = getwd(),
     use_renv = use_renv,
+    renv_prompt = FALSE,
     port = 3333,
     debug = FALSE
   )
@@ -28,8 +29,9 @@ if (type == "cypress") {
   out <- shiny.performance::performance_tests(
     commit_list = commit_list,
     shinytest2_dir = tests,
-    app_dir = "./app/",
+    app_dir = getwd(),
     use_renv = use_renv,
+    renv_prompt = FALSE,
     port = 3333,
     debug = FALSE
   )
@@ -37,4 +39,3 @@ if (type == "cypress") {
 
 # checks
 stopifnot(length(out) == length(commit_list))
-stopifnot(nrow(out[[1]]) == 0)
