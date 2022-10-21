@@ -35,6 +35,8 @@ ptest_shinytest2 <- function(
         FUN = run_shinytest2_ptest,
         app_dir = app_dir,
         project_path = project_path,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
         debug = debug,
         SIMPLIFY = FALSE
       )

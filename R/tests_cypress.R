@@ -40,6 +40,8 @@ ptest_cypress <- function(
         cypress_file,
         FUN = run_cypress_ptest,
         project_path = project_path,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
         debug = debug,
         SIMPLIFY = FALSE
       )
