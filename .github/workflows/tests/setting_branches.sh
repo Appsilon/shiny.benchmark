@@ -3,6 +3,10 @@
 # starting
 git init
 
+# credentials
+git config --local user.name "$GITHUB_ACTOR"
+git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
 # STANDARD FUNCTIONALITIES
 ## master
 git add .

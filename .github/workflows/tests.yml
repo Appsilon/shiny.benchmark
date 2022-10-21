@@ -36,8 +36,6 @@ jobs:
 
       - name: Create app structure
         run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           bash ./../setting_branches.sh
 
       - name: Install shiny.performance
