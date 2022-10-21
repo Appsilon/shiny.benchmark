@@ -41,7 +41,7 @@ performance_tests <- function(
   obj_name <- ifelse(type == "cypress", "cypress_file", "shinytest2_dir")
 
   if (length(get(obj_name)) == 1)
-    assign(obj_name, rep(cypress_file, n_commits))
+    assign(obj_name, rep(get(obj_name), n_commits))
   if (length(get(obj_name)) != n_commits)
     stop("You must provide 1 or {n_commits} paths for {obj_name}")
 
@@ -63,7 +63,7 @@ performance_tests <- function(
       app_dir,
       use_renv = use_renv,
       renv_prompt = renv_prompt,
-      debug
+      debug = debug
     )
   }
 
