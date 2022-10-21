@@ -40,8 +40,10 @@ jobs:
 
       - name: Install shiny.performance
         run: |
-          R -e "install.packages('remotes')"
-          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', ref = 'develop')"
+          git clone https://github.com/Appsilon/experimental.performance.git
+          cd experimental.performance
+          R -q --vanilla -e 'devtools::install_local(path = ".", upgrade = "never")'
+          cd .. && rm -rf experimental.performance
 
       - name: Check basic functionality
         run: |
