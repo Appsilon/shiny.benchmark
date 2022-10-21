@@ -30,16 +30,11 @@ jobs:
         with:
           extra-packages: local::. # Necessary to avoid object usage linter errors.
 
-      - name: Check the WD
-        if: always()
-        run: |
-          ls -a
-
       - name: Create app structure
         if: always()
         working-directory: ./.github/workflows/tests/app
         run: |
-          ls -a
+          ls -a ..
           bash ./../setting_branches.sh
 
       - name: Check basic functionality
