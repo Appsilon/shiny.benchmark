@@ -6,7 +6,7 @@ create_shinytest2_structure <- function(shinytest2_dir) {
   dir_tests <- tempdir()
 
   # copy everything to the temporary directory
-  system(glue("cp -r {shinytest2_dir} {dir_tests}"))
+  system(command = glue("cp -r {shinytest2_dir} {dir_tests}"))
 
   # returning the project folder
   message(glue("Structure created at {dir_tests}"))
@@ -43,7 +43,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # create a path root linked to the main directory app
   symlink_cmd <- glue("cd {dir_tests}; ln -s {app_dir} {root_path}")
-  system(symlink_cmd)
+  system(command = symlink_cmd)
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
@@ -52,7 +52,11 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # install everything that is needed
   install_deps <- glue("yarn --cwd {node_path}")
-  system(install_deps, ignore.stdout = !debug, ignore.stderr = !debug)
+  system(
+    command = install_deps,
+    ignore.stdout = !debug,
+    ignore.stderr = !debug
+  )
 
   # creating cypress plugin file
   js_txt <- create_cypress_plugins()
@@ -198,7 +202,7 @@ add_sendtime2js <- function(js_file, txt_file) {
 #' @importFrom glue glue
 get_commit_date <- function(branch) {
   date <- system(
-    glue("git show -s --format=%ci {branch}"),
+    command = glue("git show -s --format=%ci {branch}"),
     intern = TRUE
   )
   date <- as.POSIXct(date[1])
@@ -212,7 +216,7 @@ get_commit_date <- function(branch) {
 get_commit_hash <- function() {
   hash <- system("git show -s --format=%H", intern = TRUE)[1]
   branch <- system(
-    glue("git branch --contains {hash}"),
+    command = glue("git branch --contains {hash}"),
     intern = TRUE
   )
 
@@ -241,8 +245,28 @@ get_commit_hash <- function() {
 #'
 #' @description Checkout anything created by the app. It prevents errors when
 #' changing branches
-checkout_files <- function() {
-  system("git checkout .")
+#'
+#' @param debug Logical. TRUE to display all the system messages on runtime
+checkout_files <- function(debug) {
+  system(
+    command = "git checkout .",
+    ignore.stdout = !debug,
+    ignore.stderr = !debug
+  )
+}
+
+#' @title Checkout GitHub branch
+#'
+#' @description checkout and go to a different branch
+#'
+#' @param branch Commit hash code or branch name
+#' @param debug Logical. TRUE to display all the system messages on runtime
+checkout <- function(branch, debug) {
+  system(
+    command = glue("git checkout {branch}"),
+    ignore.stdout = !debug,
+    ignore.stderr = !debug
+  )
 }
 
 #' @title Check and restore renv
@@ -266,16 +290,5 @@ restore_env <- function(branch, renv_prompt) {
     error = function(e) {
       stop(glue("Unexpected error activating renv in branch {branch}: {e}\n"))
     }
-  )
-}
-
-#' @title Checkout GitHub branch
-#'
-#' @description checkout and go to a different branch
-#'
-#' @param branch Commit hash code or branch name
-checkout <- function(branch) {
-  system(
-    glue("git checkout {branch}")
   )
 }

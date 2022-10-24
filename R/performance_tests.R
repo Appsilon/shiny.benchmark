@@ -68,7 +68,7 @@ performance_tests <- function(
       },
       finally = {
         # Restore initital setup
-        checkout(branch = current_branch)
+        checkout(branch = current_branch, debug = debug)
         message(glue("Switched back to {current_branch}"))
         if (use_renv) restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
@@ -104,7 +104,7 @@ performance_tests <- function(
       },
       finally = {
         # Restore initital setup
-        checkout(branch = current_branch)
+        checkout(branch = current_branch, debug = debug)
         message(glue("Switched back to {current_branch}"))
         if (use_renv) restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
@@ -142,7 +142,7 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, use_renv, renv
   txt_file <- files$txt_file
 
   # checkout to the desired commit
-  checkout(branch = commit)
+  checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
 
@@ -154,7 +154,7 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, use_renv, renv
     "cd {project_path}; ",
     "set -eu; exec yarn --cwd node performance-test"
   )
-  system(command, ignore.stdout = !debug, ignore.stderr = !debug)
+  system(command = command, ignore.stdout = !debug, ignore.stderr = !debug)
 
   # read the file saved by cypress
   perf_file <- read.table(file = txt_file, header = FALSE, sep = ";")
@@ -165,7 +165,7 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, use_renv, renv
   unlink(x = c(js_file, txt_file))
 
   # removing anything new in the github repo
-  checkout_files()
+  checkout_files(debug = debug)
 
   # return times
   return(perf_file)
@@ -188,7 +188,7 @@ run_cypress_ptest <- function(commit, project_path, cypress_file, use_renv, renv
 #' @export
 run_shinytest2_ptest <- function(commit, app_dir, project_path, use_renv, renv_prompt, debug) {
   # checkout to the desired commit
-  checkout(branch = commit)
+  checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
 
@@ -216,7 +216,7 @@ run_shinytest2_ptest <- function(commit, app_dir, project_path, use_renv, renv_p
   colnames(perf_file) <- c("date", "test_name", "duration_ms")
 
   # removing anything new in the github repo
-  checkout_files()
+  checkout_files(debug = debug)
 
   # return times
   return(perf_file)
