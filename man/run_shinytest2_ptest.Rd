@@ -11,6 +11,7 @@ run_shinytest2_ptest(
   shinytest2_dir,
   use_renv,
   renv_prompt,
+  n_rep,
   debug
 )
 }
@@ -28,6 +29,8 @@ renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
 
 \item{renv_prompt}{Prompt the user before taking any action?}
+
+\item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
