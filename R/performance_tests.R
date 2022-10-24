@@ -224,14 +224,3 @@ run_shinytest2_ptest <- function(commit, app_dir, project_path, use_renv, renv_p
   # return times
   return(perf_file)
 }
-
-check_uncommitted_files <- function() {
-  changes <- system("git status --porcelain", intern = TRUE)
-
-  if (length(changes) != 0) {
-    system("git status -uno")
-    stop("You have uncommitted files. Please resolve it before running the performance checks.")
-  } else {
-    return(TRUE)
-  }
-}
