@@ -91,7 +91,7 @@ check_uncommitted_files <- function() {
   changes <- system("git status --porcelain", intern = TRUE)
 
   if (length(changes) != 0) {
-    system("git status -uno")
+    system("git status -u")
     stop("You have uncommitted files. Please resolve it before running the performance checks.")
   } else {
     return(TRUE)
