@@ -85,3 +85,17 @@ checkout <- function(branch) {
     glue("git checkout {branch}")
   )
 }
+
+#' @title Create a progress bar to follow the execution
+#'
+#' @param total Total number of replications
+#' @importFrom progress progress_bar
+create_progress_bar <- function(total = 100) {
+  pb <- progress_bar$new(
+    format = "Iteration :current/:total",
+    total = total,
+    clear = FALSE
+  )
+
+  return(pb)
+}
