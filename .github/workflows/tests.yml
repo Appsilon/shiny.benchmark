@@ -6,9 +6,6 @@ defaults:
  run:
   working-directory: ./.github/workflows/tests/app
 
-env:
-  shiny_pergformance_run_mode: github_actions
-
 jobs:
   main:
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
