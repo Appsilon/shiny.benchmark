@@ -38,6 +38,9 @@ performance_tests <- function(
   # getting the current branch
   current_branch <- get_commit_hash()
 
+  # check if the repo is ready for running the checks
+  check_uncommitted_files()
+
   if (type == "cypress") {
     # creating the structure
     project_path <- create_cypress_structure(
@@ -220,4 +223,15 @@ run_shinytest2_ptest <- function(commit, app_dir, project_path, use_renv, renv_p
 
   # return times
   return(perf_file)
+}
+
+check_uncommitted_files <- function() {
+  changes <- system("git status --porcelain", intern = TRUE)
+
+  if (length(changes) != 0) {
+    system("git status -uno")
+    stop("You have uncommitted files. Please resolve it before running the performance checks.")
+  } else {
+    return(TRUE)
+  }
 }
