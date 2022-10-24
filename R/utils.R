@@ -94,6 +94,6 @@ check_uncommitted_files <- function() {
     system("git status -u")
     stop("You have uncommitted files. Please resolve it before running the performance checks.")
   } else {
-    return(TRUE)
+    return(invisible(TRUE))
   }
 }
