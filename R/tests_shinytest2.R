@@ -105,11 +105,6 @@ run_shinytest2_ptest <- function(
 
   perf_file <- as.data.frame(my_reporter$get_results())
   perf_file <- perf_file[, c("test", "real")]
-  perf_file$test <- gsub(
-    x = perf_file$test,
-    pattern = "\\{shinytest2\\} recording: ",
-    replacement = ""
-  )
 
   perf_file <- cbind.data.frame(date = date, perf_file)
   colnames(perf_file) <- c("date", "test_name", "duration_ms")
