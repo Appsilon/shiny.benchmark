@@ -54,6 +54,9 @@ performance_tests <- function(
   if (length(tests_pattern) == 1)
     tests_pattern <- as.list(rep(tests_pattern, n_commits))
 
+  # check if the repo is ready for running the checks
+  check_uncommitted_files()
+
   # run tests
   if (type == "cypress") {
     perf_list <- ptest_cypress(

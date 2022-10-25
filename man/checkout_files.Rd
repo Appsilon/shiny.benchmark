@@ -4,7 +4,10 @@
 \alias{checkout_files}
 \title{Checkout GitHub files}
 \usage{
-checkout_files()
+checkout_files(debug)
+}
+\arguments{
+\item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
 \description{
 Checkout anything created by the app. It prevents errors when
