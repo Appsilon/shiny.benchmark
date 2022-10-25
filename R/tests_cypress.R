@@ -2,8 +2,11 @@
 #'
 #' @param commit_list A list of commit hash codes, branches' names or anything
 #' else you can use with git checkout [...]
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
+#' @param cypress_dir The directory with tests recorded by Cypress.
+#' It can also be a vector of the same size of commit_list
+#' @param tests_pattern Cypress/shinytest2 files pattern. E.g. 'shinytest2'
+#' It can also be a vector of the same size of commit_list. If it is NULL,
+#' all the content in cypress_dir/shinytest2_dir will be used
 #' @param app_dir The path to the application root
 #' @param port Port to run the app
 #' @param use_renv In case it is set as TRUE, package will try to apply
@@ -15,7 +18,8 @@
 #' @export
 ptest_cypress <- function(
     commit_list,
-    cypress_file,
+    cypress_dir,
+    tests_pattern,
     app_dir,
     port,
     use_renv,
@@ -37,7 +41,8 @@ ptest_cypress <- function(
     expr = {
       mapply(
         commit_list,
-        cypress_file,
+        cypress_dir,
+        tests_pattern,
         FUN = run_cypress_ptest,
         project_path = project_path,
         use_renv = use_renv,
@@ -77,8 +82,9 @@ ptest_cypress <- function(
 #' @param commit A commit hash code or a branch's name
 #' @param project_path The path to the project with all needed packages
 #' installed
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
+#' @param cypress_dir The directory with tests recorded by Cypress
+#' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
+#' all the content will be used
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
@@ -90,7 +96,8 @@ ptest_cypress <- function(
 run_cypress_ptest <- function(
     commit,
     project_path,
-    cypress_file,
+    cypress_dir,
+    tests_pattern,
     use_renv,
     renv_prompt,
     debug
@@ -104,7 +111,8 @@ run_cypress_ptest <- function(
   # get Cypress files
   files <- create_cypress_tests(
     project_path = project_path,
-    cypress_file = cypress_file
+    cypress_dir = cypress_dir,
+    tests_pattern = tests_pattern
   )
 
   js_file <- files$js_file

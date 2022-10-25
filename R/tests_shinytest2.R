@@ -4,6 +4,9 @@
 #' else you can use with git checkout [...]
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' It can also be a vector of the same size of commit_list
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'
+#' It can also be a vector of the same size of commit_list. If it is NULL,
+#' all the content in cypress_dir/shinytest2_dir will be used
 #' @param app_dir The path to the application root
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
@@ -15,6 +18,7 @@
 ptest_shinytest2 <- function(
     commit_list,
     shinytest2_dir,
+    tests_pattern,
     app_dir,
     use_renv,
     renv_prompt,
@@ -32,6 +36,7 @@ ptest_shinytest2 <- function(
       mapply(
         commit_list,
         shinytest2_dir,
+        tests_pattern,
         FUN = run_shinytest2_ptest,
         app_dir = app_dir,
         project_path = project_path,
@@ -67,6 +72,8 @@ ptest_shinytest2 <- function(
 #' @param app_dir The path to the application root
 #' @param project_path The path to the project
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'. If it is NULL,
+#' all the content will be used
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
@@ -81,6 +88,7 @@ run_shinytest2_ptest <- function(
     project_path,
     app_dir,
     shinytest2_dir,
+    tests_pattern,
     use_renv,
     renv_prompt,
     debug
@@ -100,7 +108,8 @@ run_shinytest2_ptest <- function(
     app_dir = dirname(tests_dir),
     reporter = my_reporter,
     stop_on_failure = FALSE,
-    stop_on_warning = FALSE
+    stop_on_warning = FALSE,
+    filter = tests_pattern
   )
 
   perf_file <- as.data.frame(my_reporter$get_results())
