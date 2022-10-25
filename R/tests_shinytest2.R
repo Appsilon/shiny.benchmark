@@ -46,7 +46,7 @@ ptest_shinytest2 <- function(
     },
     finally = {
       # Checkout to the main branch
-      checkout(branch = current_branch)
+      checkout(branch = current_branch, debug = debug)
       message(glue("Switched back to {current_branch}"))
 
       # Restore renv
@@ -86,7 +86,7 @@ run_shinytest2_ptest <- function(
     debug
 ) {
   # checkout to the desired commit
-  checkout(branch = commit)
+  checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
@@ -115,7 +115,7 @@ run_shinytest2_ptest <- function(
   colnames(perf_file) <- c("date", "test_name", "duration_ms")
 
   # removing anything new in the github repo
-  checkout_files()
+  checkout_files(debug = debug)
 
   # return times
   return(perf_file)
