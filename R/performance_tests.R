@@ -45,6 +45,9 @@ performance_tests <- function(
   if (length(get(obj_name)) != n_commits)
     stop("You must provide 1 or {n_commits} paths for {obj_name}")
 
+  # check if the repo is ready for running the checks
+  check_uncommitted_files()
+
   # run tests
   if (type == "cypress") {
     perf_list <- ptest_cypress(

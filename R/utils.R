@@ -73,6 +73,18 @@ checkout <- function(branch, debug) {
   )
 }
 
+#' @title Check for uncommitted files
+check_uncommitted_files <- function() {
+  changes <- system("git status --porcelain", intern = TRUE)
+
+  if (length(changes) != 0) {
+    system("git status -u")
+    stop("You have uncommitted files. Please resolve it before running the performance checks.")
+  } else {
+    return(invisible(TRUE))
+  }
+}
+
 #' @title Check and restore renv
 #'
 #' @description Check whether renv is in use in the current branch. Raise error
