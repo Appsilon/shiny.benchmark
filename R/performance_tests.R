@@ -51,6 +51,9 @@ performance_tests <- function(
   if (n_rep < 1)
     stop("You must provide an integer greater than 1 for n_rep")
 
+  # check if the repo is ready for running the checks
+  check_uncommitted_files()
+
   # run tests
   if (type == "cypress") {
     perf_list <- ptest_cypress(
