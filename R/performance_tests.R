@@ -12,6 +12,7 @@
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
 #' @param renv_prompt Prompt the user before taking any action?
+#' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
@@ -23,6 +24,7 @@ performance_tests <- function(
     port = 3333,
     use_renv = TRUE,
     renv_prompt = TRUE,
+    n_rep = 1,
     debug = FALSE
 ) {
   # Number of commits to test
@@ -45,6 +47,10 @@ performance_tests <- function(
   if (length(get(obj_name)) != n_commits)
     stop("You must provide 1 or {n_commits} paths for {obj_name}")
 
+  n_rep <- as.integer(n_rep)
+  if (n_rep < 1)
+    stop("You must provide an integer greater than 1 for n_rep")
+
   # check if the repo is ready for running the checks
   check_uncommitted_files()
 
@@ -57,6 +63,7 @@ performance_tests <- function(
       port = port,
       use_renv = use_renv,
       renv_prompt = renv_prompt,
+      n_rep = n_rep,
       debug = debug
     )
   } else {
@@ -66,6 +73,7 @@ performance_tests <- function(
       app_dir,
       use_renv = use_renv,
       renv_prompt = renv_prompt,
+      n_rep = n_rep,
       debug = debug
     )
   }
