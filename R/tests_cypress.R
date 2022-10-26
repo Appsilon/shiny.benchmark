@@ -99,6 +99,7 @@ run_cypress_ptest <- function(
   checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
+  message("Test")
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
   # get Cypress files
