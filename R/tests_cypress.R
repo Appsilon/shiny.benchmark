@@ -107,7 +107,7 @@ run_cypress_ptest <- function(
     cypress_file = cypress_file
   )
 
-  message(list.files(path = project_path, recursive = T, pattern = "performance"))
+  message(list.files(path = project_path, recursive = TRUE, pattern = "performance"))
   js_file <- files$js_file
   txt_file <- files$txt_file
 
