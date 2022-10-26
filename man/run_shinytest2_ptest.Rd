@@ -9,8 +9,10 @@ run_shinytest2_ptest(
   project_path,
   app_dir,
   shinytest2_dir,
+  tests_pattern,
   use_renv,
   renv_prompt,
+  n_rep,
   debug
 )
 }
@@ -23,11 +25,16 @@ run_shinytest2_ptest(
 
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2}
 
+\item{tests_pattern}{shinytest2 files pattern. E.g. 'performance'. If it is NULL,
+all the content will be used}
+
 \item{use_renv}{In case it is set as TRUE, package will try to apply
 renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
 
 \item{renv_prompt}{Prompt the user before taking any action?}
+
+\item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

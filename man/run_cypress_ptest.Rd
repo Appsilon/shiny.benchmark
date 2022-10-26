@@ -7,9 +7,11 @@
 run_cypress_ptest(
   commit,
   project_path,
-  cypress_file,
+  cypress_dir,
+  tests_pattern,
   use_renv,
   renv_prompt,
+  n_rep,
   debug
 )
 }
@@ -19,14 +21,18 @@ run_cypress_ptest(
 \item{project_path}{The path to the project with all needed packages
 installed}
 
-\item{cypress_file}{The path to the .js file conteining cypress tests to
-be recorded}
+\item{cypress_dir}{The directory with tests recorded by Cypress}
+
+\item{tests_pattern}{Cypress files pattern. E.g. 'performance'. If it is NULL,
+all the content will be used}
 
 \item{use_renv}{In case it is set as TRUE, package will try to apply
 renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
 
 \item{renv_prompt}{Prompt the user before taking any action?}
+
+\item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

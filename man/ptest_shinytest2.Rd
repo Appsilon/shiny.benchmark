@@ -7,9 +7,11 @@
 ptest_shinytest2(
   commit_list,
   shinytest2_dir,
+  tests_pattern,
   app_dir,
   use_renv,
   renv_prompt,
+  n_rep,
   debug
 )
 }
@@ -20,6 +22,10 @@ else you can use with git checkout \link{...}}
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2
 It can also be a vector of the same size of commit_list}
 
+\item{tests_pattern}{shinytest2 files pattern. E.g. 'performance'
+It can also be a vector of the same size of commit_list. If it is NULL,
+all the content in cypress_dir/shinytest2_dir will be used}
+
 \item{app_dir}{The path to the application root}
 
 \item{use_renv}{In case it is set as TRUE, package will try to apply
@@ -27,6 +33,8 @@ renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
 
 \item{renv_prompt}{Prompt the user before taking any action?}
+
+\item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }

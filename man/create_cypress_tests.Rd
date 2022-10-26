@@ -4,14 +4,16 @@
 \alias{create_cypress_tests}
 \title{Create the cypress files under project directory}
 \usage{
-create_cypress_tests(project_path, cypress_file)
+create_cypress_tests(project_path, cypress_dir, tests_pattern)
 }
 \arguments{
 \item{project_path}{The path to the project with all needed packages
 installed}
 
-\item{cypress_file}{The path to the .js file conteining cypress tests to
-be recorded}
+\item{cypress_dir}{The directory with tests recorded by Cypress}
+
+\item{tests_pattern}{Cypress files pattern. E.g. 'performance'. If it is NULL,
+all the content will be used}
 }
 \description{
 Create the cypress files under project directory
