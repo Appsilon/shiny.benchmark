@@ -107,7 +107,6 @@ run_cypress_ptest <- function(
     cypress_file = cypress_file
   )
 
-  message(list.files(path = project_path, recursive = TRUE, pattern = "performance"))
   js_file <- files$js_file
   txt_file <- files$txt_file
 
@@ -116,7 +115,7 @@ run_cypress_ptest <- function(
     "cd {project_path}; ",
     "set -eu; exec yarn --cwd node performance-test"
   )
-  system(command, ignore.stdout = !debug, ignore.stderr = !debug)
+  system(command, ignore.stdout = debug, ignore.stderr = debug)
 
   # read the file saved by cypress
   perf_file <- read.table(file = txt_file, header = FALSE, sep = ";")
