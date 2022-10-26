@@ -45,6 +45,7 @@ jobs:
         run: |
           R CMD build ../../../../.
           R CMD INSTALL shiny.performance_0.1.1.tar.gz
+          rm shiny.performance_0.1.1.tar.gz
 
       - name: Check basic functionality - Cypress
         run: |
