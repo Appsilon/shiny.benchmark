@@ -43,9 +43,8 @@ jobs:
 
       - name: Install shiny.performance
         run: |
-          R CMD build ../../../../.
-          R CMD INSTALL shiny.performance_0.1.1.tar.gz
-          rm shiny.performance_0.1.1.tar.gz
+          R -e "install.packages('remotes')"
+          remotes::install_github(repo = "Appsilon/experimental.performance", auth_token = Sys.getenv("GITHUB_PAT"), ref = "develop", quiet = TRUE)
 
       - name: Check basic functionality - Cypress
         run: |
