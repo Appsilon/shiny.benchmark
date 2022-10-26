@@ -37,3 +37,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Rendered reports
+inst/templates/*.html
+inst/templates/*.pdf
+inst/qmd/*.html
+inst/qmd/*.pdf

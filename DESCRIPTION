@@ -24,9 +24,12 @@ Suggests:
 Depends:
   R (>= 3.1.0)
 Imports:
-  glue,
-  jsonlite,
-  renv,
-  shinytest2,
-  stringr,
-  testthat
+    dplyr,
+    echarts4r,
+    glue,
+    jsonlite,
+    quarto,
+    renv,
+    shinytest2,
+    stringr,
+    testthat

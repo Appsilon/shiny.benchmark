@@ -1,0 +1,108 @@
+---
+title: "Performance comparison"
+format:
+  html:
+    toc: true
+    toc_float: true
+params:
+  date: ""
+  commit: ""
+  test_name: ""
+  duration_ms: ""
+  baseline: ""
+---
+
+```{r include = FALSE}
+suppressPackageStartupMessages({
+  library(DT)
+  library(dplyr)
+  library(echarts4r)
+})
+DT_options <- list(
+  initComplete = JS(
+    "function(settings, json) {",
+    "$(this.api().table().header()).css({'background-color': '#1a384c', 'color': '#fff'});",
+    "}")
+)
+```
+
+## Versions
+
+This report aims to compare `r length(params$commit)` different versions of the app. Here is the list of versions and the development dates:
+
+```{r tab, echo=FALSE}
+sample_df <- structure(
+  list(
+  date = as.POSIXct(as.numeric(params$date), origin = "1970-01-01"),
+  commit = as.numeric(params$commit),
+  test_name = as.character(params$test_name),
+  duration_ms = as.numeric(params$duration_ms)
+))
+df <- as_tibble(sample_df) %>%
+  mutate(commit = factor(x = commit, levels = commit))
+df_dates <- df %>%
+  select(commit, date) %>%
+  unique() %>%
+  arrange(desc(date))
+datatable(
+  data = df_dates, 
+  rownames = FALSE,
+  colnames = c("Branch/Commit", "Date"),
+  options = DT_options,
+  ) %>%
+  formatDate(columns = "date", method = "toLocaleString")
+```
+
+## Raw data
+
+The time spent to compute each of the tests is displayed above as well as their respective branch/commit.
+
+```{r raw data, echo=FALSE}
+df_display <- df %>%
+  select(commit, test_name, duration_ms) %>%
+  arrange(test_name, commit)
+datatable(
+  data = df_display,
+  rownames = FALSE,
+  colnames = c("Branch/Commit", "Test name", "Duration (ms)"), 
+  options = DT_options
+)
+```
+
+## Visualizations
+
+```{r preparing data, echo=FALSE}
+# selecting the baseline
+baseline <- params$baseline
+df_baseline <- df %>% 
+  filter(commit == baseline) %>%
+  select(test_name, duration_ms) %>%
+  rename(baseline = duration_ms)
+# join it with the main dataset
+times_faster <- function(a, b) b/a
+df_comp <- df %>% left_join(df_baseline, by = character(), suffix = c("", ".y")) %>% 
+  select(-test_name.y) %>%
+  mutate(tf = times_faster(duration_ms, baseline))
+```
+
+### Comparing commits/branchs
+
+```{r comp branchs, echo=FALSE}
+df_comp %>%
+  group_by(commit) %>%
+  e_charts(x = test_name) %>%
+  e_bar(serie = duration_ms) %>%
+  e_axis_labels(y = "Time (ms)") %>%
+  e_mark_line(data = list(yAxis = df_comp$baseline[1]), title = "Baseline")
+```
+
+### Analyzing evolution over time
+
+```{r comp over time, echo=FALSE, warning=FALSE}
+df_comp %>%
+  group_by(test_name) %>%
+  arrange(date) %>%
+  e_charts(x = date) %>%
+  e_line(serie = duration_ms) %>%
+  e_axis_labels(y = "Time (ms)")
+```
