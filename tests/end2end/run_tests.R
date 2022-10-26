@@ -2,6 +2,8 @@
 args <- commandArgs(trailingOnly = TRUE)
 args <- strsplit(args, ",")
 
+args
+
 # packages
 library(shiny)
 library(testthat)
@@ -26,7 +28,7 @@ if (type == "cypress") {
     renv_prompt = FALSE,
     port = 3333,
     n_rep = n_rep,
-    debug = TRUE
+    debug = FALSE
   )
 } else {
   # run performance check using shinytest2
