@@ -5,7 +5,15 @@ args <- strsplit(args, ",")
 # packages
 library(shiny)
 library(testthat)
-library(shiny.performance)
+
+if (!require(shiny.performance)) {
+  remotes::install_github(
+    repo = 'Appsilon/experimental.performance',
+    auth_token = Sys.getenv('GITHUB_PAT'),
+    ref = 'douglas-31-create-test-environment',
+    quiet = TRUE
+  )
+}
 
 # commits to compare
 type <- args[[1]]
