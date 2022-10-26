@@ -46,7 +46,6 @@ jobs:
       - name: Create app structure
         run: |
           bash ./../setting_branches.sh
-          ls ../
 
       - name: Check basic functionality - Cypress
         run: |

@@ -44,6 +44,4 @@ TODO.txt
 # csv opened files
 .~lock*
 
-  renv/
-  renv.lock
-.Rprofile
+renv/
