@@ -2,7 +2,7 @@ function(input, output, session) {
   # Sys.sleep
   react1 <- eventReactive(input$run1, {
     out <- system.time(
-      Sys.sleep(6)
+      Sys.sleep(0.1)
     )
 
     return(out[3])
@@ -10,7 +10,7 @@ function(input, output, session) {
 
   react2 <- eventReactive(input$run2, {
     out <- system.time(
-      Sys.sleep(3)
+      Sys.sleep(0.1)
     )
 
     return(out[3])
@@ -18,7 +18,7 @@ function(input, output, session) {
 
   react3 <- eventReactive(input$run3, {
     out <- system.time(
-      Sys.sleep(1)
+      Sys.sleep(0.1)
     )
 
     return(out[1])
