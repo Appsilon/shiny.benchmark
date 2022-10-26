@@ -144,6 +144,8 @@ create_cypress_tests <- function(project_path, cypress_file) {
 add_sendtime2js <- function(js_file, txt_file) {
   lines_to_add <- glue(
     "
+  describe('Finalizing tests', () => {it('Ending tests', () => {})})
+
   // Returning the time for each test
   // https://www.cypress.io/blog/2020/05/22/where-does-the-test-spend-its-time/
   let commands = []
@@ -169,7 +171,6 @@ add_sendtime2js <- function(js_file, txt_file) {
   }
   // Calling the sendTestTimings function
   beforeEach(sendTestTimings)
-  after(sendTestTimings)
   ",
     .open = "{{", .close = "}}"
   )
