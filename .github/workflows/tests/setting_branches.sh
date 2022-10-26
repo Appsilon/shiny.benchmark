@@ -28,6 +28,8 @@ git commit --allow-empty -m "dummy commit to change hash"
 git branch renv_shiny1 master
 git checkout renv_shiny1
 R -e 'renv::init()'
+R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = 'douglas-31-create-test-environment', quiet = TRUE)"
+R -e 'renv::snapshot()'
 git add .
 git commit -m "renv active"
 
