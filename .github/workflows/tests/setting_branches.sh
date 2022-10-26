@@ -9,7 +9,7 @@ git config --local user.name "$GITHUB_ACTOR"
 git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 # STANDARD FUNCTIONALITIES
-## master
+## main
 echo renv/* > .gitignore
 git add .
 git commit -m "first commit"
@@ -20,12 +20,12 @@ git commit --allow-empty -m "dummy commit to change hash"
 
 # RENV FUNCTIONALITIES
 ## No renv at all
-git branch renv_missing master
+git branch renv_missing main
 git checkout renv_missing
 git commit --allow-empty -m "dummy commit to change hash"
 
 ## Creating renv
-git branch renv_shiny1 master
+git branch renv_shiny1 main
 git checkout renv_shiny1
 R -e 'renv::init()'
 git add .
@@ -38,5 +38,5 @@ R -e 'renv::snapshot()'
 git add .
 git commit -m "downgrading shiny"
 
-## Switching back to master
-git checkout master
+## Switching back to main
+git checkout main
