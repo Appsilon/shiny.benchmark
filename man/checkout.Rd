@@ -4,10 +4,12 @@
 \alias{checkout}
 \title{Checkout GitHub branch}
 \usage{
-checkout(branch)
+checkout(branch, debug)
 }
 \arguments{
 \item{branch}{Commit hash code or branch name}
+
+\item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
 \description{
 checkout and go to a different branch
