@@ -10,6 +10,7 @@ git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 # STANDARD FUNCTIONALITIES
 ## master
+echo renv/* > .gitignore
 git add .
 git commit -m "first commit"
 
