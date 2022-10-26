@@ -6,7 +6,8 @@
 \usage{
 ptest_cypress(
   commit_list,
-  cypress_file,
+  cypress_dir,
+  tests_pattern,
   app_dir,
   port,
   use_renv,
@@ -19,8 +20,12 @@ ptest_cypress(
 \item{commit_list}{A list of commit hash codes, branches' names or anything
 else you can use with git checkout \link{...}}
 
-\item{cypress_file}{The path to the .js file conteining cypress tests to
-be recorded}
+\item{cypress_dir}{The directory with tests recorded by Cypress.
+It can also be a vector of the same size of commit_list}
+
+\item{tests_pattern}{Cypress/shinytest2 files pattern. E.g. 'shinytest2'
+It can also be a vector of the same size of commit_list. If it is NULL,
+all the content in cypress_dir/shinytest2_dir will be used}
 
 \item{app_dir}{The path to the application root}
 

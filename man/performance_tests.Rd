@@ -6,8 +6,9 @@
 \usage{
 performance_tests(
   commit_list,
-  cypress_file = NULL,
+  cypress_dir = NULL,
   shinytest2_dir = NULL,
+  tests_pattern = NULL,
   app_dir = getwd(),
   port = 3333,
   use_renv = TRUE,
@@ -20,11 +21,15 @@ performance_tests(
 \item{commit_list}{A list of commit hash codes, branches' names or anything
 else you can use with git checkout \link{...}}
 
-\item{cypress_file}{The path to the .js file containing cypress tests
-to be recorded. It can also be a vector of the same size of commit_list}
+\item{cypress_dir}{The directory with tests recorded by Cypress.
+It can also be a vector of the same size of commit_list}
 
 \item{shinytest2_dir}{The directory with tests recorded by shinytest2
 It can also be a vector of the same size of commit_list}
+
+\item{tests_pattern}{Cypress/shinytest2 files pattern. E.g. 'performance'
+It can also be a vector of the same size of commit_list. If it is NULL,
+all the content in cypress_dir/shinytest2_dir will be used}
 
 \item{app_dir}{The path to the application root}
 
