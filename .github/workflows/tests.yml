@@ -44,7 +44,7 @@ jobs:
       - name: Install shiny.performance
         run: |
           R -e "install.packages('remotes')"
-          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = 'develop', quiet = TRUE)"
+          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = 'douglas-31-create-test-environment', quiet = TRUE)"
 
       - name: Check basic functionality - Cypress
         run: |

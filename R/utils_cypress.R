@@ -127,7 +127,9 @@ create_cypress_tests <- function(project_path, cypress_file) {
     "app.spec.js"
   )
 
+  message(list.files(path = project_path, recursive = T))
   file.copy(from = cypress_file, to = js_file, overwrite = TRUE)
+  message(list.files(path = project_path, recursive = T))
 
   # file to store the times
   txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
