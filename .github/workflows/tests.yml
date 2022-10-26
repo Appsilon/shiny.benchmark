@@ -4,7 +4,7 @@ name: package-usage-tests
 
 defaults:
  run:
-  working-directory: ./tests/end2end/app
+  working-directory: ./tests/end2end/app/
 
 jobs:
   main:
@@ -46,6 +46,7 @@ jobs:
       - name: Create app structure
         run: |
           bash ./../setting_branches.sh
+          ls ../
 
       - name: Check basic functionality - Cypress
         run: |

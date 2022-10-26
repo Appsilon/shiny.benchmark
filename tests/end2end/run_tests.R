@@ -2,8 +2,6 @@
 args <- commandArgs(trailingOnly = TRUE)
 args <- strsplit(args, ",")
 
-args
-
 # packages
 library(shiny)
 library(testthat)
