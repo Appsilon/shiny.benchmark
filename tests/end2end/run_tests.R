@@ -26,7 +26,7 @@ if (type == "cypress") {
     renv_prompt = FALSE,
     port = 3333,
     n_rep = n_rep,
-    debug = FALSE
+    debug = TRUE
   )
 } else {
   # run performance check using shinytest2
