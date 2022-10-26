@@ -13,6 +13,7 @@ performance_tests(
   port = 3333,
   use_renv = TRUE,
   renv_prompt = TRUE,
+  n_rep = 1,
   debug = FALSE
 )
 }
@@ -39,6 +40,8 @@ renv::restore() in all branches. Otherwise, the current loaded list of
 packages will be used in all branches.}
 
 \item{renv_prompt}{Prompt the user before taking any action?}
+
+\item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
