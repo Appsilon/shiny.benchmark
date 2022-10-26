@@ -21,7 +21,7 @@ jobs:
         - {os: ubuntu-22.04, r: 'release'}
 
     env:
-      GITHUB_PAT: ${{ secrets.PAT }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -44,7 +44,7 @@ jobs:
       - name: Install shiny.performance
         run: |
           R -e "install.packages('remotes')"
-          remotes::install_github(repo = "Appsilon/experimental.performance", auth_token = Sys.getenv("GITHUB_PAT"), ref = "develop", quiet = TRUE)
+          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = "develop", quiet = TRUE)""
 
       - name: Check basic functionality - Cypress
         run: |
