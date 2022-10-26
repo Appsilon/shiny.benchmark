@@ -2,6 +2,7 @@
 
 # starting
 git init
+git config --global init.defaultBranch main
 git config --global advice.detachedHead false
 
 # credentials
