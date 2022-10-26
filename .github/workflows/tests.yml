@@ -22,6 +22,7 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -40,7 +41,7 @@ jobs:
       - name: Install shiny.performance
         run: |
           R -e "install.packages('remotes')"
-          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = 'douglas-31-create-test-environment', quiet = TRUE)"
+          R -e "remotes::install_github(repo = 'Appsilon/experimental.performance', auth_token = Sys.getenv('GITHUB_PAT'), ref = Sys.getenv('BRANCH_NAME'), quiet = TRUE)"
 
       - name: Create app structure
         run: |
