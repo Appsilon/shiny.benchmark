@@ -2,7 +2,6 @@
 
 # starting
 git init
-git config --global init.defaultBranch main
 git config --global advice.detachedHead false
 
 # credentials
@@ -10,7 +9,7 @@ git config --local user.name "$GITHUB_ACTOR"
 git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
 # STANDARD FUNCTIONALITIES
-## main
+## master
 echo renv/* > .gitignore
 git add .
 git commit -m "first commit"
@@ -21,12 +20,12 @@ git commit --allow-empty -m "dummy commit to change hash"
 
 # RENV FUNCTIONALITIES
 ## No renv at all
-git branch renv_missing main
+git branch renv_missing master
 git checkout renv_missing
 git commit --allow-empty -m "dummy commit to change hash"
 
 ## Creating renv
-git branch renv_shiny1 main
+git branch renv_shiny1 master
 git checkout renv_shiny1
 R -e 'renv::init()'
 git add .
@@ -39,5 +38,5 @@ R -e 'renv::snapshot()'
 git add .
 git commit -m "downgrading shiny"
 
-## Switching back to main
-git checkout main
+## Switching back to master
+git checkout master
