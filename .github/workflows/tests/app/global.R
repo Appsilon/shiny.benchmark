@@ -1,2 +1,1 @@
 library(shiny)
-library(shinycssloaders)
