@@ -49,32 +49,48 @@ jobs:
 
       - name: Check basic functionality - Cypress
         run: |
-          Rscript ../run_tests.R cypress master,develop ../cypress_tests1.js FALSE
+          Rscript ../run_tests.R cypress master,develop ../cypress_tests1.js NULL FALSE 1
 
       - name: Check basic functionality - shinytest2
         run: |
-          Rscript ../run_tests.R shinytest2 master,develop tests/ FALSE
+          Rscript ../run_tests.R shinytest2 master,develop tests/ FALSE 1
 
       - name: Check if it fails when renv not present - Cypress
         run: |
-          Rscript ../run_tests.R cypress renv_missing,renv_shiny1,renv_shiny2 ../cypress_tests1.js FALSE
+          Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,renv_shiny2 ../cypress_tests1.js NULL FALSE 1
 
       - name: Check if it fails when renv not present - shinytest2
         run: |
-          Rscript ../run_tests.R shinytest2 renv_missing,renv_shiny1,renv_shiny2 tests FALSE
+          Rscript ./../run_tests.R shinytest2 renv_missing,renv_shiny1,renv_shiny2 tests NULL FALSE 1
 
       - name: Check if it can handle renv - Cypress
         run: |
-          Rscript ../run_tests.R cypress renv_missing,renv_shiny1,renv_shiny2 ../cypress_tests1.js TRUE
+          Rscript ./../run_tests.R cypress renv_missing,renv_shiny1,renv_shiny2 ../cypress_tests1.js NULL TRUE 1
 
       - name: Check if it can handle renv - shinytest2
         run: |
-          Rscript ../run_tests.R shinytest2 renv_missing,renv_shiny1,renv_shiny2 tests TRUE
+          Rscript ./../run_tests.R shinytest2 renv_missing,renv_shiny1,renv_shiny2 tests NULL TRUE 1
 
       - name: Check if it can handle multiple files - Cypress
         run: |
-          Rscript ../run_tests.R cypress renv_shiny1,renv_shiny2 ../cypress_tests1.js,../cypress_tests2.js TRUE
+          Rscript ./../run_tests.R cypress renv_shiny1,renv_shiny2 ../cypress_tests1.js,../cypress_tests2.js NULL TRUE 1
 
       - name: Check if it can handle multiple files - shinytest2
         run: |
-          Rscript ../run_tests.R shinytest2 renv_shiny1,renv_shiny2 tests,fake_folder/tests TRUE
+          Rscript ./../run_tests.R shinytest2 renv_shiny1,renv_shiny2 tests,fake_folder/tests NULL TRUE 1
+
+      - name: Check if we can replicate tests - Cypress
+        run |
+          Rscript ./../run_tests.R cypress master,develop ../cypress_tests1.js,../cypress_tests2.js0 NULL FALSE 2
+
+      - name: Check if we can replicate tests - shinytest2
+        run |
+          Rscript ./../run_tests.R shinytest2 master,develop tests,fake_folder/tests NULL FALSE 2
+
+      - name: Check if we can run tests based on file patterns - Cypress
+        run |
+          Rscript ./../run_tests.R cypress master,develop ../cypress_tests1.js,../cypress_tests2.js0 use_this_one[0-9] FALSE 2
+
+      - name: Check if we can run tests based on file patterns - shinytest2
+        run |
+          Rscript ./../run_tests.R shinytest2 master,develop tests,fake_folder/tests this_one FALSE 2
