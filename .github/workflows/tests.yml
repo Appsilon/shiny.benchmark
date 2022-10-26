@@ -21,7 +21,7 @@ jobs:
         - {os: ubuntu-22.04, r: 'release'}
 
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.PAT }}
 
     steps:
       - name: Checkout repository
