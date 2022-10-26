@@ -102,10 +102,12 @@ run_cypress_ptest <- function(
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
   # get Cypress files
+  message(list.files(project_path))
   files <- create_cypress_tests(
     project_path = project_path,
     cypress_file = cypress_file
   )
+  message(list.files(project_path))
 
   js_file <- files$js_file
   txt_file <- files$txt_file
