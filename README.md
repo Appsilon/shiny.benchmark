@@ -5,6 +5,7 @@
 <!-- badges: start -->
 ![R-CMD-check](https://github.com/Appsilon/shiny.benchmark/workflows/R-CMD-check/badge.svg)
 <!-- badges: end -->
+
 How to install?
 ---------------
 
@@ -15,7 +16,15 @@ remotes::install_github("Appsilon/shiny.benchmark")
 Dependencies
 ------------
 
-TODO
+`shiny.benchmark` can use two different engines to test the change in the performance of your application: [shinytest2](https://rstudio.github.io/shinytest2/) and [Cypress](https://www.cypress.io/).
+The latter requires `Node` (version 12 or higher) and `yarn` (version 1.22.17 or higher) to be available.
+To install them on your computer, follow the guidelines on the documentation pages:
+
+- [Node](https://nodejs.org/en/download/)
+- [yarn](https://yarnpkg.com/getting-started/install)
+
+Besides that, on Linux, it might be required to install other `Cypress` dependencies.
+Check the [documentation](https://docs.cypress.io/guides/getting-started/installing-cypress#Linux-Prerequisites) to find out more.
 
 How to use it?
 --------------
