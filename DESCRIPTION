@@ -1,4 +1,4 @@
-Package: shiny.performance
+Package: shiny.benchmark
 Title: Compare performance of several versions of a shiny app
 Version: 0.1.1
 Authors@R:
@@ -10,7 +10,7 @@ Authors@R:
   )
 Description: Compare performance of several versions of a shiny app based on commit hashs.
 License: LGPL-3
-URL: https://github.com/Appsilon/shiny.performance
+URL: https://github.com/Appsilon/shiny.benchmark
 SystemRequirements: yarn 1.22.17 or higher, cypress 9.4.1 or higher, xvfb
 Encoding: UTF-8
 LazyData: true

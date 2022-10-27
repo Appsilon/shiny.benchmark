@@ -18,6 +18,7 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom glue glue
 #' @export
 benchmark <- function(
     commit_list,
@@ -49,7 +50,7 @@ benchmark <- function(
   if (length(get(obj_name)) == 1)
     assign(obj_name, rep(get(obj_name), n_commits))
   if (length(get(obj_name)) != n_commits)
-    stop("You must provide 1 or {n_commits} paths for {obj_name}")
+    stop(glue("You must provide 1 or {n_commits} paths for {obj_name}"))
 
   if (is.null(tests_pattern))
     tests_pattern <- vector(mode = "list", length = n_commits)

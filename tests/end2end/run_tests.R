@@ -5,7 +5,7 @@ args <- strsplit(args, ",")
 # packages
 library(shiny)
 library(testthat)
-library(shiny.performance)
+library(shiny.benchmark)
 
 # commits to compare
 type <- args[[1]]
