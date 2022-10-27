@@ -6,16 +6,16 @@
 #' @method print shiny_benchmark
 #' @export
 print.shiny_benchmark <- function(x, ...) {
-  cat('Shiny benchmark: \n')
-  cat('\n')
-  cat('Call:')
-  cat('\n')
+  cat("Shiny benchmark: \n")
+  cat("\n")
+  cat("Call:")
+  cat("\n")
   print(x$call)
-  cat('\n')
-  cat('Total time ellapsed:')
-  cat('\n')
+  cat("\n")
+  cat("Total time ellapsed:")
+  cat("\n")
   print(x$time[["elapsed"]])
-  cat('\n')
-  cat('Fit measures: \n')
+  cat("\n")
+  cat("Fit measures: \n")
   print(x$performance)
 }

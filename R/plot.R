@@ -8,7 +8,7 @@
 #' @import ggplot2
 #' @importFrom utils globalVariables
 #' @export
-plot.shiny_benchmark <- function(x, ...){
+plot.shiny_benchmark <- function(x, ...) {
   if (!requireNamespace(package = "ggplot2", quietly = TRUE))
     stop("ggplot2 is missing. Please, consider intalling ggplot2.")
 

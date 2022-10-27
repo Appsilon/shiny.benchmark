@@ -9,10 +9,10 @@
 #' @export
 
 shiny_benchmark_class <- setClass(
-  Class = 'shiny_benchmark',
+  Class = "shiny_benchmark",
   representation(
-    call = 'call',
-    time = 'proc_time',
-    performance = 'list'
+    call = "call",
+    time = "proc_time",
+    performance = "list"
   )
 )
