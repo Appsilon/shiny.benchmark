@@ -31,6 +31,9 @@ performance_tests <- function(
     n_rep = 1,
     debug = FALSE
 ) {
+  # Get the call parameters
+  call_benchmark <- match.call()
+
   # Number of commits to test
   n_commits <- length(commit_list)
 
@@ -64,30 +67,39 @@ performance_tests <- function(
   check_uncommitted_files()
 
   # run tests
-  if (type == "cypress") {
-    perf_list <- ptest_cypress(
-      commit_list = commit_list,
-      cypress_dir = cypress_dir,
-      tests_pattern = tests_pattern,
-      app_dir = app_dir,
-      port = port,
-      use_renv = use_renv,
-      renv_prompt = renv_prompt,
-      n_rep = n_rep,
-      debug = debug
-    )
-  } else {
-    perf_list <- ptest_shinytest2(
-      commit_list,
-      shinytest2_dir,
-      tests_pattern = tests_pattern,
-      app_dir,
-      use_renv = use_renv,
-      renv_prompt = renv_prompt,
-      n_rep = n_rep,
-      debug = debug
-    )
-  }
+  total_time <- system.time(
+    if (type == "cypress") {
+      perf_list <- ptest_cypress(
+        commit_list = commit_list,
+        cypress_dir = cypress_dir,
+        tests_pattern = tests_pattern,
+        app_dir = app_dir,
+        port = port,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
+        n_rep = n_rep,
+        debug = debug
+      )
+    } else {
+      perf_list <- ptest_shinytest2(
+        commit_list,
+        shinytest2_dir,
+        tests_pattern = tests_pattern,
+        app_dir,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
+        n_rep = n_rep,
+        debug = debug
+      )
+    }
+  )
 
-  return(perf_list)
+  out <- list(
+    call = call_benchmark,
+    time = total_time,
+    performance = perf_list
+  )
+  class(out) <- "shiny_benchmark"
+
+  return(out)
 }
