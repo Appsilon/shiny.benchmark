@@ -138,10 +138,6 @@ run_shinytest2_ptest <- function(
   # removing anything new in the github repo
   checkout_files(debug = debug)
 
-  # create report
-  create_report(report_params = perf_file,
-                filename = "shinytest_report")
-
   # return times
   return(perf_file)
 }

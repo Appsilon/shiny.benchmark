@@ -39,7 +39,4 @@ vignettes/*.pdf
 .Renviron
 
 # Rendered reports
-inst/templates/*.html
-inst/templates/*.pdf
-inst/qmd/*.html
-inst/qmd/*.pdf
+performance_report/*

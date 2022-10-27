@@ -17,6 +17,7 @@
 #' @param renv_prompt Prompt the user before taking any action?
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
+#' @param report_output Logical. TRUE to create a report of the performance
 #'
 #' @export
 performance_tests <- function(
@@ -29,7 +30,8 @@ performance_tests <- function(
     use_renv = TRUE,
     renv_prompt = TRUE,
     n_rep = 1,
-    debug = FALSE
+    debug = FALSE,
+    report_output = FALSE
 ) {
   # Number of commits to test
   n_commits <- length(commit_list)
@@ -87,6 +89,12 @@ performance_tests <- function(
       n_rep = n_rep,
       debug = debug
     )
+  }
+
+  # create report conditionally
+  if (report_output) {
+    report_name <- glue(type, "_report")
+    create_report(report_params = perf_file, report_name = report_name)
   }
 
   return(perf_list)
