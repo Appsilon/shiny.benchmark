@@ -115,9 +115,19 @@ create_cypress_plugins <- function() {
 #'
 #' @param project_path The path to the project with all needed packages
 #' installed
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
-create_cypress_tests <- function(project_path, cypress_file) {
+#' @param cypress_dir The directory with tests recorded by Cypress
+#' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
+#' all the content will be used
+create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
+  # locate files
+  cypress_files <- list.files(
+    path = cypress_dir,
+    pattern = tests_pattern,
+    full.names = TRUE,
+    recursive = TRUE
+  )
+  cypress_files <- grep(x = cypress_files, pattern = "\\.js$", value = TRUE)
+
   # creating a copy to be able to edit the js file
   js_file <- file.path(
     project_path,
@@ -127,7 +137,10 @@ create_cypress_tests <- function(project_path, cypress_file) {
     "app.spec.js"
   )
 
-  file.copy(from = cypress_file, to = js_file, overwrite = TRUE)
+  # combine all files into one
+  cypress_files_string <- paste0(cypress_files, collapse = " ") # nolint
+  command <- glue("cat {cypress_files_string} > {js_file}")
+  system(command = command, intern = TRUE)
 
   # file to store the times
   txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
@@ -144,6 +157,8 @@ create_cypress_tests <- function(project_path, cypress_file) {
 add_sendtime2js <- function(js_file, txt_file) {
   lines_to_add <- glue(
     "
+  describe('Finalizing tests', () => {it('Ending tests', () => {})})
+
   // Returning the time for each test
   // https://www.cypress.io/blog/2020/05/22/where-does-the-test-spend-its-time/
   let commands = []
@@ -169,7 +184,6 @@ add_sendtime2js <- function(js_file, txt_file) {
   }
   // Calling the sendTestTimings function
   beforeEach(sendTestTimings)
-  after(sendTestTimings)
   ",
     .open = "{{", .close = "}}"
   )

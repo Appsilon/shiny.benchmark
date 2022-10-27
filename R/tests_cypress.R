@@ -2,24 +2,30 @@
 #'
 #' @param commit_list A list of commit hash codes, branches' names or anything
 #' else you can use with git checkout [...]
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
+#' @param cypress_dir The directory with tests recorded by Cypress.
+#' It can also be a vector of the same size of commit_list
+#' @param tests_pattern Cypress/shinytest2 files pattern. E.g. 'shinytest2'
+#' It can also be a vector of the same size of commit_list. If it is NULL,
+#' all the content in cypress_dir/shinytest2_dir will be used
 #' @param app_dir The path to the application root
 #' @param port Port to run the app
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
 #' @param renv_prompt Prompt the user before taking any action?
+#' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
 ptest_cypress <- function(
     commit_list,
-    cypress_file,
+    cypress_dir,
+    tests_pattern,
     app_dir,
     port,
     use_renv,
     renv_prompt,
+    n_rep,
     debug
 ) {
   # creating the structure
@@ -37,11 +43,13 @@ ptest_cypress <- function(
     expr = {
       mapply(
         commit_list,
-        cypress_file,
+        cypress_dir,
+        tests_pattern,
         FUN = run_cypress_ptest,
         project_path = project_path,
         use_renv = use_renv,
         renv_prompt = renv_prompt,
+        n_rep = n_rep,
         debug = debug,
         SIMPLIFY = FALSE
       )
@@ -51,7 +59,7 @@ ptest_cypress <- function(
     },
     finally = {
       # Checkout to the main branch
-      checkout(branch = current_branch)
+      checkout(branch = current_branch, debug = debug)
       message(glue("Switched back to {current_branch}"))
 
       # Restore renv
@@ -77,12 +85,14 @@ ptest_cypress <- function(
 #' @param commit A commit hash code or a branch's name
 #' @param project_path The path to the project with all needed packages
 #' installed
-#' @param cypress_file The path to the .js file conteining cypress tests to
-#' be recorded
+#' @param cypress_dir The directory with tests recorded by Cypress
+#' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
+#' all the content will be used
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
 #' @param renv_prompt Prompt the user before taking any action?
+#' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom utils read.table
@@ -90,13 +100,15 @@ ptest_cypress <- function(
 run_cypress_ptest <- function(
     commit,
     project_path,
-    cypress_file,
+    cypress_dir,
+    tests_pattern,
     use_renv,
     renv_prompt,
+    n_rep,
     debug
 ) {
   # checkout to the desired commit
-  checkout(branch = commit)
+  checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
   message(glue("Switched to {commit}"))
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
@@ -104,29 +116,36 @@ run_cypress_ptest <- function(
   # get Cypress files
   files <- create_cypress_tests(
     project_path = project_path,
-    cypress_file = cypress_file
+    cypress_dir = cypress_dir,
+    tests_pattern = tests_pattern
   )
-
-  js_file <- files$js_file
   txt_file <- files$txt_file
 
-  # run tests there
-  command <- glue(
-    "cd {project_path}; ",
-    "set -eu; exec yarn --cwd node performance-test"
-  )
-  system(command, ignore.stdout = !debug, ignore.stderr = !debug)
+  # replicate tests
+  perf_file <- list()
+  pb <- create_progress_bar(total = n_rep)
+  for (i in 1:n_rep) {
+    # increment progress bar
+    pb$tick()
 
-  # read the file saved by cypress
-  perf_file <- read.table(file = txt_file, header = FALSE, sep = ";")
-  perf_file <- cbind.data.frame(date = date, perf_file)
-  colnames(perf_file) <- c("date", "test_name", "duration_ms")
+    # run tests there
+    command <- glue(
+      "cd {project_path}; ",
+      "set -eu; exec yarn --cwd node performance-test"
+    )
+    system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
-  # removing temp files
-  unlink(x = c(js_file, txt_file))
+    # read the file saved by cypress
+    perf_file[[i]] <- read.table(file = txt_file, header = FALSE, sep = ";")
+    perf_file[[i]] <- cbind.data.frame(date = date, rep_id = i, perf_file[[i]])
+    colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
+
+    # removing temp files
+    unlink(x = txt_file)
+  }
 
   # removing anything new in the github repo
-  checkout_files()
+  checkout_files(debug = debug)
 
   # create report
   create_report(report_params = perf_file,

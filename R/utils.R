@@ -4,7 +4,7 @@
 #' @importFrom glue glue
 get_commit_date <- function(branch) {
   date <- system(
-    glue("git show -s --format=%ci {branch}"),
+    command = glue("git show -s --format=%ci {branch}"),
     intern = TRUE
   )
   date <- as.POSIXct(date[1])
@@ -17,9 +17,10 @@ get_commit_date <- function(branch) {
 #' @importFrom glue glue
 #' @importFrom stringr str_trim
 get_commit_hash <- function() {
-  hash <- system("git show -s --format=%H", intern = TRUE)[1]
+  hash <- system(command = "git show -s --format=%H", intern = TRUE)[1]
+
   branch <- system(
-    glue("git branch --contains {hash}"),
+    command = glue("git branch --contains {hash}"),
     intern = TRUE
   )
 
@@ -33,7 +34,7 @@ get_commit_hash <- function() {
   )
 
   hash_head <- system(
-    glue("git rev-parse {branch}"),
+    command = glue("git rev-parse {branch}"),
     intern = TRUE
   )
 
@@ -48,8 +49,40 @@ get_commit_hash <- function() {
 #'
 #' @description Checkout anything created by the app. It prevents errors when
 #' changing branches
-checkout_files <- function() {
-  system("git checkout .")
+#'
+#' @param debug Logical. TRUE to display all the system messages on runtime
+checkout_files <- function(debug) {
+  system(
+    command = "git checkout .",
+    ignore.stdout = !debug,
+    ignore.stderr = !debug
+  )
+}
+
+#' @title Checkout GitHub branch
+#'
+#' @description checkout and go to a different branch
+#'
+#' @param branch Commit hash code or branch name
+#' @param debug Logical. TRUE to display all the system messages on runtime
+checkout <- function(branch, debug) {
+  system(
+    command = glue("git checkout {branch}"),
+    ignore.stdout = !debug,
+    ignore.stderr = !debug
+  )
+}
+
+#' @title Check for uncommitted files
+check_uncommitted_files <- function() {
+  changes <- system("git status --porcelain", intern = TRUE)
+
+  if (length(changes) != 0) {
+    system("git status -u")
+    stop("You have uncommitted files. Please resolve it before running the performance checks.")
+  } else {
+    return(invisible(TRUE))
+  }
 }
 
 #' @title Check and restore renv
@@ -76,12 +109,16 @@ restore_env <- function(branch, renv_prompt) {
   )
 }
 
-#' @title Checkout GitHub branch
-#' @description checkout and go to a different branch
+#' @title Create a progress bar to follow the execution
 #'
-#' @param branch Commit hash code or branch name
-checkout <- function(branch) {
-  system(
-    glue("git checkout {branch}")
+#' @param total Total number of replications
+#' @importFrom progress progress_bar
+create_progress_bar <- function(total = 100) {
+  pb <- progress_bar$new(
+    format = "Iteration :current/:total",
+    total = total,
+    clear = FALSE
   )
+
+  return(pb)
 }

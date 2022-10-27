@@ -28,6 +28,7 @@ Imports:
     echarts4r,
     glue,
     jsonlite,
+    progress,
     quarto,
     renv,
     shinytest2,
