@@ -14,6 +14,7 @@ test_that("Check if we are able to copy file content from a file to another", {
   content_before <- "TEST"
   writeLines(text = content_before, con = tmp_file)
 
+  dir.create(file.path(tmp_dir, "tests", "cypress", "integration"), showWarnings = FALSE, recursive = TRUE)
   files <- create_cypress_tests(project_path = tmp_dir, cypress_file = tmp_file)
   content_after <- readLines(con = files$js_file, n = 1)
 
@@ -29,7 +30,6 @@ test_that("Check whether we have are able to create Cypress structure correctly 
 
   expect_true(file.exists(file.path(tmp_dir, "node")))
   expect_true(file.exists(file.path(tmp_dir, "node", "root")))
-  expect_true(file.exists(file.path(tmp_dir, "node", "root", "DESCRIPTION")))
   expect_true(file.exists(file.path(tmp_dir, "tests")))
   expect_true(file.exists(file.path(tmp_dir, "tests", "cypress", "plugins")))
 })
