@@ -122,3 +122,22 @@ create_progress_bar <- function(total = 100) {
 
   return(pb)
 }
+
+#' @title Return statistics based on the set of tests replications
+#'
+#' @param object A shiny_benchmark object
+#' @import dplyr
+summarise_commit <- function(object) {
+  out <- bind_rows(object) %>%
+    group_by(test_name) %>%
+    summarise(
+      n = n(),
+      mean = mean(duration_ms),
+      median = median(duration_ms),
+      sd = sd(duration_ms),
+      min = min(duration_ms),
+      max = max(duration_ms)
+    )
+
+  return(out)
+}
