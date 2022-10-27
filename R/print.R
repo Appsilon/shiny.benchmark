@@ -1,6 +1,6 @@
 #' Print for shiny_benchmark class
 #'
-#' @param object shiny_benchmark object to print
+#' @param object shiny_benchmark object
 #'
 #' @method print shiny_benchmark
 #' @export
