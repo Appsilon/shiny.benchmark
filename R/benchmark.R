@@ -19,7 +19,7 @@
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
-performance_tests <- function(
+benchmark <- function(
     commit_list,
     cypress_dir = NULL,
     shinytest2_dir = NULL,
@@ -65,7 +65,7 @@ performance_tests <- function(
 
   # run tests
   if (type == "cypress") {
-    perf_list <- ptest_cypress(
+    perf_list <- benchmark_cypress(
       commit_list = commit_list,
       cypress_dir = cypress_dir,
       tests_pattern = tests_pattern,
@@ -77,7 +77,7 @@ performance_tests <- function(
       debug = debug
     )
   } else {
-    perf_list <- ptest_shinytest2(
+    perf_list <- benchmark_shinytest2(
       commit_list,
       shinytest2_dir,
       tests_pattern = tests_pattern,
