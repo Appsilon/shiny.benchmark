@@ -4,20 +4,26 @@
 #' else you can use with git checkout [...]
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' It can also be a vector of the same size of commit_list
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'
+#' It can also be a vector of the same size of commit_list. If it is NULL,
+#' all the content in cypress_dir/shinytest2_dir will be used
 #' @param app_dir The path to the application root
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
 #' @param renv_prompt Prompt the user before taking any action?
+#' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
 ptest_shinytest2 <- function(
     commit_list,
     shinytest2_dir,
+    tests_pattern,
     app_dir,
     use_renv,
     renv_prompt,
+    n_rep,
     debug
 ) {
   # creating the structure
@@ -32,11 +38,13 @@ ptest_shinytest2 <- function(
       mapply(
         commit_list,
         shinytest2_dir,
+        tests_pattern,
         FUN = run_shinytest2_ptest,
         app_dir = app_dir,
         project_path = project_path,
         use_renv = use_renv,
         renv_prompt = renv_prompt,
+        n_rep = n_rep,
         debug = debug,
         SIMPLIFY = FALSE
       )
@@ -67,10 +75,13 @@ ptest_shinytest2 <- function(
 #' @param app_dir The path to the application root
 #' @param project_path The path to the project
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'. If it is NULL,
+#' all the content will be used
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
 #' @param renv_prompt Prompt the user before taking any action?
+#' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom testthat ListReporter
@@ -81,8 +92,10 @@ run_shinytest2_ptest <- function(
     project_path,
     app_dir,
     shinytest2_dir,
+    tests_pattern,
     use_renv,
     renv_prompt,
+    n_rep,
     debug
 ) {
   # checkout to the desired commit
@@ -94,25 +107,33 @@ run_shinytest2_ptest <- function(
   # move test files to the project folder
   tests_dir <- move_shinytest2_tests(project_path = project_path, shinytest2_dir = shinytest2_dir)
 
-  # run tests there
-  my_reporter <- ListReporter$new()
-  test_app(
-    app_dir = dirname(tests_dir),
-    reporter = my_reporter,
-    stop_on_failure = FALSE,
-    stop_on_warning = FALSE
-  )
+  perf_file <- list()
+  pb <- create_progress_bar(total = n_rep)
+  for (i in 1:n_rep) {
+    # increment progress bar
+    pb$tick()
 
-  perf_file <- as.data.frame(my_reporter$get_results())
-  perf_file <- perf_file[, c("test", "real")]
-  perf_file$test <- gsub(
-    x = perf_file$test,
-    pattern = "\\{shinytest2\\} recording: ",
-    replacement = ""
-  )
+    # run tests there
+    my_reporter <- ListReporter$new()
+    test_app(
+      app_dir = dirname(tests_dir),
+      reporter = my_reporter,
+      stop_on_failure = FALSE,
+      stop_on_warning = FALSE,
+      filter = tests_pattern
+    )
 
-  perf_file <- cbind.data.frame(date = date, perf_file)
-  colnames(perf_file) <- c("date", "test_name", "duration_ms")
+    perf_file[[i]] <- as.data.frame(my_reporter$get_results())
+    perf_file[[i]] <- perf_file[[i]][, c("test", "real")]
+    perf_file[[i]]$test <- gsub(
+      x = perf_file[[i]]$test,
+      pattern = "\\{shinytest2\\} recording: ",
+      replacement = ""
+    )
+
+    perf_file[[i]] <- cbind.data.frame(date = date, rep_id = i, perf_file[[i]])
+    colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
+  }
 
   # removing anything new in the github repo
   checkout_files(debug = debug)
