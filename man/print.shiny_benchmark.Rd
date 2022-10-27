@@ -4,10 +4,12 @@
 \alias{print.shiny_benchmark}
 \title{Print for shiny_benchmark class}
 \usage{
-\method{print}{shiny_benchmark}(object)
+\method{print}{shiny_benchmark}(x, ...)
 }
 \arguments{
-\item{object}{shiny_benchmark object}
+\item{x}{shiny_benchmark object}
+
+\item{...}{Other parameters}
 }
 \description{
 Print for shiny_benchmark class

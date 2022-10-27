@@ -20,13 +20,15 @@ VignetteBuilder: knitr
 Depends:
   R (>= 3.1.0)
 Suggests:
-  dplyr,
   knitr,
   lintr,
   rcmdcheck
 Imports:
+  dplyr,
+  ggplot2,
   glue,
   jsonlite,
+  methods,
   progress,
   renv,
   shinytest2,

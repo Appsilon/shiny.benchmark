@@ -1,20 +1,21 @@
 #' Print for shiny_benchmark class
 #'
-#' @param object shiny_benchmark object
+#' @param x shiny_benchmark object
+#' @param ... Other parameters
 #'
 #' @method print shiny_benchmark
 #' @export
-print.shiny_benchmark <- function(object){
+print.shiny_benchmark <- function(x, ...) {
   cat('Shiny benchmark: \n')
   cat('\n')
   cat('Call:')
   cat('\n')
-  print(object$call)
+  print(x$call)
   cat('\n')
   cat('Total time ellapsed:')
   cat('\n')
-  print(object$time[["elapsed"]])
+  print(x$time[["elapsed"]])
   cat('\n')
   cat('Fit measures: \n')
-  print(object$performance)
+  print(x$performance)
 }

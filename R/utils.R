@@ -126,7 +126,9 @@ create_progress_bar <- function(total = 100) {
 #' @title Return statistics based on the set of tests replications
 #'
 #' @param object A shiny_benchmark object
+#'
 #' @import dplyr
+#' @importFrom stats median
 summarise_commit <- function(object) {
   out <- bind_rows(object) %>%
     group_by(test_name) %>%

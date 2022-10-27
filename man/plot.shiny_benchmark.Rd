@@ -4,10 +4,12 @@
 \alias{plot.shiny_benchmark}
 \title{Plot for shiny_benchmark class}
 \usage{
-\method{plot}{shiny_benchmark}(object)
+\method{plot}{shiny_benchmark}(x, ...)
 }
 \arguments{
-\item{object}{shiny_benchmark object}
+\item{x}{shiny_benchmark object}
+
+\item{...}{Other parameters}
 }
 \description{
 Plot for shiny_benchmark class

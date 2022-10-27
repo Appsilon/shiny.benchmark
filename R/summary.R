@@ -1,12 +1,12 @@
 #' Summary for shiny_benchmark class
 #'
 #' @param object shiny_benchmark object
+#' @param ... Other parameters
 #'
 #' @method summary shiny_benchmark
-#' @import dplyr
 #' @export
-summary.shiny_benchmark <- function(object){
-  if (!require(dplyr))
+summary.shiny_benchmark <- function(object, ...) {
+  if (!requireNamespace(package = "dplyr", quietly = TRUE))
     stop("dplyr is missing. Please, consider intalling dplyr.")
 
   summary_results <- lapply(X = object$performance, FUN = summarise_commit)

@@ -4,10 +4,12 @@
 \alias{summary.shiny_benchmark}
 \title{Summary for shiny_benchmark class}
 \usage{
-\method{summary}{shiny_benchmark}(object)
+\method{summary}{shiny_benchmark}(object, ...)
 }
 \arguments{
 \item{object}{shiny_benchmark object}
+
+\item{...}{Other parameters}
 }
 \description{
 Summary for shiny_benchmark class
