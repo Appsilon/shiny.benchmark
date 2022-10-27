@@ -20,7 +20,7 @@
 #'
 #' @importFrom glue glue
 #' @export
-performance_tests <- function(
+benchmark <- function(
     commit_list,
     cypress_dir = NULL,
     shinytest2_dir = NULL,
@@ -68,32 +68,30 @@ performance_tests <- function(
   check_uncommitted_files()
 
   # run tests
-  total_time <- system.time(
-    if (type == "cypress") {
-      perf_list <- ptest_cypress(
-        commit_list = commit_list,
-        cypress_dir = cypress_dir,
-        tests_pattern = tests_pattern,
-        app_dir = app_dir,
-        port = port,
-        use_renv = use_renv,
-        renv_prompt = renv_prompt,
-        n_rep = n_rep,
-        debug = debug
-      )
-    } else {
-      perf_list <- ptest_shinytest2(
-        commit_list,
-        shinytest2_dir,
-        tests_pattern = tests_pattern,
-        app_dir,
-        use_renv = use_renv,
-        renv_prompt = renv_prompt,
-        n_rep = n_rep,
-        debug = debug
-      )
-    }
-  )
+  if (type == "cypress") {
+    perf_list <- benchmark_cypress(
+      commit_list = commit_list,
+      cypress_dir = cypress_dir,
+      tests_pattern = tests_pattern,
+      app_dir = app_dir,
+      port = port,
+      use_renv = use_renv,
+      renv_prompt = renv_prompt,
+      n_rep = n_rep,
+      debug = debug
+    )
+  } else {
+    perf_list <- benchmark_shinytest2(
+      commit_list,
+      shinytest2_dir,
+      tests_pattern = tests_pattern,
+      app_dir,
+      use_renv = use_renv,
+      renv_prompt = renv_prompt,
+      n_rep = n_rep,
+      debug = debug
+    )
+  }
 
   out <- list(
     call = call_benchmark,
