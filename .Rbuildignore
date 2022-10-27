@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 .github
 .lintr
+tests/end2end
