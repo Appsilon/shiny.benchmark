@@ -1,4 +1,4 @@
 library(testthat)
-library(shiny.performance)
+library(shiny.benchmark)
 
-test_check("shiny.performance")
+test_check("shiny.benchmark")
