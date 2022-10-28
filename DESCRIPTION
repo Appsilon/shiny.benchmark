@@ -35,4 +35,5 @@ Imports:
     renv,
     shinytest2,
     stringr,
-    testthat
+    testthat,
+    yaml
