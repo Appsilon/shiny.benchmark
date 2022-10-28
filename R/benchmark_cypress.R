@@ -119,6 +119,7 @@ run_cypress_ptest <- function(
     cypress_dir = cypress_dir,
     tests_pattern = tests_pattern
   )
+  js_file <- files$js_file
   txt_file <- files$txt_file
 
   # replicate tests
@@ -140,7 +141,7 @@ run_cypress_ptest <- function(
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
     # removing temp files
-    unlink(x = txt_file)
+    unlink(x = c(txt_file, js_file))
   }
 
   # removing anything new in the github repo
