@@ -140,9 +140,12 @@ run_cypress_ptest <- function(
     perf_file[[i]] <- cbind.data.frame(date = date, rep_id = i, perf_file[[i]])
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
-    # removing temp files
-    unlink(x = c(txt_file, js_file))
+    # removing txt measures
+    unlink(x = txt_file)
   }
+
+  # removing js tests
+  unlink(x = js_file)
 
   # removing anything new in the github repo
   checkout_files(debug = debug)
