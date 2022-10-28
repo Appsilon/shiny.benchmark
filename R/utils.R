@@ -143,3 +143,28 @@ summarise_commit <- function(object) {
 
   return(out)
 }
+
+#' @title Load an application and instructions to run shiny.benchmark
+#'
+#' @param path A character vector of full path names
+#'
+#' @importFrom glue glue
+#' @export
+load_example <- function(path) {
+  # see if path exists
+  if (!file.exists(path))
+    stop("You must provide a valid path")
+
+  ex_path <- system.file(
+    "examples",
+    package = "shiny.benchmark",
+    mustWork = TRUE
+  )
+  files <- list.files(path = ex_path, full.names = TRUE)
+
+  invisible(
+    lapply(X = files, FUN = file.copy, to = path, recursive = TRUE)
+  )
+
+  message(glue("Follow instructions in {path}/run_tests.R"))
+}
