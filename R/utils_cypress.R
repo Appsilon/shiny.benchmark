@@ -139,7 +139,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   # combine all files into one
   for (i in seq_along(cypress_files)) {
     text <- readLines(con = cypress_files[i])
-    writeLines(text = text, con = js_file)
+    write(text = text, con = js_file, append = TRUE)
   }
 
   # file to store the times
