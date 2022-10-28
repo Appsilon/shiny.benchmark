@@ -27,8 +27,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir.create(path = plugins_path, showWarnings = FALSE)
 
   # create a path root linked to the main directory app
-  symlink_cmd <- glue("cd {dir_tests}; ln -s {app_dir} {root_path}")
-  system(symlink_cmd)
+  file.symlink(from = app_dir, to = root_path)
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
@@ -138,9 +137,10 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   )
 
   # combine all files into one
-  cypress_files_string <- paste0(cypress_files, collapse = " ") # nolint
-  command <- glue("cat {cypress_files_string} > {js_file}")
-  system(command = command, intern = TRUE)
+  for (i in seq_along(cypress_files)) {
+    text <- readLines(con = cypress_files[i])
+    write(x = text, file = js_file, append = TRUE)
+  }
 
   # file to store the times
   txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
