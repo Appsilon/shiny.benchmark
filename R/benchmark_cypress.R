@@ -130,8 +130,7 @@ run_cypress_ptest <- function(
 
     # run tests there
     command <- glue(
-      "cd {project_path}; ",
-      "set -eu; exec yarn --cwd node performance-test"
+      "cd {project_path}; set -eu; exec yarn --cwd node performance-test"
     )
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 

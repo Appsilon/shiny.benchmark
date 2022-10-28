@@ -25,7 +25,7 @@ create_shinytest2_structure <- function(app_dir) {
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
 move_shinytest2_tests <- function(project_path, shinytest2_dir) {
   # copy everything to the temporary directory
-  system(glue("cp -r {shinytest2_dir} {project_path}"))
+  file.copy(from = shinytest2_dir, to = project_path, recursive = TRUE)
   tests_dir <- file.path(project_path, "tests")
 
   return(tests_dir)
