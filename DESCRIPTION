@@ -11,7 +11,7 @@ Authors@R:
 Description: Compare performance of several versions of a shiny app based on commit hashs.
 License: LGPL-3
 URL: https://github.com/Appsilon/shiny.benchmark
-SystemRequirements: yarn 1.22.17 or higher, cypress 9.4.1 or higher, xvfb
+SystemRequirements: yarn 1.22.17 or higher, Node 12 or higher
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
