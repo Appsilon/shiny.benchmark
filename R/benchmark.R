@@ -19,8 +19,9 @@
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #' @param report_output Logical. TRUE to create a report of the performance
 #'
+#' @importFrom glue glue
 #' @export
-performance_tests <- function(
+benchmark <- function(
     commit_list,
     cypress_dir = NULL,
     shinytest2_dir = NULL,
@@ -33,6 +34,9 @@ performance_tests <- function(
     debug = FALSE,
     report_output = FALSE
 ) {
+  # Get the call parameters
+  call_benchmark <- match.call()
+
   # Number of commits to test
   n_commits <- length(commit_list)
 
@@ -51,7 +55,7 @@ performance_tests <- function(
   if (length(get(obj_name)) == 1)
     assign(obj_name, rep(get(obj_name), n_commits))
   if (length(get(obj_name)) != n_commits)
-    stop("You must provide 1 or {n_commits} paths for {obj_name}")
+    stop(glue("You must provide 1 or {n_commits} paths for {obj_name}"))
 
   if (is.null(tests_pattern))
     tests_pattern <- vector(mode = "list", length = n_commits)
@@ -66,36 +70,45 @@ performance_tests <- function(
   check_uncommitted_files()
 
   # run tests
-  if (type == "cypress") {
-    perf_list <- ptest_cypress(
-      commit_list = commit_list,
-      cypress_dir = cypress_dir,
-      tests_pattern = tests_pattern,
-      app_dir = app_dir,
-      port = port,
-      use_renv = use_renv,
-      renv_prompt = renv_prompt,
-      n_rep = n_rep,
-      debug = debug
-    )
-  } else {
-    perf_list <- ptest_shinytest2(
-      commit_list,
-      shinytest2_dir,
-      tests_pattern = tests_pattern,
-      app_dir,
-      use_renv = use_renv,
-      renv_prompt = renv_prompt,
-      n_rep = n_rep,
-      debug = debug
-    )
-  }
+  total_time <- system.time(
+    if (type == "cypress") {
+      perf_list <- benchmark_cypress(
+        commit_list = commit_list,
+        cypress_dir = cypress_dir,
+        tests_pattern = tests_pattern,
+        app_dir = app_dir,
+        port = port,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
+        n_rep = n_rep,
+        debug = debug
+      )
+    } else {
+      perf_list <- benchmark_shinytest2(
+        commit_list,
+        shinytest2_dir,
+        tests_pattern = tests_pattern,
+        app_dir,
+        use_renv = use_renv,
+        renv_prompt = renv_prompt,
+        n_rep = n_rep,
+        debug = debug
+      )
+    }
+  )
+
+  out <- list(
+    call = call_benchmark,
+    time = total_time,
+    performance = perf_list
+  )
+  class(out) <- "shiny_benchmark"
 
   # create report conditionally
   if (report_output) {
     report_name <- glue(type, "_report")
-    create_report(report_params = perf_file, report_name = report_name)
+    create_report(report_params = out$perf_file, report_name = report_name)
   }
 
-  return(perf_list)
+  return(out)
 }

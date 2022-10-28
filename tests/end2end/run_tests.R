@@ -5,7 +5,7 @@ args <- strsplit(args, ",")
 # packages
 library(shiny)
 library(testthat)
-library(shiny.performance)
+library(shiny.benchmark)
 
 # commits to compare
 type <- args[[1]]
@@ -17,7 +17,7 @@ n_rep <- as.integer(args[[6]])
 
 if (type == "cypress") {
   # run performance check using Cypress
-  out <- shiny.performance::performance_tests(
+  out <- benchmark(
     commit_list = commit_list,
     cypress_dir = dir,
     tests_pattern = pattern,
@@ -30,7 +30,7 @@ if (type == "cypress") {
   )
 } else {
   # run performance check using shinytest2
-  out <- shiny.performance::performance_tests(
+  out <- benchmark(
     commit_list = commit_list,
     shinytest2_dir = dir,
     tests_pattern = pattern,
@@ -44,8 +44,8 @@ if (type == "cypress") {
 }
 
 # checks
-stopifnot(length(out) == length(commit_list))
-stopifnot(length(out[[1]]) >= n_rep)
+stopifnot(length(out$performance) == length(commit_list))
+stopifnot(length(out$performance[[1]]) >= n_rep)
 
 # deactivate renv
 renv::deactivate()

@@ -1,14 +1,13 @@
-#' @title Run the performance test based on multiple commits using Cypress
+#' @title Run the performance test based on a multiple commits using shinytest2
 #'
 #' @param commit_list A list of commit hash codes, branches' names or anything
 #' else you can use with git checkout [...]
-#' @param cypress_dir The directory with tests recorded by Cypress.
+#' @param shinytest2_dir The directory with tests recorded by shinytest2
 #' It can also be a vector of the same size of commit_list
-#' @param tests_pattern Cypress/shinytest2 files pattern. E.g. 'shinytest2'
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'
 #' It can also be a vector of the same size of commit_list. If it is NULL,
 #' all the content in cypress_dir/shinytest2_dir will be used
 #' @param app_dir The path to the application root
-#' @param port Port to run the app
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
 #' packages will be used in all branches.
@@ -17,23 +16,18 @@
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @export
-ptest_cypress <- function(
+benchmark_shinytest2 <- function(
     commit_list,
-    cypress_dir,
+    shinytest2_dir,
     tests_pattern,
     app_dir,
-    port,
     use_renv,
     renv_prompt,
     n_rep,
     debug
 ) {
   # creating the structure
-  project_path <- create_cypress_structure(
-    app_dir = app_dir,
-    port = port,
-    debug = debug
-  )
+  project_path <- create_shinytest2_structure(app_dir = app_dir)
 
   # getting the current branch
   current_branch <- get_commit_hash()
@@ -43,9 +37,10 @@ ptest_cypress <- function(
     expr = {
       mapply(
         commit_list,
-        cypress_dir,
+        shinytest2_dir,
         tests_pattern,
-        FUN = run_cypress_ptest,
+        FUN = run_shinytest2_ptest,
+        app_dir = app_dir,
         project_path = project_path,
         use_renv = use_renv,
         renv_prompt = renv_prompt,
@@ -67,26 +62,20 @@ ptest_cypress <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(
-        x = c(
-          file.path(project_path, "node"),
-          file.path(project_path, "tests")
-        ),
-        recursive = TRUE
-      )
+      unlink(x = file.path(project_path, "tests"), recursive = TRUE)
     }
   )
 
   return(perf_list)
 }
 
-#' @title Run the performance test based on a single commit using Cypress
+#' @title Run the performance test based on a single commit using shinytest2
 #'
 #' @param commit A commit hash code or a branch's name
-#' @param project_path The path to the project with all needed packages
-#' installed
-#' @param cypress_dir The directory with tests recorded by Cypress
-#' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
+#' @param app_dir The path to the application root
+#' @param project_path The path to the project
+#' @param shinytest2_dir The directory with tests recorded by shinytest2
+#' @param tests_pattern shinytest2 files pattern. E.g. 'performance'. If it is NULL,
 #' all the content will be used
 #' @param use_renv In case it is set as TRUE, package will try to apply
 #' renv::restore() in all branches. Otherwise, the current loaded list of
@@ -95,12 +84,14 @@ ptest_cypress <- function(
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
-#' @importFrom utils read.table
+#' @importFrom testthat ListReporter
+#' @importFrom shinytest2 test_app
 #' @export
-run_cypress_ptest <- function(
+run_shinytest2_ptest <- function(
     commit,
     project_path,
-    cypress_dir,
+    app_dir,
+    shinytest2_dir,
     tests_pattern,
     use_renv,
     renv_prompt,
@@ -113,15 +104,9 @@ run_cypress_ptest <- function(
   message(glue("Switched to {commit}"))
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
-  # get Cypress files
-  files <- create_cypress_tests(
-    project_path = project_path,
-    cypress_dir = cypress_dir,
-    tests_pattern = tests_pattern
-  )
-  txt_file <- files$txt_file
+  # move test files to the project folder
+  tests_dir <- move_shinytest2_tests(project_path = project_path, shinytest2_dir = shinytest2_dir)
 
-  # replicate tests
   perf_file <- list()
   pb <- create_progress_bar(total = n_rep)
   for (i in 1:n_rep) {
@@ -129,19 +114,25 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
-    command <- glue(
-      "cd {project_path}; ",
-      "set -eu; exec yarn --cwd node performance-test"
+    my_reporter <- ListReporter$new()
+    test_app(
+      app_dir = dirname(tests_dir),
+      reporter = my_reporter,
+      stop_on_failure = FALSE,
+      stop_on_warning = FALSE,
+      filter = tests_pattern
     )
-    system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
-    # read the file saved by cypress
-    perf_file[[i]] <- read.table(file = txt_file, header = FALSE, sep = ";")
+    perf_file[[i]] <- as.data.frame(my_reporter$get_results())
+    perf_file[[i]] <- perf_file[[i]][, c("test", "real")]
+    perf_file[[i]]$test <- gsub(
+      x = perf_file[[i]]$test,
+      pattern = "\\{shinytest2\\} recording: ",
+      replacement = ""
+    )
+
     perf_file[[i]] <- cbind.data.frame(date = date, rep_id = i, perf_file[[i]])
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
-
-    # removing temp files
-    unlink(x = txt_file)
   }
 
   # removing anything new in the github repo
