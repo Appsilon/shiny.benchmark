@@ -44,8 +44,8 @@ if (type == "cypress") {
 }
 
 # checks
-stopifnot(length(out) == length(commit_list))
-stopifnot(length(out[[1]]) >= n_rep)
+stopifnot(length(out$performance) == length(commit_list))
+stopifnot(length(out$performance[[1]]) >= n_rep)
 
 # deactivate renv
 renv::deactivate()
