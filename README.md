@@ -141,7 +141,7 @@ out <- benchmark(
   commit_list = commit_list,
   cypress_dir = "tests/cypress",
   tests_pattern = "use_this_one_[0-9]",
-  use_renv = FALSE
+  use_renv = FALSE,
   n_rep = 15
 )
 
