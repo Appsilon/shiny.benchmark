@@ -51,7 +51,7 @@ Here is a complete example on how to setup your `git`:
 # starting
 git init
 echo .Rproj.user >> .gitignore
-echo .Rproj >> .gitignore
+echo *.Rproj >> .gitignore
 echo .Rprofile >> .gitignore
 echo renv >> .gitignore
 echo .Rprofile >> .gitignore
