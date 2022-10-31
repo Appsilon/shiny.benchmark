@@ -3,3 +3,4 @@
 .github
 .lintr
 tests/end2end
+pkgdown
