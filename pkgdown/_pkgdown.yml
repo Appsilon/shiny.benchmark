@@ -1,0 +1,33 @@
+title: shiny.benchmark
+template:
+  bootstrap: 5
+  bootswatch: pulse
+  bslib:
+    pkgdown-nav-height: 100px
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-RS06EY8KNQ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RS06EY8KNQ');
+      </script>
+
+url:
+
+navbar:
+  bg: primary
+  left:
+    - icon: fa-home
+      href: index.html
+      text: "Start"
+    - icon: fa-file-code-o
+      text: "Reference"
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/Appsilon/shiny.benchmark
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/Appsilon
