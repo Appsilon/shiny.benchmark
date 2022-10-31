@@ -62,7 +62,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/Appsilon/shiny.benchmark">
+  <a class="nav-link" href="https://github.com/Appsilon/shiny.benchmark">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -107,13 +107,112 @@
 <div class="section level2">
 <h2 id="how-to-use-it">How to use it?<a class="anchor" aria-label="anchor" href="#how-to-use-it"></a>
 </h2>
-<p>TODO</p>
+<p>The best way to start using <code>shiny.performance</code> is through an example. If you want a start point, you can use the <code>load_example</code> function. In order to use this, create a new folder in your computer and use the following code to generate an application to serve us as example for our performance checks:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Appsilon/shiny.benchmark">shiny.benchmark</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/load_example.html">load_example</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"path/to/new/project"</span><span class="op">)</span></span></code></pre></div>
+<p>It will create some useful files under <code>path/to/new/project</code>. The most important one is the <code>run_tests.R</code> which provides several instructions at the very top.</p>
+<p>As we are comparing versions of the same application, we need different app versions in different branches/commits in <code>git</code>. Start using <code>cd app; git init</code> to iniciate git inside <code>app/</code> folder.</p>
+<p>Get familiar with <code>app/server.R</code> file in order to generate more interesting scenarios. The basic idea is to use the <code>Sys.sleep</code> function to simulate some app’s functionalities. Remember that, when running the benchmark, that is the amount of time it will take to measure the performance.</p>
+<p>When you are ready, commit your changes in master/main using <code>git add .; git commit -m "your commit message"</code>. Make some editions and commit these new changes into a new branch or in the same branch your are testing (it will have a different commit hash). Repeat the process adding as many new modifications as you want. E.g. add renv, add more tests, change the names of the tests/test files and so on.</p>
+<p>Here is a complete example on how to setup your <code>git</code>:</p>
+<pre class="git"><code># starting
+git init
+echo .Rproj.user &gt;&gt; .gitignore
+echo *.Rproj &gt;&gt; .gitignore
+echo .Rprofile &gt;&gt; .gitignore
+echo renv &gt;&gt; .gitignore
+echo .Rprofile &gt;&gt; .gitignore
+
+# master
+git add .
+git commit -m "first commit"
+
+# develop (decrease Sys.sleep times in server.R)
+git checkout -b develop
+git add .
+git commit -m "improving performance"
+
+## Using renv
+git branch renv_shiny1 develop
+git checkout renv_shiny1
+R -e 'renv::init()'
+git add .
+git commit -m "renv active"
+
+## Downgrading shiny
+git checkout -b renv_shiny2
+R -e 'renv::install("shiny@1.7.0")'
+R -e 'renv::snapshot()'
+git add .
+git commit -m "downgrading shiny"
+
+## Switching back to develop
+git checkout develop</code></pre>
+<p>Now you are ready to go. The <code>benchmark</code> function provides several arguments to make your life easier when running your performance checks. The mandatory arguments are:</p>
+<ul>
+<li>
+<code>commit_list</code>: A vector with commits, branches or anything else you can use in <code>git checkout</code>
+</li>
+<li>
+<code>cypress_dir</code> or <code>shinytest2_dir</code>: Folder containing the tests we want to check the performance. In our case it is <code>tests/cypress</code> and <code>tests</code> respectively.</li>
+</ul>
+<p>The default behavior is to try to use <code>renv</code> in your project. If you do not have the renv structure, you can turn <code>renv</code> off using <code>use_renv = FALSE</code></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Appsilon/shiny.benchmark">shiny.benchmark</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># commits to compare</span></span>
+<span><span class="va">commit_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"develop"</span>, <span class="st">"renv_shiny1"</span>, <span class="st">"renv_shiny2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># run performance check using Cypress</span></span>
+<span><span class="fu"><a href="reference/benchmark.html">benchmark</a></span><span class="op">(</span></span>
+<span>  commit_list <span class="op">=</span> <span class="va">commit_list</span>,</span>
+<span>  cypress_dir <span class="op">=</span> <span class="st">"tests/cypress"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>That is all you need to run your <code>Cypress</code> tests. If you don’t use <code>Cypress</code>, you may want to use <code>shinytest2</code> instead:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/benchmark.html">benchmark</a></span><span class="op">(</span></span>
+<span>  commit_list <span class="op">=</span> <span class="va">commit_list</span>,</span>
+<span>  shinytest2_dir <span class="op">=</span> <span class="st">"tests"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To run just specific tests, you can take advantage of the <code>tests_pattern</code> argument. It will filter the test file’s names based on regular expression:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/benchmark.html">benchmark</a></span><span class="op">(</span></span>
+<span>  commit_list <span class="op">=</span> <span class="va">commit_list</span>,</span>
+<span>  shinytest2_dir <span class="op">=</span> <span class="st">"tests"</span>,</span>
+<span>  tests_pattern <span class="op">=</span> <span class="st">"use_this_one_[0-9]"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>If your project has <code>renv</code> strucure, you can set <code>use_renv</code> to <code>TRUE</code> to guarantee that, for each application version your are using the correct packages. If you want to approve/reprove <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a></code>, you can set <code>renv_prompt = TRUE</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/benchmark.html">benchmark</a></span><span class="op">(</span></span>
+<span>  commit_list <span class="op">=</span> <span class="va">commit_list</span>,</span>
+<span>  shinytest2_dir <span class="op">=</span> <span class="st">"tests"</span>,</span>
+<span>  tests_pattern <span class="op">=</span> <span class="st">"use_this_one_[0-9]"</span>,</span>
+<span>  use_renv <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># default</span></span>
+<span>  renv_prompt <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To have more acurate information about the time your application takes to perform some actions, you may need to replicate the tests. In this case, you can use the <code>n_rep</code> argument:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/benchmark.html">benchmark</a></span><span class="op">(</span></span>
+<span>  commit_list <span class="op">=</span> <span class="va">commit_list</span>,</span>
+<span>  cypress_dir <span class="op">=</span> <span class="st">"tests/cypress"</span>,</span>
+<span>  tests_pattern <span class="op">=</span> <span class="st">"use_this_one_[0-9]"</span>,</span>
+<span>  use_renv <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">15</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">out</span></span></code></pre></div>
+<p>For fast information about the tests’s results, you can use the <code>summary</code> and also the <code>plot</code> methods:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="how-to-contribute">How to contribute?<a class="anchor" aria-label="anchor" href="#how-to-contribute"></a>
 </h2>
 <p>If you want to contribute to this project please submit a regular PR, once you’re done with new feature or bug fix.</p>
-<p>Reporting a bug is also helpful - please use <a href="https://github.com/Appsilon/shiny.benchmark/issues" class="external-link">GitHub issues</a> and describe your problem as detailed as possible.</p>
+<p>Reporting a bug is also helpful - please use <a href="https://github.com/Appsilon/shiny.benchmark/issues">GitHub issues</a> and describe your problem as detailed as possible.</p>
 </div>
 </div>
 <div class="section level1">
@@ -128,7 +227,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/Appsilon/shiny.benchmark/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Appsilon/shiny.benchmark/">Browse source code</a></li>
 </ul>
 </div>
 
