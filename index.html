@@ -88,6 +88,8 @@
 </blockquote>
 <!-- badges: start -->
 <p><img src="https://github.com/Appsilon/shiny.benchmark/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"><!-- badges: end --></p>
+<p><code>shiny.benchmark</code> is a tool aimed to measure and compare the performance of different versions of a <code>shiny</code> application. Based on a list of different application versions, accessible by a git repo by its refs (commit hash or branch name), the user can write instructions to be executed using Cypress or <code>shinytest2</code>. These instructions are then evaluated by the different versions of your <code>shiny</code> application and therefore the performance’s improvement/deterioration (time elapsed) are be recorded.</p>
+<p>The package is flexible enough to allow different sets of tests for the different refs as well as different package versions (via <code>renv</code>). Also, the user can replicate the tests to have more accurate measures of performance.</p>
 <div class="section level2">
 <h2 id="how-to-install">How to install?<a class="anchor" aria-label="anchor" href="#how-to-install"></a>
 </h2>
