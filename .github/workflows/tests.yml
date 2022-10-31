@@ -44,10 +44,8 @@ jobs:
 
       - name: Install shiny.benchmark
         run: |
-          pwd
-          ls
           Rscript -e "install.packages('remotes')"
-          Rscript -e "remotes::install_local(quiet = TRUE)"
+          Rscript -e "remotes::install_local("../../../", quiet = TRUE)"
 
       - name: Create app structure
         run: |
