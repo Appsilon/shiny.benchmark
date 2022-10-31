@@ -12,3 +12,4 @@ summarise_commit(object)
 \description{
 Return statistics based on the set of tests replications
 }
+\keyword{internal}

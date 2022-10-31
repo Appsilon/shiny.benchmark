@@ -16,3 +16,4 @@ create_cypress_structure(app_dir, port, debug)
 \description{
 Create a temporary directory to store everything needed by Cypress
 }
+\keyword{internal}

@@ -9,3 +9,4 @@ check_uncommitted_files()
 \description{
 Check for uncommitted files
 }
+\keyword{internal}

@@ -5,6 +5,8 @@
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
 #' @importFrom jsonlite write_json
+#'
+#' @keywords internal
 create_cypress_structure <- function(app_dir, port, debug) {
   # temp dir to run the tests
   dir_tests <- tempdir()
@@ -57,6 +59,8 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #'
 #' @param tests_path The path to project
 #' @param port Port to run the app
+#'
+#' @keywords internal
 create_node_list <- function(tests_path, port) {
   json_list <- list(
     private = TRUE,
@@ -80,6 +84,8 @@ create_node_list <- function(tests_path, port) {
 #'
 #' @param plugins_file The path to the Cypress plugins
 #' @param port Port to run the app
+#'
+#' @keywords internal
 create_cypress_list <- function(plugins_file, port) {
   json_list <- list(
     baseUrl = glue("http://localhost:{port}"),
@@ -91,6 +97,8 @@ create_cypress_list <- function(plugins_file, port) {
 }
 
 #' @title Create the JS code to track execution time
+#'
+#' @keywords internal
 create_cypress_plugins <- function() {
   js_txt <- "
   const fs = require('fs')
@@ -117,6 +125,8 @@ create_cypress_plugins <- function() {
 #' @param cypress_dir The directory with tests recorded by Cypress
 #' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
 #' all the content will be used
+#'
+#' @keywords internal
 create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   # locate files
   cypress_files <- list.files(
@@ -154,6 +164,8 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
 #'
 #' @param js_file Path to the .js file to add code
 #' @param txt_file Path to the file to record the execution times
+#'
+#' @keywords internal
 add_sendtime2js <- function(js_file, txt_file) {
   lines_to_add <- glue(
     "

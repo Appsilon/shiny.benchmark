@@ -14,3 +14,4 @@ move_shinytest2_tests(project_path, shinytest2_dir)
 \description{
 Move tests to a temporary folder
 }
+\keyword{internal}

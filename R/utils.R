@@ -2,6 +2,8 @@
 #'
 #' @param branch Commit hash code or branch name
 #' @importFrom glue glue
+#'
+#' @keywords internal
 get_commit_date <- function(branch) {
   date <- system(
     command = glue("git show -s --format=%ci {branch}"),
@@ -16,6 +18,8 @@ get_commit_date <- function(branch) {
 #'
 #' @importFrom glue glue
 #' @importFrom stringr str_trim
+#'
+#' @keywords internal
 get_commit_hash <- function() {
   hash <- system(command = "git show -s --format=%H", intern = TRUE)[1]
 
@@ -51,6 +55,8 @@ get_commit_hash <- function() {
 #' changing branches
 #'
 #' @param debug Logical. TRUE to display all the system messages on runtime
+#'
+#' @keywords internal
 checkout_files <- function(debug) {
   system(
     command = "git checkout .",
@@ -65,6 +71,8 @@ checkout_files <- function(debug) {
 #'
 #' @param branch Commit hash code or branch name
 #' @param debug Logical. TRUE to display all the system messages on runtime
+#'
+#' @keywords internal
 checkout <- function(branch, debug) {
   system(
     command = glue("git checkout {branch}"),
@@ -74,6 +82,8 @@ checkout <- function(branch, debug) {
 }
 
 #' @title Check for uncommitted files
+#'
+#' @keywords internal
 check_uncommitted_files <- function() {
   changes <- system("git status --porcelain", intern = TRUE)
 
@@ -96,6 +106,8 @@ check_uncommitted_files <- function() {
 #' @param renv_prompt Prompt the user before taking any action?
 #' @importFrom glue glue
 #' @importFrom renv activate restore
+#'
+#' @keywords internal
 restore_env <- function(branch, renv_prompt) {
   # handling renv
   tryCatch(
@@ -113,6 +125,8 @@ restore_env <- function(branch, renv_prompt) {
 #'
 #' @param total Total number of replications
 #' @importFrom progress progress_bar
+#'
+#' @keywords internal
 create_progress_bar <- function(total = 100) {
   pb <- progress_bar$new(
     format = "Iteration :current/:total",
@@ -129,6 +143,8 @@ create_progress_bar <- function(total = 100) {
 #'
 #' @import dplyr
 #' @importFrom stats median
+#'
+#' @keywords internal
 summarise_commit <- function(object) {
   out <- bind_rows(object) %>%
     group_by(test_name) %>%

@@ -3,6 +3,8 @@
 #' @param app_dir The path to the application root
 #'
 #' @importFrom glue glue
+#'
+#' @keywords internal
 create_shinytest2_structure <- function(app_dir) {
   # temp dir to run the tests
   dir_tests <- tempdir()
@@ -23,6 +25,8 @@ create_shinytest2_structure <- function(app_dir) {
 #'
 #' @param project_path The path to the project
 #' @param shinytest2_dir The directory with tests recorded by shinytest2
+#'
+#' @keywords internal
 move_shinytest2_tests <- function(project_path, shinytest2_dir) {
   # copy everything to the temporary directory
   file.copy(from = shinytest2_dir, to = project_path, recursive = TRUE)
