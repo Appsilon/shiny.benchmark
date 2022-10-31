@@ -15,7 +15,7 @@ template:
         gtag('config', 'G-RS06EY8KNQ');
       </script>
 
-url:
+url: https://github.com/Appsilon/shiny.benchmark/
 
 navbar:
   bg: primary
