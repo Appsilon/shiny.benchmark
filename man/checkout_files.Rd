@@ -13,3 +13,4 @@ checkout_files(debug)
 Checkout anything created by the app. It prevents errors when
 changing branches
 }
+\keyword{internal}

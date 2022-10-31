@@ -17,3 +17,4 @@ Check whether renv is in use in the current branch. Raise error
 if renv is not in use or apply renv:restore() in the case the package is
 present
 }
+\keyword{internal}
