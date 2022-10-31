@@ -31,3 +31,21 @@ navbar:
       href: https://github.com/Appsilon/shiny.benchmark
     - icon: fa-twitter fa-lg
       href: https://twitter.com/Appsilon
+
+reference:
+- title: Performance tests
+  contents:
+  - '`benchmark`'
+  - '`benchmark_cypress`'
+  - '`benchmark_shinytest2`'
+  - '`run_cypress_ptest`'
+  - '`run_shinytest2_ptest`'
+- title: Shiny Benchmark Class
+  contents:
+  - '`shiny_benchmark-class`'
+  - '`summary.shiny_benchmark`'
+  - '`plot.shiny_benchmark`'
+  - '`print.shiny_benchmark`'
+- title: Other
+  contents:
+  - '`load_example`'
