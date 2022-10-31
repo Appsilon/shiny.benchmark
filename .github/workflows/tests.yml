@@ -38,14 +38,14 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - name: Install R package dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+        uses: r-lib/actions/setup-r-dependencies@v3
         with:
           extra-packages: local::. # Necessary to avoid object usage linter errors.
 
       - name: Install shiny.benchmark
         run: |
           Rscript -e "install.packages('remotes')"
-          Rscript -e "remotes::install_github(repo = 'Appsilon/shiny.benchmark', auth_token = Sys.getenv('GITHUB_PAT'), ref = Sys.getenv('BRANCH_NAME'), quiet = TRUE)"
+          Rscript -e "remotes::install_local(quiet = TRUE)"
 
       - name: Create app structure
         run: |
