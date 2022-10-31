@@ -162,7 +162,7 @@ load_example <- function(path) {
   if (!file.exists(path))
     stop("You must provide a valid path")
 
-  if (length(list.files("tst"))) {
+  if (length(list.files(path))) {
     choice <- menu(
       choices = c("Yes", "No"),
       title = glue("{path} seems to not be empty. Would you like to proceed?")
