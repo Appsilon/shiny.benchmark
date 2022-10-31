@@ -4,7 +4,6 @@ Version: 0.1.1
 Authors@R:
   c(
     person(given = "Douglas", family = "Azevedo", email = "douglas@appsilon.com", role = "aut"),
-    person(given = "Pedro", family = "Silva", email = "pedro@appsilon.com", role = "aut"),
     person("Developers", "Appsilon", email = "support+opensource@appsilon.com", role = "cre"),
     person(family = "Appsilon Sp. z o.o.", role = "cph")
   )
