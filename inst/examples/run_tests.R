@@ -1,6 +1,6 @@
 ###############################################################################
-# Start a git repo under app/ folder here and create some branches. It can be #
-# more fun if you change the parameters in app/server.R                       #
+# Start a git repo under app/ folder and create some branches. It can be more #
+# fun if you change the Sys.sleep time in app/server.R                        #
 #                                                                             #
 # suggestion:                                                                 #
 # git init                                                                    #
@@ -16,6 +16,9 @@
 # # feature                                                                   #
 # git checkout -b feature                                                     #
 # git commit --allow-empty -m "dummy commit to change hash"                   #
+#                                                                             #
+# For a more complete example see:                                            #
+#   https://github.com/Appsilon/shiny.benchmark                               #
 ###############################################################################
 
 # packages
@@ -23,7 +26,7 @@ library(shiny.benchmark)
 
 # commits to compare
 type <- "cypress"
-commit_list <- c("develop", "feature") # be sure you created these branches
+commit_list <- c("develop", "feature")
 dir <- "tests/cypress"
 pattern <- "use_this_one_[0-9]"
 use_renv <- FALSE
@@ -56,3 +59,7 @@ if (type == "cypress") {
     debug = FALSE
   )
 }
+
+out
+summary(out)
+plot(out)

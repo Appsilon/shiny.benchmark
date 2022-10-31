@@ -145,15 +145,32 @@ summarise_commit <- function(object) {
 }
 
 #' @title Load an application and instructions to run shiny.benchmark
+#' @description This function aims to generate a template to be used
+#' by shiny.benchmark. It will create the necessary structure on `path` with
+#' some examples of tests using Cypress and shinytest2. Also, a simple
+#' application will be added to the folder as well as instructions on how
+#' to perform the performance checks. Be aware that a new git repo is need in
+#' the selected `path`.
 #'
-#' @param path A character vector of full path names
+#' @param path A character vector of full path name
 #'
 #' @importFrom glue glue
+#' @importFrom utils menu
 #' @export
 load_example <- function(path) {
   # see if path exists
   if (!file.exists(path))
     stop("You must provide a valid path")
+
+  if (length(list.files(path))) {
+    choice <- menu(
+      choices = c("Yes", "No"),
+      title = glue("{path} seems to not be empty. Would you like to proceed?")
+    )
+
+    if (choice == 2)
+      stop("Process aborted by user. Consider creating a new empty path.")
+  }
 
   ex_path <- system.file(
     "examples",
@@ -162,9 +179,11 @@ load_example <- function(path) {
   )
   files <- list.files(path = ex_path, full.names = TRUE)
 
-  invisible(
-    lapply(X = files, FUN = file.copy, to = path, recursive = TRUE)
-  )
+  for (file in files) {
+    file.copy(from = file, to = path, recursive = TRUE)
+    print(glue("{basename(file)} created at {path}"))
+  }
 
-  message(glue("Follow instructions in {path}/run_tests.R"))
+  fpath <- file.path(path, "run_tests.R") # nolint
+  message(glue("Follow instructions in {fpath}"))
 }

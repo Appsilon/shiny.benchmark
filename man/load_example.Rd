@@ -7,8 +7,13 @@
 load_example(path)
 }
 \arguments{
-\item{path}{A character vector of full path names}
+\item{path}{A character vector of full path name}
 }
 \description{
-Load an application and instructions to run shiny.benchmark
+This function aims to generate a template to be used
+by shiny.benchmark. It will create the necessary structure on \code{path} with
+some examples of tests using Cypress and shinytest2. Also, a simple
+application will be added to the folder as well as instructions on how
+to perform the performance checks. Be aware that a new git repo is need in
+the selected \code{path}.
 }
