@@ -18,7 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
+        - {os: macOS-latest,   r: 'release'}
+        - {os: windows-latest, r: 'release'}
+        - {os: ubuntu-22.04, r: 'devel'}
         - {os: ubuntu-22.04, r: 'release'}
+        - {os: ubuntu-22.04, r: 'oldrel'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -26,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install R
         uses: r-lib/actions/setup-r@v2
@@ -40,8 +44,8 @@ jobs:
 
       - name: Install shiny.benchmark
         run: |
-          R -e "install.packages('remotes')"
-          R -e "remotes::install_github(repo = 'Appsilon/shiny.benchmark', auth_token = Sys.getenv('GITHUB_PAT'), ref = Sys.getenv('BRANCH_NAME'), quiet = TRUE)"
+          Rscript -e "install.packages('remotes')"
+          Rscript -e "remotes::install_local('../../../', quiet = TRUE)"
 
       - name: Create app structure
         run: |
