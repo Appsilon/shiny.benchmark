@@ -83,11 +83,6 @@ datatable(
 
 ## Visualizations
 
-``` {r cache = FALSE, echo = F, warning = F, message = F}
-message(df_all_branches)
-message(typeof(df_all_branches))
-```
-
 ```{r preparing data, echo=FALSE}
 baseline <- min(df_all_branches$duration_ms)
 df_baseline <- df_all_branches %>% 
