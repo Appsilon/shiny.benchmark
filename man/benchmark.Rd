@@ -14,7 +14,8 @@ benchmark(
   use_renv = TRUE,
   renv_prompt = TRUE,
   n_rep = 1,
-  debug = FALSE
+  debug = FALSE,
+  report_output = FALSE
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ packages will be used in all branches.}
 \item{n_rep}{Number of replications desired}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
+
+\item{report_output}{Logical. TRUE to create a report of the performance}
 }
 \description{
 Execute performance tests for a list of commits
