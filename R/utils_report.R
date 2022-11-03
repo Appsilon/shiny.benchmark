@@ -1,7 +1,7 @@
 TEMPLATE_FILE_USR <- "performance_report/report.qmd"
 TEMPLATE_FILE_PKG <-
   system.file("templates", "report_template.qmd",
-              package = "shiny.performance")
+              package = "shiny.benchmark")
 
 #' Create a performance report for the tests that were run
 #'
@@ -11,13 +11,10 @@ TEMPLATE_FILE_PKG <-
 #' the extension
 #'
 #' @importFrom quarto quarto_render
-#' @importFrom yaml write_yaml yaml.load_file
 #' @export
 create_report <- function(report_params, report_name) {
   prepare_dir_and_template()
   report_file <- file.path("performance_report", glue(report_name, ".html"))
-  #yaml_file <- file.path("performance_report", "params_list.yml")
-  #write_yaml(list("test_output" = report_params), yaml_file)
   quarto_render(input = TEMPLATE_FILE_USR,
                 output_file = report_file,
                 execute_params = report_params)

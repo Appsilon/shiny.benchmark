@@ -26,14 +26,32 @@ DT_options <- list(
 
 This report aims to compare different versions of the app. Here is the list of versions and the development dates:
 
-```{r tab, echo=FALSE}
+```{r data_prep, echo = FALSE}
 out <- params$test_output
-df_all_branches <- data.frame()
+df_all_branches <- NULL
 for (n in range(1:length(out))) {
-  tmp_df <- out[[n]][[1]]
+  tmp_list <- out[[n]][[1]]
+  tmp_df <- data.frame(matrix(
+    unlist(tmp_list),
+    nrow = length(tmp_list$date),
+    byrow = FALSE
+  ))
+  colnames(tmp_df) <- names(tmp_list)
   tmp_df$branch <- names(out)[n]
-  df_all_branches <- rbind(df_all_branches, tmp_df)
+  df_all_branches <- bind_rows(df_all_branches, tmp_df)
 }
+df_all_branches$date <-
+  format(as.POSIXct(
+    as.numeric(df_all_branches$date),
+    origin = "1970-01-01",
+    tz = "UTC"
+  ),
+  "%Y-%m-%d %H:%M:%S")
+df_all_branches$duration_ms <-
+  as.numeric(df_all_branches$duration_ms)
+```
+
+```{r tab, echo = FALSE}
 df_by_dates <- df_all_branches %>%
   select(rep_id, branch, date) %>%
   unique() %>%
@@ -64,6 +82,11 @@ datatable(
 ```
 
 ## Visualizations
+
+``` {r cache = FALSE, echo = F, warning = F, message = F}
+message(df_all_branches)
+message(typeof(df_all_branches))
+```
 
 ```{r preparing data, echo=FALSE}
 baseline <- min(df_all_branches$duration_ms)
