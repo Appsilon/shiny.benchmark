@@ -12,3 +12,4 @@ create_progress_bar(total = 100)
 \description{
 Create a progress bar to follow the execution
 }
+\keyword{internal}

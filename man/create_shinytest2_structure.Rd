@@ -12,3 +12,4 @@ create_shinytest2_structure(app_dir)
 \description{
 Create a temporary directory to store everything needed by shinytest2
 }
+\keyword{internal}

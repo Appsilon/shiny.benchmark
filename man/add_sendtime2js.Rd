@@ -14,3 +14,4 @@ add_sendtime2js(js_file, txt_file)
 \description{
 Add the sendTime function to the .js file
 }
+\keyword{internal}

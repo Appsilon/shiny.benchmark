@@ -40,3 +40,6 @@ vignettes/*.pdf
 
 # Rendered reports
 performance_report/*
+
+# documentation page
+docs

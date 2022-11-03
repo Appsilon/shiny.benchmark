@@ -14,3 +14,4 @@ checkout(branch, debug)
 \description{
 checkout and go to a different branch
 }
+\keyword{internal}

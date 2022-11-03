@@ -9,3 +9,4 @@ create_cypress_plugins()
 \description{
 Create the JS code to track execution time
 }
+\keyword{internal}

@@ -12,3 +12,4 @@ get_commit_date(branch)
 \description{
 Get the commit date in POSIXct format
 }
+\keyword{internal}

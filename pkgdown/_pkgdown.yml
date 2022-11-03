@@ -1,0 +1,51 @@
+title: shiny.benchmark
+template:
+  bootstrap: 5
+  bootswatch: pulse
+  bslib:
+    pkgdown-nav-height: 100px
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-RS06EY8KNQ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RS06EY8KNQ');
+      </script>
+
+url: https://github.com/Appsilon/shiny.benchmark/
+
+navbar:
+  bg: primary
+  left:
+    - icon: fa-home
+      href: index.html
+      text: "Start"
+    - icon: fa-file-code-o
+      text: "Reference"
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/Appsilon/shiny.benchmark
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/Appsilon
+
+reference:
+- title: Performance tests
+  contents:
+  - '`benchmark`'
+  - '`benchmark_cypress`'
+  - '`benchmark_shinytest2`'
+  - '`run_cypress_ptest`'
+  - '`run_shinytest2_ptest`'
+- title: Shiny Benchmark Class
+  contents:
+  - '`shiny_benchmark-class`'
+  - '`summary.shiny_benchmark`'
+  - '`plot.shiny_benchmark`'
+  - '`print.shiny_benchmark`'
+- title: Other
+  contents:
+  - '`load_example`'

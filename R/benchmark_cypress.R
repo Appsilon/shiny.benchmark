@@ -119,6 +119,7 @@ run_cypress_ptest <- function(
     cypress_dir = cypress_dir,
     tests_pattern = tests_pattern
   )
+  js_file <- files$js_file
   txt_file <- files$txt_file
 
   # replicate tests
@@ -130,8 +131,7 @@ run_cypress_ptest <- function(
 
     # run tests there
     command <- glue(
-      "cd {project_path}; ",
-      "set -eu; exec yarn --cwd node performance-test"
+      "cd {project_path}; set -eu; exec yarn --cwd node performance-test"
     )
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
@@ -140,9 +140,12 @@ run_cypress_ptest <- function(
     perf_file[[i]] <- cbind.data.frame(date = date, rep_id = i, perf_file[[i]])
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
-    # removing temp files
+    # removing txt measures
     unlink(x = txt_file)
   }
+
+  # removing js tests
+  unlink(x = js_file)
 
   # removing anything new in the github repo
   checkout_files(debug = debug)
