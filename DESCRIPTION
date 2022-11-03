@@ -29,6 +29,7 @@ Imports:
     ggplot2,
     glue,
     jsonlite,
+    methods,
     progress,
     quarto,
     renv,

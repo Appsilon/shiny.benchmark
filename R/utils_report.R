@@ -1,7 +1,6 @@
-TEMPLATE_FILE_USR <- "performance_report/report.qmd"
-TEMPLATE_FILE_PKG <-
-  system.file("templates", "report_template.qmd",
-              package = "shiny.benchmark")
+template_file_usr <- "performance_report/report.qmd"
+template_file_pkg <- system.file("templates", "report_template.qmd",
+                                 package = "shiny.benchmark")
 
 #' Create a performance report for the tests that were run
 #'
@@ -14,8 +13,9 @@ TEMPLATE_FILE_PKG <-
 #' @export
 create_report <- function(report_params, report_name) {
   prepare_dir_and_template()
-  report_file <- file.path("performance_report", glue(report_name, ".html"))
-  quarto_render(input = TEMPLATE_FILE_USR,
+  report_file <-
+    file.path("performance_report", glue(report_name, ".html"))
+  quarto_render(input = template_file_usr,
                 output_file = report_file,
                 execute_params = report_params)
 }
@@ -25,7 +25,7 @@ create_report <- function(report_params, report_name) {
 #' the package to the user's directory
 prepare_dir_and_template <- function() {
   dir.create(path = "performance_report", showWarnings = FALSE)
-  file.copy(from = TEMPLATE_FILE_PKG,
-            to = TEMPLATE_FILE_USR,
+  file.copy(from = template_file_pkg,
+            to = template_file_usr,
             overwrite = TRUE)
 }
