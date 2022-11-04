@@ -1,6 +1,4 @@
 template_file_usr <- "performance_report/report.qmd"
-template_file_pkg <- system.file("templates", "report_template.qmd",
-                                 package = "shiny.benchmark")
 
 #' Create a performance report for the tests that were run
 #'
@@ -24,6 +22,8 @@ create_report <- function(report_params, report_name) {
 #' Prepare user's directory for the report and copy the report template from
 #' the package to the user's directory
 prepare_dir_and_template <- function() {
+  template_file_pkg <- system.file("templates", "report_template.qmd",
+                                   package = "shiny.benchmark")
   dir.create(path = "performance_report", showWarnings = FALSE)
   file.copy(from = template_file_pkg,
             to = template_file_usr,
