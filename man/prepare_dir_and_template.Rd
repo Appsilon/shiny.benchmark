@@ -5,7 +5,12 @@
 \title{Prepare user's directory for the report and copy the report template from
 the package to the user's directory}
 \usage{
-prepare_dir_and_template()
+prepare_dir_and_template(report_dir, file_paths)
+}
+\arguments{
+\item{report_dir}{name of the folder where the report should be saved}
+
+\item{file_paths}{two-element vector with paths to template reports}
 }
 \description{
 Prepare user's directory for the report and copy the report template from

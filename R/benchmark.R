@@ -17,7 +17,8 @@
 #' @param renv_prompt Prompt the user before taking any action?
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
-#' @param report_output Logical. TRUE to create a report of the performance
+#' @param report_dir Name of the folder where the report should be saved,
+#' when default (NULL), then report is not saved
 #'
 #' @importFrom glue glue
 #' @export
@@ -32,7 +33,7 @@ benchmark <- function(
     renv_prompt = TRUE,
     n_rep = 1,
     debug = FALSE,
-    report_output = FALSE
+    report_dir = NULL
 ) {
   # Get the call parameters
   call_benchmark <- match.call()
@@ -105,9 +106,11 @@ benchmark <- function(
   class(out) <- "shiny_benchmark"
 
   # create report conditionally
-  if (report_output) {
+  if (!is.null(report_dir)) {
     report_name <- glue(type, "_report")
-    create_report(report_params = out$perf_file, report_name = report_name)
+    create_report(report_params = out$perf_file,
+                  report_name = report_name,
+                  report_dir = report_dir)
   }
 
   return(out)

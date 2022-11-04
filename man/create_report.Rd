@@ -4,7 +4,7 @@
 \alias{create_report}
 \title{Create a performance report for the tests that were run}
 \usage{
-create_report(report_params, report_name)
+create_report(report_params, report_name, report_dir)
 }
 \arguments{
 \item{report_params}{list of tests containing commits with dates, duration
@@ -12,6 +12,8 @@ time and test name}
 
 \item{report_name}{name of the file to which the report should be saved, without
 the extension}
+
+\item{report_dir}{name of the folder where the report should be saved}
 }
 \description{
 Create a performance report for the tests that were run

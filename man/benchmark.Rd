@@ -15,7 +15,7 @@ benchmark(
   renv_prompt = TRUE,
   n_rep = 1,
   debug = FALSE,
-  report_output = FALSE
+  report_dir = NULL
 )
 }
 \arguments{
@@ -46,7 +46,8 @@ packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 
-\item{report_output}{Logical. TRUE to create a report of the performance}
+\item{report_dir}{Name of the folder where the report should be saved,
+when default (NULL), then report is not saved}
 }
 \description{
 Execute performance tests for a list of commits
