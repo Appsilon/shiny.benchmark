@@ -170,6 +170,7 @@ summarise_commit <- function(object) {
 #'
 #' @param path A character vector of full path name
 #'
+#' @importFrom fs path
 #' @importFrom glue glue
 #' @importFrom utils menu
 #' @export
@@ -200,6 +201,6 @@ load_example <- function(path) {
     print(glue("{basename(file)} created at {path}"))
   }
 
-  fpath <- file.path(path, "run_tests.R") # nolint
+  fpath <- path(path, "run_tests.R") # nolint
   message(glue("Follow instructions in {fpath}"))
 }

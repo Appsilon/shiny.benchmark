@@ -4,6 +4,7 @@
 #' @param port Port to run the app
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom fs path
 #' @importFrom jsonlite write_json
 #'
 #' @keywords internal
@@ -12,14 +13,14 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir_tests <- tempdir()
 
   # node path
-  node_path <- file.path(dir_tests, "node")
-  root_path <- file.path(node_path, "root") # nolint
+  node_path <- path(dir_tests, "node")
+  root_path <- path(node_path, "root") # nolint
 
   # test path
-  tests_path <- file.path(dir_tests, "tests")
-  cypress_path <- file.path(tests_path, "cypress")
-  integration_path <- file.path(cypress_path, "integration")
-  plugins_path <- file.path(cypress_path, "plugins")
+  tests_path <- path(dir_tests, "tests")
+  cypress_path <- path(tests_path, "cypress")
+  integration_path <- path(cypress_path, "integration")
+  plugins_path <- path(cypress_path, "plugins")
 
   # creating paths
   dir.create(path = node_path, showWarnings = FALSE)
@@ -33,7 +34,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
-  json_file <- file.path(node_path, "package.json")
+  json_file <- path(node_path, "package.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # install everything that is needed
@@ -47,7 +48,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # creating cypress.json
   json_txt <- create_cypress_list(plugins_file = js_file, port = port)
-  json_file <- file.path(tests_path, "cypress.json")
+  json_file <- path(tests_path, "cypress.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # returning the project folder
@@ -60,9 +61,11 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #' @param tests_path The path to project
 #' @param port Port to run the app
 #'
+#' @importFrom fs path
+#'
 #' @keywords internal
 create_node_list <- function(tests_path, port) {
-  app_dir <- file.path(tests_path, "..", "node", "root")  # nolint
+  app_dir <- path(tests_path, "..", "node", "root")  # nolint
 
   json_list <- list(
     private = TRUE,
@@ -128,6 +131,8 @@ create_cypress_plugins <- function() {
 #' @param tests_pattern Cypress files pattern. E.g. 'performance'. If it is NULL,
 #' all the content will be used
 #'
+#' @importFrom fs path
+#'
 #' @keywords internal
 create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   # locate files
@@ -140,7 +145,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   cypress_files <- grep(x = cypress_files, pattern = "\\.js$", value = TRUE)
 
   # creating a copy to be able to edit the js file
-  js_file <- file.path(
+  js_file <- path(
     project_path,
     "tests",
     "cypress",
@@ -155,7 +160,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   }
 
   # file to store the times
-  txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
+  txt_file <- path(project_path, "tests", "cypress", "performance.txt")
   add_sendtime2js(js_file = js_file, txt_file = txt_file)
 
   # returning the file location

@@ -24,6 +24,7 @@ Suggests:
   rcmdcheck
 Imports:
   dplyr,
+  fs,
   ggplot2,
   glue,
   jsonlite,

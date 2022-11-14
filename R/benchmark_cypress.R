@@ -16,6 +16,7 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom fs path
 #' @export
 benchmark_cypress <- function(
     commit_list,
@@ -69,8 +70,8 @@ benchmark_cypress <- function(
       # Cleaning the temporary directory
       unlink(
         x = c(
-          file.path(project_path, "node"),
-          file.path(project_path, "tests")
+          path(project_path, "node"),
+          path(project_path, "tests")
         ),
         recursive = TRUE
       )
@@ -130,7 +131,7 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
-    yarn_path <- file.path(project_path, "node") # nolint
+    yarn_path <- path(project_path, "node") # nolint
     command <- glue(
       "yarn --cwd {yarn_path} performance-test"
     )

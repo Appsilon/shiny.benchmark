@@ -15,6 +15,7 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom fs path
 #' @export
 benchmark_shinytest2 <- function(
     commit_list,
@@ -62,7 +63,7 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(x = file.path(project_path, "tests"), recursive = TRUE)
+      unlink(x = path(project_path, "tests"), recursive = TRUE)
     }
   )
 
