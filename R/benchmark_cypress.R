@@ -132,7 +132,7 @@ run_cypress_ptest <- function(
     # run tests there
     yarn_path <- file.path(project_path, "node") # nolint
     command <- glue(
-      "set -eu; exec yarn --cwd {yarn_path} performance-test"
+      "exec yarn --cwd {yarn_path} performance-test"
     )
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
