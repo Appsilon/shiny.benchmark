@@ -62,7 +62,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #'
 #' @keywords internal
 create_node_list <- function(tests_path, port) {
-  flag <- ifelse(test = .Platform$OS.type == "windows", yes = "\d", no = "")
+  flag <- ifelse(test = .Platform$OS.type == "windows", yes = "\\d", no = "")
 
   json_list <- list(
     private = TRUE,
