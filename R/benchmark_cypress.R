@@ -130,9 +130,9 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
-    flag <- ifelse(test = .Platform$OS.type == "windows", yes = "\\d", no = "") # nolint
+    yarn_path <- file.path(project_path, "node") # nolint
     command <- glue(
-      "cd {flag} {project_path}; set -eu; exec yarn --cwd node performance-test"
+      "set -eu; exec yarn --cwd {yarn_path} performance-test"
     )
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
