@@ -130,8 +130,9 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
+    flag <- ifelse(test = .Platform$OS.type == "windows", yes = "\d", no = "")
     command <- glue(
-      "cd {project_path}; set -eu; exec yarn --cwd node performance-test"
+      "cd {flag} {project_path}; set -eu; exec yarn --cwd node performance-test"
     )
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 

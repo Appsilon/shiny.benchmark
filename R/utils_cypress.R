@@ -62,13 +62,15 @@ create_cypress_structure <- function(app_dir, port, debug) {
 #'
 #' @keywords internal
 create_node_list <- function(tests_path, port) {
+  flag <- ifelse(test = .Platform$OS.type == "windows", yes = "\d", no = "")
+
   json_list <- list(
     private = TRUE,
     scripts = list(
       "performance-test" = glue(
         "start-server-and-test run-app http://localhost:{port} run-cypress"
       ),
-      "run-app" = glue("cd root && Rscript -e 'shiny::runApp(port = {port})'"),
+      "run-app" = glue("cd {flag} root && Rscript -e 'shiny::runApp(port = {port})'"),
       "run-cypress" = glue("cypress run --project {tests_path}")
     ),
     "devDependencies" = list(
