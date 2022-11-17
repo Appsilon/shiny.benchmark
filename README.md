@@ -33,7 +33,7 @@ Check the [documentation](https://docs.cypress.io/guides/getting-started/install
 How to use it?
 --------------
 
-The best way to start using `shiny.performance` is through an example. If you want a start point, you can use the `load_example` function. In order to use this, create a new folder in your computer and use the following code to generate an application to serve us as example for our performance checks:
+The best way to start using `shiny.benchmark` is through an example. If you want a start point, you can use the `load_example` function. In order to use this, create a new folder in your computer and use the following code to generate an application to serve us as example for our performance checks:
 
 ```r
 library(shiny.benchmark)
