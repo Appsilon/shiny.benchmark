@@ -1,13 +1,13 @@
 .navbar {
-  background-color: rgb(177, 30, 30) !important;
+  background-color: rgb(178, 9, 41) !important;
 }
 
 #navbar > ul.navbar-nav > li.nav-item a:hover {
-  background-color: rgb(177, 30, 30) !important;
+  background-color: rgb(178, 9, 41) !important;
 }
 
 .navbar-dark .navbar-nav .active>.nav-link {
-  background-color: rgb(177, 30, 30) !important;
+  background-color: rgb(178, 9, 41) !important;
   color: #fff;
 }
 
@@ -21,16 +21,16 @@ nav .text-muted {
 }
 
 a {
-  color: rgb(124, 23, 23);
+  color: rgb(156, 19, 44);
 }
 
 a:hover {
-  color: rgb(177, 30, 30);
+  color: rgb(178, 9, 41);
 }
 
 button.btn.btn-primary.btn-copy-ex {
-  background-color: rgb(177, 30, 30);
-  border-color: rgb(177, 30, 30);
+  background-color: rgb(178, 9, 41);
+  border-color: rgb(178, 9, 41);
 }
 
 .app-preview {
