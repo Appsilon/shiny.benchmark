@@ -2,7 +2,7 @@
 #'
 #' @slot call Function call
 #' @slot time Time elapsed
-#' @slot performance List of measuraments (one entry for each commit)
+#' @slot performance List of measurements (one entry for each commit)
 #'
 #' @importFrom methods new
 #'
