@@ -15,6 +15,6 @@ An object of 'shiny_benchmark' class
 
 \item{\code{time}}{Time elapsed}
 
-\item{\code{performance}}{List of measuraments (one entry for each commit)}
+\item{\code{performance}}{List of measurements (one entry for each commit)}
 }}
 

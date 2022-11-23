@@ -43,7 +43,7 @@ load_example(path = "path/to/new/project")
 
 It will create some useful files under `path/to/new/project`. The most important one is the `run_tests.R` which provides several instructions at the very top.
 
-As we are comparing versions of the same application, we need different app versions in different branches/commits in `git`. Start using `cd app; git init` to iniciate git inside `app/` folder.
+As we are comparing versions of the same application, we need different app versions in different branches/commits in `git`. Start using `cd app; git init` to initiate git inside `app/` folder.
 
 Get familiar with `app/server.R` file in order to generate more interesting scenarios. The basic idea is to use the `Sys.sleep` function to simulate some app's functionalities. Remember that, when running the benchmark, that is the amount of time it will take to measure the performance.
 
@@ -126,7 +126,7 @@ benchmark(
 )
 ```
 
-If your project has `renv` strucure, you can set `use_renv` to `TRUE` to guarantee that, for each application version your are using the correct packages. If you want to approve/reprove `renv::restore()`, you can set `renv_prompt = TRUE`.
+If your project has `renv` structure, you can set `use_renv` to `TRUE` to guarantee that, for each application version your are using the correct packages. If you want to approve/reprove `renv::restore()`, you can set `renv_prompt = TRUE`.
 
 ```r
 benchmark(
@@ -138,7 +138,7 @@ benchmark(
 )
 ```
 
-To have more acurate information about the time your application takes to perform some actions, you may need to replicate the tests. In this case, you can use the `n_rep` argument:
+To have more accurate information about the time your application takes to perform some actions, you may need to replicate the tests. In this case, you can use the `n_rep` argument:
 
 ```r
 out <- benchmark(
@@ -152,7 +152,7 @@ out <- benchmark(
 out
 ```
 
-For fast information about the tests's results, you can use the `summary` and also the `plot` methods:
+For fast information about the tests results, you can use the `summary` and also the `plot` methods:
 
 ```r
 summary(out)
@@ -171,7 +171,7 @@ Appsilon
 
 <img src="https://avatars0.githubusercontent.com/u/6096772" align="right" alt="" width="6%" />
 
-Appsilon is the **Full Service Certified RStudio Partner**. Learn more
+Appsilon is the **Full Service Certified Posit Partner**. Learn more
 at [appsilon.com](https://appsilon.com).
 
 Get in touch [opensource@appsilon.com](opensource@appsilon.com)
