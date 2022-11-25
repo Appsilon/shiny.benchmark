@@ -16,8 +16,6 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
-#' @importFrom fs path link_create file_delete
-#'
 #' @export
 benchmark_cypress <- function(
     commit_list,
@@ -70,8 +68,8 @@ benchmark_cypress <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      file_delete(path(project_path, "node"))
-      file_delete(path(project_path, "tests"))
+      fs::file_delete(path(project_path, "node"))
+      fs::file_delete(path(project_path, "tests"))
     }
   )
 
@@ -141,11 +139,11 @@ run_cypress_ptest <- function(
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
     # removing txt measures
-    file_delete(txt_file)
+    fs::file_delete(txt_file)
   }
 
   # removing js tests
-  file_delete(js_file)
+  fs::file_delete(js_file)
 
   # removing anything new in the github repo
   checkout_files(debug = debug)

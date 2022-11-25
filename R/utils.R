@@ -232,7 +232,7 @@ summarise_commit <- function(object) {
 #' @export
 load_example <- function(path) {
   # see if path exists
-  if (!file.exists(path))
+  if (!fs::file_exists(path))
     stop("You must provide a valid path")
 
   if (length(list.files(path))) {
@@ -253,7 +253,11 @@ load_example <- function(path) {
   files <- list.files(path = ex_path, full.names = TRUE)
 
   for (file in files) {
-    file.copy(from = file, to = path, recursive = TRUE)
+    if (fs::is_dir(file)) {
+      fs::dir_copy(file, path)
+    } else {
+      fs::file_copy(file, path)
+    }
     print(glue("{basename(file)} created at {path}"))
   }
 

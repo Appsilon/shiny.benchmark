@@ -5,7 +5,7 @@ test_that("Check if we are able to add Cypress code to a txt file", {
     txt_file = "test.txt"
   )
 
-  expect_true(file.exists(path(tmp_dir, "test.js")))
+  expect_true(fs::file_exists(path(tmp_dir, "test.js")))
 })
 
 test_that("Check if we are able to copy file content from a file to another", {
@@ -15,7 +15,7 @@ test_that("Check if we are able to copy file content from a file to another", {
   writeLines(text = content_before, con = tmp_file)
 
   integration_dir <- path(tmp_dir, "tests", "cypress", "integration")
-  dir.create(integration_dir, showWarnings = FALSE, recursive = TRUE)
+  fs::dir_create(path = integration_dir)
   files <- create_cypress_tests(
     project_path = tmp_dir,
     cypress_dir = tmp_dir,
