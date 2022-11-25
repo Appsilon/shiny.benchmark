@@ -102,7 +102,7 @@ performance_test_cmd <- function(project_path) {
 #' @param intern a logical (not NA) which indicates whether to capture
 #' the output of the command as an R character vector.
 #'
-#' @param ... Other paramters passed to shell or system
+#' @param ... Other parameters passed to shell or system
 #'
 #' @return see system or shell
 #'
