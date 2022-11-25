@@ -87,8 +87,8 @@ checkout <- function(branch, debug) {
 #'
 #' @keywords internal
 performance_test_cmd <- function(project_path) {
-  if (grepl("win", .Platform$OS.type)) {
-    glue("yarn --cwd \"{file.path(project_path, 'node')}\" performance-test")
+  if (grepl("win", .Platform$OS.type, ignore.case = TRUE)) {
+    glue("yarn --cwd \"{path(project_path, 'node')}\" performance-test")
   } else {
     glue("cd {project_path}; set -eu; exec yarn --cwd node performance-test")
   }
@@ -108,7 +108,7 @@ performance_test_cmd <- function(project_path) {
 #'
 #' @keywords internal
 command_wrapper <- function(cmd, intern = FALSE,  ...) {
-  if (grepl("win", .Platform$OS.type)) {
+  if (grepl("win", .Platform$OS.type, ignore.case = TRUE)) {
     logger::log_debug("cmd (shell): {cmd}")
     system(cmd, intern = intern, ...)
   } else {
@@ -263,6 +263,6 @@ load_example <- function(path) {
     print(glue("{basename(file)} created at {path}"))
   }
 
-  fpath <- file.path(path, "run_tests.R") # nolint
+  fpath <- path(path, "run_tests.R") # nolint
   message(glue("Follow instructions in {fpath}"))
 }

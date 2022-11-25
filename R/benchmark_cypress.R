@@ -16,6 +16,8 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @importFrom fs path link_create file_delete
+#'
 #' @export
 benchmark_cypress <- function(
     commit_list,
@@ -68,13 +70,8 @@ benchmark_cypress <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(
-        x = c(
-          file.path(project_path, "node"),
-          file.path(project_path, "tests")
-        ),
-        recursive = TRUE
-      )
+      file_delete(path(project_path, "node"))
+      file_delete(path(project_path, "tests"))
     }
   )
 

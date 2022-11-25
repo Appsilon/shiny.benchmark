@@ -12,14 +12,14 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir_tests <- tempdir()
 
   # node path
-  node_path <- file.path(dir_tests, "node")
-  root_path <- file.path(node_path, "root") # nolint
+  node_path <- path(dir_tests, "node")
+  root_path <- path(node_path, "root") # nolint
 
   # test path
-  tests_path <- file.path(dir_tests, "tests")
-  cypress_path <- file.path(tests_path, "cypress")
-  integration_path <- file.path(cypress_path, "integration")
-  plugins_path <- file.path(cypress_path, "plugins")
+  tests_path <- path(dir_tests, "tests")
+  cypress_path <- path(tests_path, "cypress")
+  integration_path <- path(cypress_path, "integration")
+  plugins_path <- path(cypress_path, "plugins")
 
   # creating paths
   dir.create(path = node_path, showWarnings = FALSE)
@@ -29,19 +29,26 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir.create(path = plugins_path, showWarnings = FALSE)
 
   # create a path root linked to the main directory app
-  linked <- file.symlink(from = app_dir, to = root_path)
-  # If system cannot symlink then try to clone the repository
-  #  This may happen on some windows versions
-  #  This can be an expensive operation on big repositories
-  if (!linked) {
-    shell(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
-    shell("git submodule init")
-    shell("git submodule update ")
-  }
+  tryCatch(
+    expr = {
+      linked <- link_create(app_dir, root_path, symbolic = TRUE)
+    },
+    error = function(e) {
+      # If system cannot symlink then try to clone the repository
+      #  This may happen on some windows versions
+      #  This can be an expensive operation on big repositories
+      logger::log_warn(
+        "Could not create symbolic link with fs package, ",
+        "trying with git clone..."
+      )
+      command_wrapper(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
+      command_wrapper("git submodule init")
+      command_wrapper("git submodule update ")
+    })
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
-  json_file <- file.path(node_path, "package.json")
+  json_file <- path(node_path, "package.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # install everything that is needed
@@ -50,12 +57,12 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # creating cypress plugin file
   js_txt <- create_cypress_plugins()
-  js_file <- file.path(plugins_path, "index.js")
+  js_file <- path(plugins_path, "index.js")
   writeLines(text = js_txt, con = js_file)
 
   # creating cypress.json
   json_txt <- create_cypress_list(plugins_file = js_file, port = port)
-  json_file <- file.path(tests_path, "cypress.json")
+  json_file <- path(tests_path, "cypress.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # returning the project folder
@@ -150,7 +157,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   cypress_files <- grep(x = cypress_files, pattern = "\\.js$", value = TRUE)
 
   # creating a copy to be able to edit the js file
-  js_file <- file.path(
+  js_file <- path(
     project_path,
     "tests",
     "cypress",
@@ -165,7 +172,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   }
 
   # file to store the times
-  txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
+  txt_file <- path(project_path, "tests", "cypress", "performance.txt")
   if (!file.exists(txt_file)) {
     file.create(txt_file) # touch file if it doesn't exist
   }

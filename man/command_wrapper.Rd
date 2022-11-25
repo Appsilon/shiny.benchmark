@@ -4,18 +4,18 @@
 \alias{command_wrapper}
 \title{Wrapper to call on Operating System commands}
 \usage{
-command_wrapper(cmd, system = FALSE, intern = FALSE, ...)
+command_wrapper(cmd, intern = FALSE, ...)
 }
 \arguments{
 \item{cmd}{command}
-
-\item{system}{a logical (not NA) which indicates whether to use
-shell or system call (system is a more low-level call)}
 
 \item{intern}{a logical (not NA) which indicates whether to capture
 the output of the command as an R character vector.}
 
 \item{...}{Other paramters passed to shell or system}
+
+\item{system}{a logical (not NA) which indicates whether to use
+shell or system call (system is a more low-level call)}
 }
 \value{
 see system or shell
