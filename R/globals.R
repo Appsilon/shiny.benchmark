@@ -14,4 +14,4 @@ utils::globalVariables(
 )
 
 # Setting threshold to debug (temporary and should be removed)
-logger::log_threshold(logger::DEBUG)
+logger::log_threshold(logger::INFO)
