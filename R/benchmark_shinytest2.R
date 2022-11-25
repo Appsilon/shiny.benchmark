@@ -62,6 +62,9 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
+      message(getwd())
+      message(system('pwd'))
+      message(system('dir'))
       file_delete(path(project_path, "tests"))
     }
   )
