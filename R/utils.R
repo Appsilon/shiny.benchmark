@@ -128,10 +128,9 @@ command_wrapper <- function(cmd, intern = FALSE,  ...) {
 #'
 #' @keywords internal
 commit_exists <- function(commit) {
-  result <- shell(
+  result <- command_wrapper(
     cmd = glue::glue("git rev-parse --verify {commit}"),
     intern = FALSE,
-    mustWork = NA,
     wait = TRUE
   )
   if (result == 128) {
