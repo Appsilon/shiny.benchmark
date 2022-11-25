@@ -9,7 +9,7 @@ command_wrapper(cmd, ...)
 \arguments{
 \item{cmd}{command}
 
-\item{...}{Other paramters passed to shell or system}
+\item{...}{Other parameters passed to shell or system}
 
 \item{system}{a logical (not NA) which indicates whether to use
 shell or system call (system is a more low-level call)}
