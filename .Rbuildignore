@@ -4,3 +4,4 @@
 .lintr
 tests/end2end
 pkgdown
+docs

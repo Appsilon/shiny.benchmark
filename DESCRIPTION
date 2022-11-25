@@ -1,15 +1,15 @@
 Package: shiny.benchmark
-Title: Compare performance of several versions of a shiny app
+Title: Benchmark the Performance of Shiny Applications
 Version: 0.1.1
 Authors@R:
   c(
-    person(given = "Douglas", family = "Azevedo", email = "douglas@appsilon.com", role = "aut"),
-    person("Developers", "Appsilon", email = "support+opensource@appsilon.com", role = "cre"),
-    person(family = "Appsilon Sp. z o.o.", role = "cph")
+    person(given = "Douglas", family = "Azevedo", email = "opensource+douglas@appsilon.com", role = c("aut", "cre")),
+    person(family = "Appsilon Sp. z o.o.", role = "cph", email = "opensource@appsilon.com")
   )
-Description: Compare performance of several versions of a shiny app based on commit hashes.
+Description: Compare performance between different versions of a Shiny application based on Git references.
 License: LGPL-3
-URL: https://github.com/Appsilon/shiny.benchmark
+URL: https://github.com/Appsilon/shiny.benchmark, https://github.com/Appsilon/shiny.benchmark
+BugReports: https://github.com/Appsilon/shiny.benchmark/issues
 SystemRequirements: yarn 1.22.17 or higher, Node 12 or higher
 Encoding: UTF-8
 LazyData: true
