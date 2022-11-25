@@ -70,7 +70,6 @@ benchmark_cypress <- function(
       # Cleaning the temporary directory
       unlink(
         x = c(
-          file.path(project_path, "node", "root"),
           file.path(project_path, "node"),
           file.path(project_path, "tests")
         ),

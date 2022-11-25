@@ -107,11 +107,12 @@ performance_test_cmd <- function(project_path) {
 #' @return see system or shell
 #'
 #' @keywords internal
-command_wrapper <- function(cmd, system = FALSE, intern = FALSE,  ...) {
-  logger::log_debug("command {ifelse(system, 'system', 'shell')}: {cmd}")
-  if (system) {
+command_wrapper <- function(cmd, intern = FALSE,  ...) {
+  if (grepl("win", .Platform$OS.type)) {
+    logger::log_debug("cmd (shell): {cmd}")
     system(cmd, intern = intern, ...)
   } else {
+    logger::log_debug("cmd (system): {cmd}")
     shell(cmd, intern = intern, ...)
   }
 }
