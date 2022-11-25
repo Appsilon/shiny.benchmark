@@ -107,14 +107,9 @@ performance_test_cmd <- function(project_path) {
 #' @return see system or shell
 #'
 #' @keywords internal
-command_wrapper <- function(cmd, intern = FALSE,  ...) {
-  if (grepl("windows", .Platform$OS.type, ignore.case = TRUE)) {
-    logger::log_debug("cmd (shell): {cmd}")
-    shell(cmd, intern = intern, ...)
-  } else {
-    logger::log_debug("cmd (system): {cmd}")
-    system(cmd, intern = intern, ...)
-  }
+command_wrapper <- function(cmd, ...) {
+  logger::log_debug("cmd (system): {cmd}")
+  system(command = cmd, ...)
 }
 
 #' @title Check if git commit hash exists

@@ -141,11 +141,11 @@ run_cypress_ptest <- function(
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
     # removing txt measures
-    unlink(x = txt_file)
+    file_delete(txt_file)
   }
 
   # removing js tests
-  unlink(x = js_file)
+  file_delete(js_file)
 
   # removing anything new in the github repo
   checkout_files(debug = debug)

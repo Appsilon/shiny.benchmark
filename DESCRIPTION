@@ -34,6 +34,7 @@ Imports:
   shinytest2,
   stringr,
   testthat,
+  rlang,
   fs,
   logger
 Language: en-US

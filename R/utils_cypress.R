@@ -31,7 +31,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
   # create a path root linked to the main directory app
   tryCatch(
     expr = {
-      linked <- link_create(app_dir, root_path, symbolic = TRUE)
+      link_create(app_dir, root_path, symbolic = TRUE)
     },
     error = function(e) {
       # If system cannot symlink then try to clone the repository
