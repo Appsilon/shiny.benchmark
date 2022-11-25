@@ -63,7 +63,7 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(path(project_path, "tests"))
+      unlink(fs::path(project_path, "tests"))
     }
   )
 

@@ -12,7 +12,7 @@ create_shinytest2_structure <- function(app_dir) {
   # shiny call
   writeLines(
     text = glue('shiny::runApp(appDir = "{app_dir}")'),
-    con = path(dir_tests, "app.R")
+    con = fs::path(dir_tests, "app.R")
   )
 
   # returning the project folder
@@ -35,7 +35,7 @@ move_shinytest2_tests <- function(project_path, shinytest2_dir) {
     # should never reach this
     fs::file_copy(path = shinytest2_dir, new_path = project_path)
   }
-  tests_dir <- path(project_path, "tests")
+  tests_dir <- fs::path(project_path, "tests")
 
   return(tests_dir)
 }

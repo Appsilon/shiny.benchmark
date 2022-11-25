@@ -68,8 +68,8 @@ benchmark_cypress <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      fs::file_delete(path(project_path, "node"))
-      fs::file_delete(path(project_path, "tests"))
+      fs::file_delete(fs::path(project_path, "node"))
+      fs::file_delete(fs::path(project_path, "tests"))
     }
   )
 
