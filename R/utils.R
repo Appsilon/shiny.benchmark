@@ -110,7 +110,7 @@ performance_test_cmd <- function(project_path) {
 command_wrapper <- function(cmd, system = FALSE, intern = FALSE,  ...) {
   logger::log_debug("command {ifelse(system, 'system', 'shell')}: {cmd}")
   if (system) {
-    system(cmd, intern = inter, ...)
+    system(cmd, intern = intern, ...)
   } else {
     shell(cmd, intern = intern, ...)
   }
@@ -126,7 +126,7 @@ command_wrapper <- function(cmd, system = FALSE, intern = FALSE,  ...) {
 #' @return true if exists, an error message if not
 #'
 #' @keywords internal
-commit_exists <- function (commit) {
+commit_exists <- function(commit) {
   result <- shell(
     cmd = glue::glue("git rev-parse --verify {commit}"),
     intern = FALSE,

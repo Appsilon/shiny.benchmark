@@ -136,8 +136,8 @@ run_cypress_ptest <- function(
 
     # run tests there
     command <- performance_test_cmd(project_path)
-    debug = TRUE
-    result <- command_wrapper(command, ignore.stdout = !debug, ignore.stderr = !debug)
+    debug <- TRUE
+    command_wrapper(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
     # read the file saved by cypress
     perf_file[[i]] <- read.table(file = txt_file, header = FALSE, sep = ";")
