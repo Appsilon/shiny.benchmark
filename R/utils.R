@@ -81,6 +81,68 @@ checkout <- function(branch, debug) {
   )
 }
 
+#' @title Running the node script "performance_test" is system-dependent
+#'
+#' @param project_path path to project directory (one level above node)
+#'
+#' @keywords internal
+performance_test_cmd <- function(project_path) {
+  if (grepl("win", .Platform$OS.type)) {
+    glue("yarn --cwd \"{file.path(project_path, 'node')}\" performance-test")
+  } else {
+    glue("cd {project_path}; set -eu; exec yarn --cwd node performance-test")
+  }
+}
+
+#' @title Wrapper to call on Operating System commands
+#'
+#' @param cmd command
+#' @param system a logical (not NA) which indicates whether to use
+#' shell or system call (system is a more low-level call)
+#' @param intern a logical (not NA) which indicates whether to capture
+#' the output of the command as an R character vector.
+#'
+#' @param ... Other paramters passed to shell or system
+#'
+#' @return see system or shell
+#'
+#' @keywords internal
+command_wrapper <- function(cmd, system = FALSE, intern = FALSE,  ...) {
+  logger::log_debug("command {ifelse(system, 'system', 'shell')}: {cmd}")
+  if (system) {
+    system(cmd, intern = inter, ...)
+  } else {
+    shell(cmd, intern = intern, ...)
+  }
+}
+
+#' @title Check if git commit hash exists
+#'
+#' @description Can be anything git recognizes as a commit, such
+#' as a commit hash, a branch, a tag, ...
+#'
+#' @param commit commit hash code, branch name or tag
+#'
+#' @return true if exists, an error message if not
+#'
+#' @keywords internal
+commit_exists <- function (commit) {
+  result <- shell(
+    cmd = glue::glue("git rev-parse --verify {commit}"),
+    intern = FALSE,
+    mustWork = NA,
+    wait = TRUE
+  )
+  if (result == 128) {
+    rlang::abort(
+      message = glue(
+        "git error:: Commit/branch/tag/.. '{commit}' doesn't exist"
+      )
+    )
+  }
+  TRUE
+}
+
 #' @title Check for uncommitted files
 #'
 #' @keywords internal

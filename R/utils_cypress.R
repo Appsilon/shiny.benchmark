@@ -29,7 +29,15 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir.create(path = plugins_path, showWarnings = FALSE)
 
   # create a path root linked to the main directory app
-  file.symlink(from = app_dir, to = root_path)
+  linked <- file.symlink(from = app_dir, to = root_path)
+  # If system cannot symlink then try to clone the repository
+  #  This may happen on some windows versions
+  #  This can be an expensive operation on big repositories
+  if (!linked) {
+    shell(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
+    shell("git submodule init")
+    shell("git submodule update ")
+  }
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
@@ -68,7 +76,11 @@ create_node_list <- function(tests_path, port) {
       "performance-test" = glue(
         "start-server-and-test run-app http://localhost:{port} run-cypress"
       ),
-      "run-app" = glue("cd root && Rscript -e 'shiny::runApp(port = {port})'"),
+      "run-app" = glue(
+        "cd root && ",
+        "Rscript -e \"installed.packages()[,1] |> sort()\" && ",
+        "Rscript -e \"shiny::runApp(port = {port})\""
+      ),
       "run-cypress" = glue("cypress run --project {tests_path}")
     ),
     "devDependencies" = list(
@@ -154,6 +166,9 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
 
   # file to store the times
   txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
+  if (!file.exists(txt_file)) {
+    file.create(txt_file) # touch file if it doesn't exist
+  }
   add_sendtime2js(js_file = js_file, txt_file = txt_file)
 
   # returning the file location

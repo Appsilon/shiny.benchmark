@@ -55,6 +55,7 @@ benchmark_cypress <- function(
       )
     },
     error = function(e) {
+      logger::log_fatal("ERROR!!! {e}")
       message(e)
     },
     finally = {
@@ -69,6 +70,7 @@ benchmark_cypress <- function(
       # Cleaning the temporary directory
       unlink(
         x = c(
+          file.path(project_path, "node", "root"),
           file.path(project_path, "node"),
           file.path(project_path, "tests")
         ),
@@ -107,6 +109,9 @@ run_cypress_ptest <- function(
     n_rep,
     debug
 ) {
+
+  # Checks if commit exists
+  commit_exists(commit)
   # checkout to the desired commit
   checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
@@ -130,10 +135,9 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
-    command <- glue(
-      "cd {project_path}; set -eu; exec yarn --cwd node performance-test"
-    )
-    system(command, ignore.stdout = !debug, ignore.stderr = !debug)
+    command <- performance_test_cmd(project_path)
+    debug = TRUE
+    result <- command_wrapper(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
     # read the file saved by cypress
     perf_file[[i]] <- read.table(file = txt_file, header = FALSE, sep = ";")
