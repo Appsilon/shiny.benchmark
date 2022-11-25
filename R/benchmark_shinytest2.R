@@ -26,11 +26,23 @@ benchmark_shinytest2 <- function(
     n_rep,
     debug
 ) {
+  message("Andre start: Temp messages to check the pwd dir")
+  message("getwd(): ", getwd())
+  message("pwd: ", system('pwd'))
+  message("dir: ", dir())
+
   # creating the structure
   project_path <- create_shinytest2_structure(app_dir = app_dir)
 
   # getting the current branch
   current_branch <- get_commit_hash()
+
+  message("Andre After Create: Temp messages to check the pwd dir")
+  message("project_path: ", project_path)
+  message("getwd(): ", getwd())
+  message("pwd: ", system('pwd'))
+  message("dir: ", dir())
+  message("dir(project_path): ", dir(project_path))
 
   # apply the tests for each branch/commit
   perf_list <- tryCatch(
@@ -62,9 +74,13 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      message(getwd())
-      message(system('pwd'))
-      message(system('dir'))
+      message("Andre Finally: Temp messages to check the pwd dir")
+      message("project_path: ", project_path)
+      message("getwd(): ", getwd())
+      message("pwd: ", system('pwd'))
+      message("dir: ", dir())
+      message("dir(project_path): ", dir(project_path))
+      system(glue("cd {path('..', '..')}"))
       file_delete(path(project_path, "tests"))
     }
   )
