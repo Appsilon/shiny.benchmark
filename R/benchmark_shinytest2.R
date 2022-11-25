@@ -28,7 +28,7 @@ benchmark_shinytest2 <- function(
 ) {
   message("Andre start: Temp messages to check the pwd dir")
   message("getwd(): ", getwd())
-  message("pwd: ", system('pwd'))
+  message("pwd: ", system("pwd"))
   message("dir: ", dir())
 
   # creating the structure
@@ -40,7 +40,7 @@ benchmark_shinytest2 <- function(
   message("Andre After Create: Temp messages to check the pwd dir")
   message("project_path: ", project_path)
   message("getwd(): ", getwd())
-  message("pwd: ", system('pwd'))
+  message("pwd: ", system("pwd"))
   message("dir: ", dir())
   message("dir(project_path): ", dir(project_path))
 
