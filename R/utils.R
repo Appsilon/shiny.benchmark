@@ -254,9 +254,9 @@ load_example <- function(path) {
 
   for (file in files) {
     if (fs::is_dir(file)) {
-      fs::dir_copy(file, path)
+      fs::dir_copy(file, path, overwrite = TRUE)
     } else {
-      fs::file_copy(file, path)
+      fs::file_copy(file, path, overwrite = TRUE)
     }
     print(glue("{basename(file)} created at {path}"))
   }
