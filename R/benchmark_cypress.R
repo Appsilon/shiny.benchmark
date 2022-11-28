@@ -55,7 +55,6 @@ benchmark_cypress <- function(
       )
     },
     error = function(e) {
-      logger::log_fatal("ERROR!!! {e}")
       message(e)
     },
     finally = {
@@ -130,7 +129,7 @@ run_cypress_ptest <- function(
 
     # run tests there
     command <- performance_test_cmd(project_path)
-    command_wrapper(command, ignore.stdout = !debug, ignore.stderr = !debug)
+    system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
     # read the file saved by cypress
     perf_file[[i]] <- read.table(file = txt_file, header = FALSE, sep = ";")

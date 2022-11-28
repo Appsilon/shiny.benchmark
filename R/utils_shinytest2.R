@@ -28,22 +28,22 @@ create_shinytest2_structure <- function(app_dir) {
 #'
 #' @keywords internal
 move_shinytest2_tests <- function(project_path, shinytest2_dir) {
+  tests_dir <- fs::path(project_path, "tests")
   # copy everything to the temporary directory
   if (fs::is_dir(shinytest2_dir)) {
     fs::dir_copy(
       path = shinytest2_dir,
-      new_path = project_path,
+      new_path = tests_dir,
       overwrite = TRUE
     )
   } else {
     # should never reach this
     fs::file_copy(
       path = shinytest2_dir,
-      new_path = project_path,
+      new_path = tests_dir,
       overwrite = TRUE
     )
   }
-  tests_dir <- fs::path(project_path, "tests")
 
   return(tests_dir)
 }

@@ -94,24 +94,6 @@ performance_test_cmd <- function(project_path) {
   }
 }
 
-#' @title Wrapper to call on Operating System commands
-#'
-#' @param cmd command
-#' @param system a logical (not NA) which indicates whether to use
-#' shell or system call (system is a more low-level call)
-#' @param intern a logical (not NA) which indicates whether to capture
-#' the output of the command as an R character vector.
-#'
-#' @param ... Other parameters passed to shell or system
-#'
-#' @return see system or shell
-#'
-#' @keywords internal
-command_wrapper <- function(cmd, ...) {
-  logger::log_debug("cmd (system): {cmd}")
-  system(command = cmd, ...)
-}
-
 #' @title Check if git commit hash exists
 #'
 #' @description Can be anything git recognizes as a commit, such
@@ -123,8 +105,8 @@ command_wrapper <- function(cmd, ...) {
 #'
 #' @keywords internal
 commit_exists <- function(commit) {
-  result <- command_wrapper(
-    cmd = glue::glue("git rev-parse --verify {commit}"),
+  result <- system(
+    command = glue::glue("git rev-parse --verify {commit}"),
     intern = FALSE,
     wait = TRUE
   )
@@ -226,16 +208,17 @@ summarise_commit <- function(object) {
 #' the selected `path`.
 #'
 #' @param path A character vector of full path name
+#' @param force Create example even if directory is not empty
 #'
 #' @importFrom glue glue
 #' @importFrom utils menu
 #' @export
-load_example <- function(path) {
+load_example <- function(path, force = FALSE) {
   # see if path exists
   if (!fs::file_exists(path))
     stop("You must provide a valid path")
 
-  if (length(list.files(path))) {
+  if (!force && length(list.files(path))) {
     choice <- menu(
       choices = c("Yes", "No"),
       title = glue("{path} seems to not be empty. Would you like to proceed?")
@@ -243,6 +226,11 @@ load_example <- function(path) {
 
     if (choice == 2)
       stop("Process aborted by user. Consider creating a new empty path.")
+  } else if (length(list.files(path))) {
+    message(glue(
+      "{path} seems to not be empty. ",
+      "Continuing as parameter 'force' is TRUE"
+    ))
   }
 
   ex_path <- system.file(
@@ -254,7 +242,9 @@ load_example <- function(path) {
 
   for (file in files) {
     if (fs::is_dir(file)) {
-      fs::dir_copy(file, path, overwrite = TRUE)
+      # Due to overwrite = TRUE the destination must include the name of the
+      #  directory to be created
+      fs::dir_copy(file, fs::path(path, fs::path_file(file)), overwrite = TRUE)
     } else {
       fs::file_copy(file, path, overwrite = TRUE)
     }

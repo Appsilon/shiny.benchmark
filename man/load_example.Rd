@@ -4,10 +4,12 @@
 \alias{load_example}
 \title{Load an application and instructions to run shiny.benchmark}
 \usage{
-load_example(path)
+load_example(path, force = FALSE)
 }
 \arguments{
 \item{path}{A character vector of full path name}
+
+\item{force}{Create example even if directory is not empty}
 }
 \description{
 This function aims to generate a template to be used

@@ -106,7 +106,10 @@ run_shinytest2_ptest <- function(
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
   # move test files to the project folder
-  tests_dir <- move_shinytest2_tests(project_path = project_path, shinytest2_dir = shinytest2_dir)
+  tests_dir <- move_shinytest2_tests(
+    project_path = project_path,
+    shinytest2_dir = shinytest2_dir
+  )
 
   perf_file <- list()
   pb <- create_progress_bar(total = n_rep)

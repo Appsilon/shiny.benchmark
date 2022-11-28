@@ -41,9 +41,9 @@ create_cypress_structure <- function(app_dir, port, debug) {
         "Could not create symbolic link with fs package, ",
         "trying with git clone..."
       )
-      command_wrapper(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
-      command_wrapper("git submodule init")
-      command_wrapper("git submodule update ")
+      system(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
+      system("git submodule init")
+      system("git submodule update ")
     })
 
   # create the packages.json file
@@ -172,9 +172,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
 
   # file to store the times
   txt_file <- fs::path(project_path, "tests", "cypress", "performance.txt")
-  if (!fs::file_exists(txt_file)) {
-    fs::file_create(txt_file) # touch file if it doesn't exist
-  }
+
   add_sendtime2js(js_file = js_file, txt_file = txt_file)
 
   # returning the file location
