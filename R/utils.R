@@ -215,10 +215,10 @@ summarise_commit <- function(object) {
 #' @export
 load_example <- function(path, force = FALSE) {
   # see if path exists
-  if (!fs::file_exists(path))
+  if (!file.exists(path))
     stop("You must provide a valid path")
 
-  if (!force && length(list.files(path))) {
+  if (length(list.files(path))) {
     choice <- menu(
       choices = c("Yes", "No"),
       title = glue("{path} seems to not be empty. Would you like to proceed?")
@@ -226,11 +226,6 @@ load_example <- function(path, force = FALSE) {
 
     if (choice == 2)
       stop("Process aborted by user. Consider creating a new empty path.")
-  } else if (length(list.files(path))) {
-    message(glue(
-      "{path} seems to not be empty. ",
-      "Continuing as parameter 'force' is TRUE"
-    ))
   }
 
   ex_path <- system.file(
@@ -241,16 +236,10 @@ load_example <- function(path, force = FALSE) {
   files <- list.files(path = ex_path, full.names = TRUE)
 
   for (file in files) {
-    if (fs::is_dir(file)) {
-      # Due to overwrite = TRUE the destination must include the name of the
-      #  directory to be created
-      fs::dir_copy(file, fs::path(path, fs::path_file(file)), overwrite = TRUE)
-    } else {
-      fs::file_copy(file, path, overwrite = TRUE)
-    }
+    file.copy(from = file, to = path, recursive = TRUE)
     print(glue("{basename(file)} created at {path}"))
   }
 
-  fpath <- fs::path(path, "run_tests.R") # nolint
+  fpath <- file.path(path, "run_tests.R") # nolint
   message(glue("Follow instructions in {fpath}"))
 }
