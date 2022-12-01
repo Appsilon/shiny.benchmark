@@ -34,6 +34,18 @@ create_cypress_structure <- function(app_dir, port, debug) {
       fs::link_create(app_dir, root_path, symbolic = TRUE)
     },
     error = function(e) {
+
+      choice <- menu(
+        choices = c("Yes", "No"),
+        title = glue(
+          "A symbolic link cannot be created, it is possible to clone ",
+          "the repository, but it can take some time and space on disk. ",
+          "Would you like to proceed with this operations?")
+      )
+
+      if (choice == 2)
+        stop("Process aborted by user.")
+
       # If system cannot symlink then try to clone the repository
       #  This may happen on some windows versions
       #  This can be an expensive operation on big repositories
@@ -84,7 +96,7 @@ create_node_list <- function(tests_path, port) {
         "start-server-and-test run-app http://localhost:{port} run-cypress"
       ),
       "run-app" = glue(
-        "cd root && ",
+        "cd root; ",
         "Rscript -e \"shiny::runApp(port = {port})\""
       ),
       "run-cypress" = glue("cypress run --project {tests_path}")

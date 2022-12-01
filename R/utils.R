@@ -87,11 +87,7 @@ checkout <- function(branch, debug) {
 #'
 #' @keywords internal
 performance_test_cmd <- function(project_path) {
-  if (grepl("win", .Platform$OS.type, ignore.case = TRUE)) {
-    glue("yarn --cwd \"{fs::path(project_path, 'node')}\" performance-test")
-  } else {
-    glue("cd {project_path}; set -eu; exec yarn --cwd node performance-test")
-  }
+  glue("yarn --cwd \"{fs::path(project_path, 'node')}\" performance-test")
 }
 
 #' @title Check for uncommitted files
