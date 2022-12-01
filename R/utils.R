@@ -208,12 +208,11 @@ summarise_commit <- function(object) {
 #' the selected `path`.
 #'
 #' @param path A character vector of full path name
-#' @param force Create example even if directory is not empty
 #'
 #' @importFrom glue glue
 #' @importFrom utils menu
 #' @export
-load_example <- function(path, force = FALSE) {
+load_example <- function(path) {
   # see if path exists
   if (!file.exists(path))
     stop("You must provide a valid path")
