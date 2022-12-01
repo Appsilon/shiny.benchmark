@@ -35,6 +35,5 @@ Imports:
   stringr,
   testthat,
   rlang,
-  fs,
-  logger
+  fs
 Language: en-US

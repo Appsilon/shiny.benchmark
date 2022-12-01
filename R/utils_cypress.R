@@ -37,7 +37,7 @@ create_cypress_structure <- function(app_dir, port, debug) {
       # If system cannot symlink then try to clone the repository
       #  This may happen on some windows versions
       #  This can be an expensive operation on big repositories
-      logger::log_warn(
+      messsage(
         "Could not create symbolic link with fs package, ",
         "trying with git clone..."
       )
