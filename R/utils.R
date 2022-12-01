@@ -94,32 +94,6 @@ performance_test_cmd <- function(project_path) {
   }
 }
 
-#' @title Check if git commit hash exists
-#'
-#' @description Can be anything git recognizes as a commit, such
-#' as a commit hash, a branch, a tag, ...
-#'
-#' @param commit commit hash code, branch name or tag
-#'
-#' @return true if exists, an error message if not
-#'
-#' @keywords internal
-commit_exists <- function(commit) {
-  result <- system(
-    command = glue::glue("git rev-parse --verify {commit}"),
-    intern = FALSE,
-    wait = TRUE
-  )
-  if (result == 128) {
-    rlang::abort(
-      message = glue(
-        "git error:: Commit/branch/tag/.. '{commit}' doesn't exist"
-      )
-    )
-  }
-  TRUE
-}
-
 #' @title Check for uncommitted files
 #'
 #' @keywords internal

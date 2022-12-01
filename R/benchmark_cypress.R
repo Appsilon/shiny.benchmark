@@ -102,9 +102,6 @@ run_cypress_ptest <- function(
     n_rep,
     debug
 ) {
-
-  # Checks if commit exists
-  commit_exists(commit)
   # checkout to the desired commit
   checkout(branch = commit, debug = debug)
   date <- get_commit_date(branch = commit)
