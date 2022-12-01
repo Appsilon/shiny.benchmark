@@ -96,7 +96,7 @@ create_node_list <- function(tests_path, port) {
         "start-server-and-test run-app http://localhost:{port} run-cypress"
       ),
       "run-app" = glue(
-        "cd root; ",
+        "cd root && ",
         "Rscript -e \"shiny::runApp(port = {port})\""
       ),
       "run-cypress" = glue("cypress run --project {tests_path}")
