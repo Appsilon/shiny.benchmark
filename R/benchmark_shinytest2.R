@@ -63,6 +63,8 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
+      #  couldn't use fs::file_delete / fs::directory_delete as a process
+      #  is accessing one of the files and it fails. unlink does not
       unlink(fs::path(project_path, "tests"))
     }
   )
