@@ -12,28 +12,55 @@ create_cypress_structure <- function(app_dir, port, debug) {
   dir_tests <- tempdir()
 
   # node path
-  node_path <- file.path(dir_tests, "node")
-  root_path <- file.path(node_path, "root") # nolint
+  node_path <- fs::path(dir_tests, "node")
+  root_path <- fs::path(node_path, "root") # nolint
 
   # test path
-  tests_path <- file.path(dir_tests, "tests")
-  cypress_path <- file.path(tests_path, "cypress")
-  integration_path <- file.path(cypress_path, "integration")
-  plugins_path <- file.path(cypress_path, "plugins")
+  tests_path <- fs::path(dir_tests, "tests")
+  cypress_path <- fs::path(tests_path, "cypress")
+  integration_path <- fs::path(cypress_path, "integration")
+  plugins_path <- fs::path(cypress_path, "plugins")
 
   # creating paths
-  dir.create(path = node_path, showWarnings = FALSE)
-  dir.create(path = tests_path, showWarnings = FALSE)
-  dir.create(path = cypress_path, showWarnings = FALSE)
-  dir.create(path = integration_path, showWarnings = FALSE)
-  dir.create(path = plugins_path, showWarnings = FALSE)
+  fs::dir_create(path = node_path)
+  fs::dir_create(path = tests_path)
+  fs::dir_create(path = cypress_path)
+  fs::dir_create(path = integration_path)
+  fs::dir_create(path = plugins_path)
 
   # create a path root linked to the main directory app
-  file.symlink(from = app_dir, to = root_path)
+  tryCatch(
+    expr = {
+      fs::link_create(app_dir, root_path, symbolic = TRUE)
+    },
+    error = function(e) {
+
+      choice <- menu(
+        choices = c("Yes", "No"),
+        title = glue(
+          "A symbolic link cannot be created, it is possible to clone ",
+          "the repository, but it can take some time and space on disk. ",
+          "Would you like to proceed with this operations?")
+      )
+
+      if (choice == 2)
+        stop("Process aborted by user.")
+
+      # If system cannot symlink then try to clone the repository
+      #  This may happen on some windows versions
+      #  This can be an expensive operation on big repositories
+      message(
+        "Could not create symbolic link with fs package, ",
+        "trying with git clone..."
+      )
+      system(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
+      system("git submodule init")
+      system("git submodule update ")
+    })
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
-  json_file <- file.path(node_path, "package.json")
+  json_file <- fs::path(node_path, "package.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # install everything that is needed
@@ -42,12 +69,12 @@ create_cypress_structure <- function(app_dir, port, debug) {
 
   # creating cypress plugin file
   js_txt <- create_cypress_plugins()
-  js_file <- file.path(plugins_path, "index.js")
+  js_file <- fs::path(plugins_path, "index.js")
   writeLines(text = js_txt, con = js_file)
 
   # creating cypress.json
   json_txt <- create_cypress_list(plugins_file = js_file, port = port)
-  json_file <- file.path(tests_path, "cypress.json")
+  json_file <- fs::path(tests_path, "cypress.json")
   write_json(x = json_txt, path = json_file, pretty = TRUE, auto_unbox = TRUE)
 
   # returning the project folder
@@ -68,7 +95,10 @@ create_node_list <- function(tests_path, port) {
       "performance-test" = glue(
         "start-server-and-test run-app http://localhost:{port} run-cypress"
       ),
-      "run-app" = glue("cd root && Rscript -e 'shiny::runApp(port = {port})'"),
+      "run-app" = glue(
+        "cd root && ",
+        "Rscript -e \"shiny::runApp(port = {port})\""
+      ),
       "run-cypress" = glue("cypress run --project {tests_path}")
     ),
     "devDependencies" = list(
@@ -138,7 +168,7 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   cypress_files <- grep(x = cypress_files, pattern = "\\.js$", value = TRUE)
 
   # creating a copy to be able to edit the js file
-  js_file <- file.path(
+  js_file <- fs::path(
     project_path,
     "tests",
     "cypress",
@@ -153,7 +183,8 @@ create_cypress_tests <- function(project_path, cypress_dir, tests_pattern) {
   }
 
   # file to store the times
-  txt_file <- file.path(project_path, "tests", "cypress", "performance.txt")
+  txt_file <- fs::path(project_path, "tests", "cypress", "performance.txt")
+
   add_sendtime2js(js_file = js_file, txt_file = txt_file)
 
   # returning the file location
