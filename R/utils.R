@@ -81,6 +81,15 @@ checkout <- function(branch, debug) {
   )
 }
 
+#' @title Running the node script "performance_test" is system-dependent
+#'
+#' @param project_path path to project directory (one level above node)
+#'
+#' @keywords internal
+performance_test_cmd <- function(project_path) {
+  glue("yarn --cwd \"{fs::path(project_path, 'node')}\" performance-test")
+}
+
 #' @title Check for uncommitted files
 #'
 #' @keywords internal

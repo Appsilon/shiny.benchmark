@@ -26,6 +26,7 @@ benchmark_shinytest2 <- function(
     n_rep,
     debug
 ) {
+
   # creating the structure
   project_path <- create_shinytest2_structure(app_dir = app_dir)
 
@@ -62,7 +63,9 @@ benchmark_shinytest2 <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(x = file.path(project_path, "tests"), recursive = TRUE)
+      #  couldn't use fs::file_delete / fs::directory_delete as a process
+      #  is accessing one of the files and it fails. unlink does not
+      unlink(fs::path(project_path, "tests"))
     }
   )
 
@@ -105,7 +108,10 @@ run_shinytest2_ptest <- function(
   if (use_renv) restore_env(branch = commit, renv_prompt = renv_prompt)
 
   # move test files to the project folder
-  tests_dir <- move_shinytest2_tests(project_path = project_path, shinytest2_dir = shinytest2_dir)
+  tests_dir <- move_shinytest2_tests(
+    project_path = project_path,
+    shinytest2_dir = shinytest2_dir
+  )
 
   perf_file <- list()
   pb <- create_progress_bar(total = n_rep)

@@ -12,7 +12,7 @@ create_shinytest2_structure <- function(app_dir) {
   # shiny call
   writeLines(
     text = glue('shiny::runApp(appDir = "{app_dir}")'),
-    con = file.path(dir_tests, "app.R")
+    con = fs::path(dir_tests, "app.R")
   )
 
   # returning the project folder

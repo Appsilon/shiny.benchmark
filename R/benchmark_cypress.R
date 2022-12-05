@@ -67,13 +67,8 @@ benchmark_cypress <- function(
         restore_env(branch = current_branch, renv_prompt = renv_prompt)
 
       # Cleaning the temporary directory
-      unlink(
-        x = c(
-          file.path(project_path, "node"),
-          file.path(project_path, "tests")
-        ),
-        recursive = TRUE
-      )
+      fs::file_delete(fs::path(project_path, "node"))
+      fs::file_delete(fs::path(project_path, "tests"))
     }
   )
 
@@ -130,9 +125,7 @@ run_cypress_ptest <- function(
     pb$tick()
 
     # run tests there
-    command <- glue(
-      "cd {project_path}; set -eu; exec yarn --cwd node performance-test"
-    )
+    command <- performance_test_cmd(project_path)
     system(command, ignore.stdout = !debug, ignore.stderr = !debug)
 
     # read the file saved by cypress
@@ -141,11 +134,11 @@ run_cypress_ptest <- function(
     colnames(perf_file[[i]]) <- c("date", "rep_id", "test_name", "duration_ms")
 
     # removing txt measures
-    unlink(x = txt_file)
+    fs::file_delete(txt_file)
   }
 
   # removing js tests
-  unlink(x = js_file)
+  fs::file_delete(js_file)
 
   # removing anything new in the github repo
   checkout_files(debug = debug)
