@@ -4,10 +4,12 @@
 \alias{load_example}
 \title{Load an application and instructions to run shiny.benchmark}
 \usage{
-load_example(path)
+load_example(path, force = FALSE)
 }
 \arguments{
 \item{path}{A character vector of full path name}
+
+\item{force}{Create example even if directory does not exist or is not empty}
 }
 \description{
 This function aims to generate a template to be used
@@ -16,4 +18,7 @@ some examples of tests using Cypress and shinytest2. Also, a simple
 application will be added to the folder as well as instructions on how
 to perform the performance checks. Be aware that a new git repo is need in
 the selected \code{path}.
+}
+\examples{
+load_example(file.path(tempdir(), "example_destination"), force = TRUE)
 }

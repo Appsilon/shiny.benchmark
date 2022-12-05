@@ -82,4 +82,3 @@ test_that("Does not create load_examples if there is a file in directory", {
       expect_output("app created at")
   })
 })
-
