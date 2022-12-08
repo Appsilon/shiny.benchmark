@@ -178,16 +178,22 @@ summarise_commit <- function(object) {
 #' the selected `path`.
 #'
 #' @param path A character vector of full path name
+#' @param force Create example even if directory does not exist or is not empty
 #'
 #' @importFrom glue glue
 #' @importFrom utils menu
 #' @export
-load_example <- function(path) {
+#' @examples
+#' load_example(file.path(tempdir(), "example_destination"), force = TRUE)
+load_example <- function(path, force = FALSE) {
   # see if path exists
-  if (!file.exists(path))
+  if (!force && !fs::file_exists(path))
     stop("You must provide a valid path")
+  else if (!fs::file_exists(path)) {
+    fs::dir_create(path, recurse = TRUE)
+  }
 
-  if (length(list.files(path))) {
+  if (!force && length(fs::dir_ls(path))) {
     choice <- menu(
       choices = c("Yes", "No"),
       title = glue("{path} seems to not be empty. Would you like to proceed?")
@@ -195,6 +201,11 @@ load_example <- function(path) {
 
     if (choice == 2)
       stop("Process aborted by user. Consider creating a new empty path.")
+  } else if (length(fs::dir_ls(path))) {
+    message(glue(
+      "{path} seems to not be empty. ",
+      "Continuing as parameter `force = TRUE`"
+    ))
   }
 
   ex_path <- system.file(
@@ -202,13 +213,19 @@ load_example <- function(path) {
     package = "shiny.benchmark",
     mustWork = TRUE
   )
-  files <- list.files(path = ex_path, full.names = TRUE)
+  files <- fs::dir_ls(path = ex_path, fun = fs::path_real)
 
   for (file in files) {
-    file.copy(from = file, to = path, recursive = TRUE)
+    if (fs::is_dir(file)) {
+      # Due to overwrite = TRUE the destination must include the name of the
+      #  directory to be created
+      fs::dir_copy(file, fs::path(path, fs::path_file(file)), overwrite = TRUE)
+    } else {
+      fs::file_copy(file, path, overwrite = TRUE)
+    }
     print(glue("{basename(file)} created at {path}"))
   }
 
-  fpath <- file.path(path, "run_tests.R") # nolint
+  fpath <- fs::path(path, "run_tests.R") # nolint
   message(glue("Follow instructions in {fpath}"))
 }
