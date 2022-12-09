@@ -109,6 +109,8 @@ shiny::runApp()
 
 <img src="images/app.png" style="width: 100%; margin:0px">
 
+----
+
 # Tests engines
 
 `shiny.benchmark` works under two different engines: `Cypress` and `shinytest2`.
@@ -141,11 +143,11 @@ describe('Cypress test', () => {
 });
 ```
 
-This code is simulating clicks in the three buttons we have in our application. Also it waits for the output to appear. Replace `set1` by `set2` in the code and save it as `tests/cypress/test-set2.js` as well. It will be useful to present some functionalities later.
+This code is simulating clicks in the three buttons we have in our application. Also it waits for the outputs to appear. In a new file, replace `set1` by `set2` in the code and save it as `tests/cypress/test-set2.js` as well. It will be useful to present some functionalities later.
 
 ## shinytest2
 
-`shinytest2` is an R package maintained by `Posit`. It is handy for R users since all tests can be done using R only (differently than Cypress). To set up it easily, you can run `shinytest2::use_shinytest2()`. It will create configuration files which you do not need to change for this tutorial.
+`shinytest2` is an R package maintained by [Posit](https://posit.co/). It is handy for R users since all tests can be done using R only (differently than Cypress). To set up it easily, run `shinytest2::use_shinytest2()`. It will create configuration files which you do not need to change for this tutorial.
 
 Save the following code as `tests/testthat/test-set1.R`:
 
@@ -171,6 +173,9 @@ test_that("Out3 time elapsed - set1", {
 
 Again, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well.
 
+
+----
+
 # Package management
 
 During the development process, it is normal to use different packages/package versions. `renv` allow us to manage package versions and is used by `shiny.benchmark` by default. Run the following code to setup `renv` in our test application.
@@ -181,6 +186,9 @@ renv::install("remotes")
 remotes::install_github("Appsilon/shiny.benchmark")
 renv::snapshot(prompt = FALSE)
 ```
+
+
+----
 
 # Simulating app versions
 
@@ -236,7 +244,9 @@ git commit -m "downgrading shiny"
 git checkout develop
 ```
 
-And we are all set!
+Great! We are all set!
+
+----
 
 # shiny.benchmark
 
@@ -304,9 +314,9 @@ list(develop = list(structure(list(date = structure(c(1670530838,
 -6L))))
 ```
 
-You can notice that both files are reported (`test-set1` and `test-set2`). Also, the result is a list of `data.frames` in which each entry correspond to a specific commit.
+You can notice that both tests files are reported (`test-set1` and `test-set2`). Also, the result is a list of `data.frames` in which each entry correspond to a specific commit.
 
-For now on we will use only `shinytest2`. However, everything is also applied for Cypress.
+For now on we will use only `shinytest2`. However, everything is also applied for `Cypress`.
 
 ## Package management
 
@@ -323,7 +333,7 @@ shinytest2_out <- benchmark(
 
 ## Handling multiple files
 
-Sometimes it is not our interest to measure performance of all the tests we have. in order to select specific files you can use the argument `tests_pattern`. This argument accept either a vector of files (one for each item in commit list). Also, it is possible to search for a pattern in `tests` files.
+Sometimes it is not our interest to measure performance of all the tests we have. In order to select specific files you can use the argument `tests_pattern`. This argument accept either a vector of files (one for each item in commit list). Also, it is possible to search for a pattern in `tests` files.
 
 ```r
 shinytest2_out <- benchmark(
@@ -369,11 +379,11 @@ shinytest2_out <- benchmark(
   shinytest2_dir = testthat_dir,
   use_renv = FALSE,
   tests_pattern = "set1",
-  n_rep = 5
+  n_rep = 10
 )
 ```
 
-Some methods are implemented to make it easy to explore the results:
+Some methods are implemented to make it easy to explore the results. `summary` brings summarized statistics as mean, median, minimum and maximum while `plot` shows a plot with the average times for each `git` ref and test. Also it presents maximum and minimum range.
 
 ```r
 summary(shinytest2_out)
@@ -407,4 +417,6 @@ plot(shinytest2_out)
 
 <img src="images/plot.png" style="width: 100%; margin:0px">
 
-## Creating a report
+----
+
+**Congratulations! You are now able to apply your knoledge to check the performance improvments in your own projects!**
