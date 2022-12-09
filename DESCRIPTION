@@ -19,7 +19,7 @@ VignetteBuilder: knitr
 Depends:
   R (>= 3.1.0)
 Suggests:
-  codecov,
+  covr,
   knitr,
   lintr,
   rcmdcheck,
