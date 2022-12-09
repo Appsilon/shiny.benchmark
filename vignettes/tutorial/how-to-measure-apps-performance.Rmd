@@ -1,0 +1,410 @@
+---
+title: "Tutorial: Compare performance of different versions of a shiny application"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tutorial: Compare performance of different versions of a shiny application}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Setup
+
+## How to install shiny.benchmark?
+
+`shiny.benchmark` can use two different engines to test the changes in the performance of your application: [shinytest2](https://rstudio.github.io/shinytest2/) and [Cypress](https://www.cypress.io/). The latter requires `Node` (version 12 or higher) and `yarn` (version 1.22.17 or higher) to be available. To install them on your computer, follow the guidelines on the documentation pages:
+
+- [Node](https://nodejs.org/en/download/)
+- [yarn](https://yarnpkg.com/getting-started/install)
+
+Besides that, on Linux, it might be required to install other `Cypress` dependencies. Check the [documentation](https://docs.cypress.io/guides/getting-started/installing-cypress#Linux-Prerequisites) to find out more.
+
+To install `shiny.benchmark` use the following command:
+
+```r
+remotes::install_github("Appsilon/shiny.benchmark")
+```
+
+----
+
+# Create an initial application
+
+Let's start creating an application that will serve us as a guide through the `shiny.benchmark` functionalities.
+
+Save the following code as `ui.R`. It is a simple UI containing three columns with one action button in each. Also each column has an output which will be created in the server file later.
+
+```r
+function() {
+  bootstrapPage(
+    tags$h1("Measuring time in different commits"),
+    column(
+      width = 4,
+      actionButton(inputId = "run1", label = "Run 1"),
+      uiOutput(outputId = "out1")
+    ),
+    column(
+      width = 4,
+      actionButton(inputId = "run2", label = "Run 2"),
+      uiOutput(outputId = "out2")
+    ),
+    column(
+      width = 4,
+      actionButton(inputId = "run3", label = "Run 3"),
+      uiOutput(outputId = "out3")
+    )
+  )
+}
+```
+
+In the server side, the application will use the `Sys.sleep` function to simulate a task every time the user press a button. This will be helpful for us since we can easily increase/decrease the sleep time to simulate improvements/deterioration of the application. Save the following code as `server.R`:
+
+```r
+times <- c(10, 5, 2)
+
+function(input, output, session) {
+  # Sys.sleep
+  react1 <- eventReactive(input$run1, {
+    out <- system.time(
+      Sys.sleep(times[1] + rexp(n = 1, rate = 10)) # we will play with the time here
+    )
+
+    return(out[3])
+  })
+
+  react2 <- eventReactive(input$run2, {
+    out <- system.time(
+      Sys.sleep(times[2] + rexp(n = 1, rate = 10)) # we will play with the time here
+    )
+
+    return(out[3])
+  })
+
+  react3 <- eventReactive(input$run3, {
+    out <- system.time(
+      Sys.sleep(times[3] + rexp(n = 1, rate = 10)) # we will play with the time here
+    )
+
+    return(out[1])
+  })
+
+  # outputs
+  output$out1 <- renderUI({
+    tags$span(round(react1()), style = "font-size: 500px;")
+  })
+
+  output$out2 <- renderUI({
+    tags$span(round(react2()), style = "font-size: 500px;")
+  })
+
+  output$out3 <- renderUI({
+    tags$span(round(react3()), style = "font-size: 500px;")
+  })
+}
+```
+
+The application should look like this:
+
+```r
+shiny::runApp()
+```
+
+<img src="images/app.png" style="width: 100%; margin:0px">
+
+# Tests engines
+
+`shiny.benchmark` works under two different engines: `Cypress` and `shinytest2`.
+
+## Cypress
+
+Cypress is a widely used end to end testing JavaScript library. Because its broader usage, this engine allows the user to take advantage of a huge number of functionalities in order to test its applications. Also, the community is active and therefore it is easier to find solution for bugs you may encounter while coding.
+
+Save the following code as `tests/cypress/test-set1.js`:
+
+```r
+describe('Cypress test', () => {
+  it('Out1 time elapsed - set1', () => { // replace set1 by set2
+    cy.visit('/');
+    cy.get('#run1').click();
+    cy.get('#out1', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out2
+  it('Out2 time elapsed - set1', () => { // replace set1 by set2
+    cy.get('#run2').click();
+    cy.get('#out2', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out3
+  it('Out3 time elapsed - set1', () => { // replace set1 by set2
+    cy.get('#run3').click();
+    cy.get('#out3', {timeout: 10000}).should('be.visible');
+  });
+});
+```
+
+This code is simulating clicks in the three buttons we have in our application. Also it waits for the output to appear. Replace `set1` by `set2` in the code and save it as `tests/cypress/test-set2.js` as well. It will be useful to present some functionalities later.
+
+## shinytest2
+
+`shinytest2` is an R package maintained by `Posit`. It is handy for R users since all tests can be done using R only (differently than Cypress). To set up it easily, you can run `shinytest2::use_shinytest2()`. It will create configuration files which you do not need to change for this tutorial.
+
+Save the following code as `tests/testthat/test-set1.R`:
+
+```r
+test_that("Out1 time elapsed - set1", {
+  app <- AppDriver$new(name = "test1", height = 975, width = 1619)
+  app$click("run1")
+  app$expect_values(output = "out1")
+})
+
+test_that("Out2 time elapsed - set1", {
+  app <- AppDriver$new(name = "test2", height = 975, width = 1619)
+  app$click("run2")
+  app$expect_values(output = "out2")
+})
+
+test_that("Out3 time elapsed - set1", {
+  app <- AppDriver$new(name = "test3", height = 975, width = 1619)
+  app$click("run3")
+  app$expect_values(output = "out3")
+})
+```
+
+Again, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well.
+
+# Package management
+
+During the development process, it is normal to use different packages/package versions. `renv` allow us to manage package versions and is used by `shiny.benchmark` by default. Run the following code to setup `renv` in our test application.
+
+```r
+renv::init()
+renv::install("remotes")
+remotes::install_github("Appsilon/shiny.benchmark")
+renv::snapshot(prompt = FALSE)
+```
+
+# Simulating app versions
+
+In a regular project, you may use `git` to maintain the code. In this case, it is natural to have different app's versions in different branches/commits/releases. `shiny.benchmark` take advantage of these different `git` refs to run tests under different code versions. Add the following code to `.gitignore` to avoid problems with uncommitted files later:
+
+```git
+.Rhistory
+.Rproj.user/
+.Rproj.user
+renv/
+```
+
+Now, lets create a `git` repo and commit the current application into the `develop` branch:
+
+```git
+git init
+git checkout -b develop
+git add .
+git commit -m "first commit"
+```
+
+Also, let's create a new branch called `feature1`:
+
+```git
+git checkout -b feature1
+```
+
+At this point, we can simulate improvement in our application. To do so, let's change `Sys.sleep` time in the server function. Replace `times <- c(10, 5, 2)` by `times <- c(5, 2.5, 1)` in `server.R` and then commit the changes.
+
+```git
+git add server.R
+git commit -m "improving performance"
+```
+
+To play with `renv` let's downgrade `shiny` version and snapshoot it:
+
+```git
+git checkout -b feature2
+```
+
+Replace `times <- c(5, 2.5, 1)` by `times <- c(2.5, 1.25, 0.5)` in `server.R`. Also, run the following code to downgrade `shiny`:
+
+```r
+renv::install("shiny@1.7.0")
+renv::snapshot(prompt = FALSE)
+```
+
+Commit the changes:
+
+```git
+git add .
+git commit -m "downgrading shiny"
+git checkout develop
+```
+
+And we are all set!
+
+# shiny.benchmark
+
+Now we have all ingredients needed: An application, a set of tests and different versions in a `git` repo. `shiny.benchmark::benchmark` function has only two mandatory arguments:
+
+- `commit_list`: a named list of `git` refs (commit hashes, branch names, tags, ...)
+- `cypress_dir` or `shinytest2_dir`: path to `Cypress` or `shinytest2` tests
+
+By default, `shiny.benchmark` uses `renv`. To turn `renv` off just set `use_renv = FALSE`.
+
+```r
+library(shiny.benchmark)
+
+commits <- list(
+  "develop" = "710fce371b3bf25c9223a11c70d5b27e5d16448e", # develop
+  "feature1" = "feature1",
+  "using_renv" = "feature2"
+)
+
+cypress_dir <- "tests/cypress/"
+testthat_dir <- "tests/"
+
+cypress_out <- benchmark(
+  commit_list = commits,
+  cypress_dir = cypress_dir,
+  use_renv = FALSE
+)
+
+shinytest2_out <- benchmark(
+  commit_list = commits,
+  shinytest2_dir = testthat_dir,
+  use_renv = FALSE
+)
+```
+
+For the sake of illustration, we are using the hash code in the develop branch (which is not needed). The console should display something similar to:
+
+<img src="images/console_basic.png" style="display: block; margin:auto">
+
+You can access the results using `cypress_out$performance` or `shinytest2_out$performance`:
+
+```r
+cypress_out$performance
+```
+
+```{r echo = FALSE, eval = TRUE}
+list(develop = list(structure(list(date = structure(c(1670530838, 
+1670530838, 1670530838, 1670530838, 1670530838, 1670530838), class = c("POSIXct", 
+"POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
+"Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(10743L, 
+5215L, 2309L, 10526L, 5354L, 2267L)), class = "data.frame", row.names = c(NA, 
+-6L))), feature1 = list(structure(list(date = structure(c(1670530879, 
+1670530879, 1670530879, 1670530879, 1670530879, 1670530879), class = c("POSIXct", 
+"POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
+"Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(5764L, 
+2798L, 1321L, 5316L, 2713L, 1169L)), class = "data.frame", row.names = c(NA, 
+-6L))), using_renv = list(structure(list(date = structure(c(1670530923, 
+1670530923, 1670530923, 1670530923, 1670530923, 1670530923), class = c("POSIXct", 
+"POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
+"Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(3435L, 
+1509L, 719L, 2978L, 1431L, 763L)), class = "data.frame", row.names = c(NA, 
+-6L))))
+```
+
+You can notice that both files are reported (`test-set1` and `test-set2`). Also, the result is a list of `data.frames` in which each entry correspond to a specific commit.
+
+For now on we will use only `shinytest2`. However, everything is also applied for Cypress.
+
+## Package management
+
+In order to use `renv`, simply assign `use_renv = TRUE`. You can also use `renv_prompt = TRUE` if you want to see what renv is applying in the background.
+
+```r
+shinytest2_out <- benchmark(
+  commit_list = commits,
+  shinytest2_dir = testthat_dir,
+  use_renv = TRUE,
+  renv_prompt = TRUE
+)
+```
+
+## Handling multiple files
+
+Sometimes it is not our interest to measure performance of all the tests we have. in order to select specific files you can use the argument `tests_pattern`. This argument accept either a vector of files (one for each item in commit list). Also, it is possible to search for a pattern in `tests` files.
+
+```r
+shinytest2_out <- benchmark(
+  commit_list = commits,
+  shinytest2_dir = testthat_dir,
+  use_renv = FALSE,
+  tests_pattern = c("set[0-9]", "set1", "set2")
+)
+shinytest2_out$performance
+```
+
+```{r echo=FALSE}
+list(develop = list(structure(list(date = structure(c(1670530838, 
+1670530838, 1670530838, 1670530838, 1670530838, 1670530838), class = c("POSIXct", 
+"POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
+"Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(12.649, 
+7.88999999999999, 4.51400000000001, 12.3340000000001, 7.47699999999998, 
+4.11500000000001)), class = "data.frame", row.names = c(NA, -6L
+))), feature1 = list(structure(list(date = structure(c(1670530879, 
+1670530879, 1670530879), class = c("POSIXct", "POSIXt"), tzone = ""), 
+    rep_id = c(1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
+    "Out2 time elapsed - set1", "Out3 time elapsed - set1"), 
+    duration_ms = c(7.07800000000009, 5.447, 3.49199999999996
+    )), class = "data.frame", row.names = c(NA, -3L))), using_renv = list(
+    structure(list(date = structure(c(1670530923, 1670530923, 
+    1670530923), class = c("POSIXct", "POSIXt"), tzone = ""), 
+        rep_id = c(1L, 1L, 1L), test_name = c("Out1 time elapsed - set2", 
+        "Out2 time elapsed - set2", "Out3 time elapsed - set2"
+        ), duration_ms = c(4.79999999999995, 3.63, 3.1339999999999
+        )), class = "data.frame", row.names = c(NA, -3L))))
+```
+
+Now the output is sightly different. For `develop` branch both files are in use (they match the pattern). For `feature1` and `feature2` only one file is in use. It can be useful when new tests are added during the development process and you need to run different tests for different versions.
+
+## Repetitions 
+
+Sometimes it is important to repeat the measurement several times to have a distribution of the performance times instead of an unique measurement. To do so, it is possible to use the `n_rep argument` as follows:
+
+```r
+shinytest2_out <- benchmark(
+  commit_list = commits,
+  shinytest2_dir = testthat_dir,
+  use_renv = FALSE,
+  tests_pattern = "set1",
+  n_rep = 5
+)
+```
+
+Some methods are implemented to make it easy to explore the results:
+
+```r
+summary(shinytest2_out)
+```
+
+```{r echo = FALSE}
+structure(list(commit = c("develop", "develop", "develop", "feature1", 
+"feature1", "feature1", "using_renv", "using_renv", "using_renv"
+), test_name = c("Out1 time elapsed - set1", "Out2 time elapsed - set1", 
+"Out3 time elapsed - set1", "Out1 time elapsed - set1", "Out2 time elapsed - set1", 
+"Out3 time elapsed - set1", "Out1 time elapsed - set1", "Out2 time elapsed - set1", 
+"Out3 time elapsed - set1"), n = c(10L, 10L, 10L, 10L, 10L, 10L, 
+10L, 10L, 10L), mean = c(12.2756, 7.64179999999999, 4.70679999999998, 
+7.18020000000001, 5.22919999999999, 3.46759999999995, 5.05980000000004, 
+3.75569999999996, 2.82280000000001), median = c(12.238, 7.62050000000005, 
+4.77099999999996, 7.14600000000007, 5.1925, 3.40049999999985, 
+5.06850000000009, 3.60749999999996, 2.79049999999997), sd = c(0.212946106901357, 
+0.145640195916746, 0.210462876114088, 0.253890527590115, 0.191039728270784, 
+0.215106278641769, 0.340268456108157, 0.484944910960702, 0.259766904059041
+), min = c(11.963, 7.46699999999998, 4.35799999999995, 6.89200000000005, 
+4.89699999999993, 3.19999999999982, 4.57500000000005, 3.19899999999984, 
+2.49700000000007), max = c(12.602, 7.95299999999997, 4.97799999999984, 
+7.61400000000003, 5.56999999999994, 3.81999999999994, 5.75900000000001, 
+4.97299999999996, 3.21599999999989)), class = c("tbl_df", "tbl", 
+"data.frame"), row.names = c(NA, -9L))
+```
+
+```r
+plot(shinytest2_out)
+```
+
+<img src="images/plot.png" style="width: 100%; margin:0px">
+
+## Creating a report
