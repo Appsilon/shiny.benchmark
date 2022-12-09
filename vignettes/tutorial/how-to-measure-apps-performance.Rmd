@@ -1,6 +1,8 @@
 ---
 title: "Tutorial: Compare performance of different versions of a shiny application"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    self_contained: true
 vignette: >
   %\VignetteIndexEntry{Tutorial: Compare performance of different versions of a shiny application}
   %\VignetteEngine{knitr::rmarkdown}
