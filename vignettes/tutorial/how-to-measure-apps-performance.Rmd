@@ -30,7 +30,7 @@ remotes::install_github("Appsilon/shiny.benchmark")
 
 Let's start creating an application that will serve us as a guide through the `shiny.benchmark` functionalities.
 
-Save the following code as `ui.R`. It is a simple UI containing three columns with one action button in each. Also each column has an output which will be created in the server file later.
+Save the following code as `ui.R`. It is a simple user interface containing three columns with one action button in each. Also each column has an output which will be created in the server file later.
 
 ```r
 function() {
@@ -223,7 +223,7 @@ git add server.R
 git commit -m "improving performance"
 ```
 
-To play with `renv` let's downgrade `shiny` version and snapshoot it:
+To play with `renv` let's downgrade `shiny` version and snapshot it:
 
 ```git
 git checkout -b feature2
@@ -419,4 +419,4 @@ plot(shinytest2_out)
 
 ----
 
-**Congratulations! You are now able to apply your knoledge to check the performance improvments in your own projects!**
+**Congratulations! You are now able to apply your knowledge to check the performance improvements in your own projects!**
