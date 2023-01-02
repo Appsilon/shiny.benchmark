@@ -149,7 +149,7 @@ This code is simulating clicks in the three buttons we have in our application. 
 
 ## shinytest2
 
-`shinytest2` is an R package maintained by [Posit](https://posit.co/). It is handy for R users since all tests can be done using R only (differently than Cypress). To set up it easily, run `shinytest2::use_shinytest2()`. It will create configuration files which you do not need to change for this tutorial.
+`shinytest2` is an R package maintained by [Posit](https://posit.co/) (formerly RStudio). It is handy for R users since all tests can be done using R only (differently than Cypress). To set up it easily, run `shinytest2::use_shinytest2()`. It will create configuration files which you do not need to change for this tutorial.
 
 Save the following code as `tests/testthat/test-set1.R`:
 
