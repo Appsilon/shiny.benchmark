@@ -30,7 +30,7 @@ remotes::install_github("Appsilon/shiny.benchmark")
 
 # Create an initial application
 
-Let's start creating an application that will serve us as a guide through the `shiny.benchmark` functionalities.
+Let's start by creating an application that will serve us as a guide through the `shiny.benchmark` functionalities.
 
 Save the following code as `ui.R`. It is a simple user interface containing three columns with one action button in each. Also each column has an output which will be created in the server file later.
 
