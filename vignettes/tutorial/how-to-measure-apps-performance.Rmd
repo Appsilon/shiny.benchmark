@@ -194,7 +194,7 @@ renv::snapshot(prompt = FALSE)
 
 # Simulating app versions
 
-In a regular project, you may use `git` to maintain the code. In this case, it is natural to have different app's versions in different branches/commits/releases. `shiny.benchmark` take advantage of these different `git` refs to run tests under different code versions. Add the following code to `.gitignore` to avoid problems with uncommitted files later:
+In a regular project, you use `git` to maintain the code versioning. In this case, it is natural to have different app's versions in different branches/commits/releases. `shiny.benchmark` take advantage of these different `git` refs to run tests under different code versions. Add the following code to `.gitignore` to avoid problems with uncommitted files later:
 
 ```git
 .Rhistory
