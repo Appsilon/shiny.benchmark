@@ -26,6 +26,8 @@ To install `shiny.benchmark` use the following command:
 remotes::install_github("Appsilon/shiny.benchmark")
 ```
 
+`shiny.benchmark` will handle `Cypress` installation. If you face any inconvenience using `Cypress`, please try to use `shinytest2` in the rest of this tutorial.
+
 ----
 
 # Create an initial application
@@ -66,7 +68,7 @@ function(input, output, session) {
   # Sys.sleep
   react1 <- eventReactive(input$run1, {
     out <- system.time(
-      Sys.sleep(times[1] + rexp(n = 1, rate = 10)) # we will play with the time here
+      Sys.sleep(times[1] + rexp(n = 1, rate = 1)) # we will play with the time here
     )
 
     return(out[3])
@@ -74,7 +76,7 @@ function(input, output, session) {
 
   react2 <- eventReactive(input$run2, {
     out <- system.time(
-      Sys.sleep(times[2] + rexp(n = 1, rate = 10)) # we will play with the time here
+      Sys.sleep(times[2] + rexp(n = 1, rate = 1)) # we will play with the time here
     )
 
     return(out[3])
@@ -82,7 +84,7 @@ function(input, output, session) {
 
   react3 <- eventReactive(input$run3, {
     out <- system.time(
-      Sys.sleep(times[3] + rexp(n = 1, rate = 10)) # we will play with the time here
+      Sys.sleep(times[3] + rexp(n = 1, rate = 1)) # we will play with the time here
     )
 
     return(out[1])
@@ -90,15 +92,15 @@ function(input, output, session) {
 
   # outputs
   output$out1 <- renderUI({
-    tags$span(round(react1()), style = "font-size: 500px;")
+    tags$span(round(react1()), style = "font-size: 5vw;")
   })
 
   output$out2 <- renderUI({
-    tags$span(round(react2()), style = "font-size: 500px;")
+    tags$span(round(react2()), style = "font-size: 5vw;")
   })
 
   output$out3 <- renderUI({
-    tags$span(round(react3()), style = "font-size: 500px;")
+    tags$span(round(react3()), style = "font-size: 5vw;")
   })
 }
 ```
@@ -116,36 +118,6 @@ shiny::runApp()
 # Tests engines
 
 `shiny.benchmark` works under two different engines: `Cypress` and `shinytest2`.
-
-## Cypress
-
-Cypress is a widely used end to end testing JavaScript library. Because its broader usage, this engine allows the user to take advantage of a huge number of functionalities in order to test its applications. Also, the community is active and therefore it is easier to find solution for bugs you may encounter while coding.
-
-Save the following code as `tests/cypress/test-set1.js`:
-
-```r
-describe('Cypress test', () => {
-  it('Out1 time elapsed - set1', () => { // replace set1 by set2
-    cy.visit('/');
-    cy.get('#run1').click();
-    cy.get('#out1', {timeout: 10000}).should('be.visible');
-  });
-
-  // Test how long it takes to wait for out2
-  it('Out2 time elapsed - set1', () => { // replace set1 by set2
-    cy.get('#run2').click();
-    cy.get('#out2', {timeout: 10000}).should('be.visible');
-  });
-
-  // Test how long it takes to wait for out3
-  it('Out3 time elapsed - set1', () => { // replace set1 by set2
-    cy.get('#run3').click();
-    cy.get('#out3', {timeout: 10000}).should('be.visible');
-  });
-});
-```
-
-This code is simulating clicks in the three buttons we have in our application. Also it waits for the outputs to appear. In a new file, replace `set1` by `set2` in the code and save it as `tests/cypress/test-set2.js` as well. It will be useful to present some functionalities later.
 
 ## shinytest2
 
@@ -173,7 +145,79 @@ test_that("Out3 time elapsed - set1", {
 })
 ```
 
-Again, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well.
+This code is simulating clicks in the three buttons we have in our application. Also it waits for the outputs to appear. In a new file, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well. It will be useful to present some functionalities later.
+
+```r
+test_that("Out1 time elapsed - set2", {
+  app <- AppDriver$new(name = "test1", height = 975, width = 1619)
+  app$click("run1")
+  app$expect_values(output = "out1")
+})
+
+test_that("Out2 time elapsed - set2", {
+  app <- AppDriver$new(name = "test2", height = 975, width = 1619)
+  app$click("run2")
+  app$expect_values(output = "out2")
+})
+
+test_that("Out3 time elapsed - set2", {
+  app <- AppDriver$new(name = "test3", height = 975, width = 1619)
+  app$click("run3")
+  app$expect_values(output = "out3")
+})
+```
+
+## Cypress
+
+Cypress is a widely used end to end testing JavaScript library. Because its broader usage, this engine allows the user to take advantage of a huge number of functionalities in order to test its applications. Also, the community is active and therefore it is easier to find solution for bugs you may encounter while coding.
+
+Save the following code as `tests/cypress/test-set1.js`:
+
+```r
+describe('Cypress test', () => {
+  it('Out1 time elapsed - set1', () => {
+    cy.visit('/');
+    cy.get('#run1').click();
+    cy.get('#out1', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out2
+  it('Out2 time elapsed - set1', () => {
+    cy.get('#run2').click();
+    cy.get('#out2', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out3
+  it('Out3 time elapsed - set1', () => {
+    cy.get('#run3').click();
+    cy.get('#out3', {timeout: 10000}).should('be.visible');
+  });
+});
+```
+
+Again, replace `set1` by `set2` in the code and save it as `tests/cypress/test-set2.R` as well.
+
+```r
+describe('Cypress test', () => {
+  it('Out1 time elapsed - set2', () => {
+    cy.visit('/');
+    cy.get('#run1').click();
+    cy.get('#out1', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out2
+  it('Out2 time elapsed - set2', () => {
+    cy.get('#run2').click();
+    cy.get('#out2', {timeout: 10000}).should('be.visible');
+  });
+
+  // Test how long it takes to wait for out3
+  it('Out3 time elapsed - set2', () => {
+    cy.get('#run3').click();
+    cy.get('#out3', {timeout: 10000}).should('be.visible');
+  });
+});
+```
 
 
 ----
@@ -218,7 +262,7 @@ Also, let's create a new branch called `feature1`:
 git checkout -b feature1
 ```
 
-At this point, we can simulate improvement in our application. To do so, let's change `Sys.sleep` time in the server function. Replace `times <- c(10, 5, 2)` by `times <- c(5, 2.5, 1)` in `server.R` and then commit the changes.
+At this point, we can simulate improvement in our application. To do so, let's change `Sys.sleep` time in the server function. Replace `times <- c(10, 5, 2)` by `times <- c(5, 2.5, 1)` in first row of `server.R` and then commit the changes.
 
 ```git
 git add server.R
@@ -231,10 +275,10 @@ To play with `renv` let's downgrade `shiny` version and snapshot it:
 git checkout -b feature2
 ```
 
-Replace `times <- c(5, 2.5, 1)` by `times <- c(2.5, 1.25, 0.5)` in `server.R`. Also, run the following code to downgrade `shiny`:
+Replace `times <- c(5, 2.5, 1)` by `times <- c(2.5, 1.25, 0.5)` in first row of `server.R`. Also, run the following code to downgrade `shiny`:
 
 ```r
-renv::install("shiny@1.7.0")
+renv::install("shiny@1.0.0")
 renv::snapshot(prompt = FALSE)
 ```
 
@@ -257,13 +301,13 @@ Now we have all ingredients needed: An application, a set of tests and different
 - `commit_list`: a named list of `git` refs (commit hashes, branch names, tags, ...)
 - `cypress_dir` or `shinytest2_dir`: path to `Cypress` or `shinytest2` tests
 
-By default, `shiny.benchmark` uses `renv`. To turn `renv` off just set `use_renv = FALSE`.
+By default, `shiny.benchmark` uses `renv`. To turn `renv` off just set `use_renv = FALSE` in the `benchmark` call. Be aware that this function will take a while to run since the application will be started and tested 3 times (`develop`, `feature1` and `using_renv` branches).
 
 ```r
 library(shiny.benchmark)
 
 commits <- list(
-  "develop" = "710fce371b3bf25c9223a11c70d5b27e5d16448e", # develop
+  "develop" = "develop",
   "feature1" = "feature1",
   "using_renv" = "feature2"
 )
@@ -284,7 +328,7 @@ shinytest2_out <- benchmark(
 )
 ```
 
-For the sake of illustration, we are using the hash code in the develop branch (which is not needed). The console should display something similar to:
+Instead of a branch name, you can also use the hash code of a desired commit. The console should display something similar to:
 
 <img src="images/console_basic.png" style="display: block; margin:auto">
 
@@ -295,24 +339,24 @@ cypress_out$performance
 ```
 
 ```{r echo = FALSE, eval = TRUE}
-list(develop = list(structure(list(date = structure(c(1670530838, 
-1670530838, 1670530838, 1670530838, 1670530838, 1670530838), class = c("POSIXct", 
+list(develop = list(structure(list(date = structure(c(1673034247, 
+1673034247, 1673034247, 1673034247, 1673034247, 1673034247), class = c("POSIXct", 
 "POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
 "Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
-"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(10743L, 
-5215L, 2309L, 10526L, 5354L, 2267L)), class = "data.frame", row.names = c(NA, 
--6L))), feature1 = list(structure(list(date = structure(c(1670530879, 
-1670530879, 1670530879, 1670530879, 1670530879, 1670530879), class = c("POSIXct", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(10782L, 
+6091L, 2804L, 10591L, 6768L, 3944L)), class = "data.frame", row.names = c(NA, 
+-6L))), feature1 = list(structure(list(date = structure(c(1673034279, 
+1673034279, 1673034279, 1673034279, 1673034279, 1673034279), class = c("POSIXct", 
 "POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
 "Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
-"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(5764L, 
-2798L, 1321L, 5316L, 2713L, 1169L)), class = "data.frame", row.names = c(NA, 
--6L))), using_renv = list(structure(list(date = structure(c(1670530923, 
-1670530923, 1670530923, 1670530923, 1670530923, 1670530923), class = c("POSIXct", 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(6471L, 
+6442L, 1422L, 5613L, 3593L, 1272L)), class = "data.frame", row.names = c(NA, 
+-6L))), using_renv = list(structure(list(date = structure(c(1673034314, 
+1673034314, 1673034314, 1673034314, 1673034314, 1673034314), class = c("POSIXct", 
 "POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
 "Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
-"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(3435L, 
-1509L, 719L, 2978L, 1431L, 763L)), class = "data.frame", row.names = c(NA, 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(3941L, 
+3010L, 995L, 3082L, 2130L, 2458L)), class = "data.frame", row.names = c(NA, 
 -6L))))
 ```
 
@@ -348,28 +392,29 @@ shinytest2_out$performance
 ```
 
 ```{r echo=FALSE}
-list(develop = list(structure(list(date = structure(c(1670530838, 
-1670530838, 1670530838, 1670530838, 1670530838, 1670530838), class = c("POSIXct", 
+list(develop = list(structure(list(date = structure(c(1673034247, 
+1673034247, 1673034247, 1673034247, 1673034247, 1673034247), class = c("POSIXct", 
 "POSIXt"), tzone = ""), rep_id = c(1L, 1L, 1L, 1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
 "Out2 time elapsed - set1", "Out3 time elapsed - set1", "Out1 time elapsed - set2", 
-"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(12.649, 
-7.88999999999999, 4.51400000000001, 12.3340000000001, 7.47699999999998, 
-4.11500000000001)), class = "data.frame", row.names = c(NA, -6L
-))), feature1 = list(structure(list(date = structure(c(1670530879, 
-1670530879, 1670530879), class = c("POSIXct", "POSIXt"), tzone = ""), 
+"Out2 time elapsed - set2", "Out3 time elapsed - set2"), duration_ms = c(12.0559999999996, 
+8.16600000000017, 6.94699999999921, 13.3299999999999, 7.09899999999925, 
+6.84699999999975)), class = "data.frame", row.names = c(NA, -6L
+))), feature1 = list(structure(list(date = structure(c(1673034279, 
+1673034279, 1673034279), class = c("POSIXct", "POSIXt"), tzone = ""), 
     rep_id = c(1L, 1L, 1L), test_name = c("Out1 time elapsed - set1", 
     "Out2 time elapsed - set1", "Out3 time elapsed - set1"), 
-    duration_ms = c(7.07800000000009, 5.447, 3.49199999999996
+    duration_ms = c(6.96900000000005, 5.58899999999994, 3.23300000000017
     )), class = "data.frame", row.names = c(NA, -3L))), using_renv = list(
-    structure(list(date = structure(c(1670530923, 1670530923, 
-    1670530923), class = c("POSIXct", "POSIXt"), tzone = ""), 
+    structure(list(date = structure(c(1673034314, 1673034314, 
+    1673034314), class = c("POSIXct", "POSIXt"), tzone = ""), 
         rep_id = c(1L, 1L, 1L), test_name = c("Out1 time elapsed - set2", 
         "Out2 time elapsed - set2", "Out3 time elapsed - set2"
-        ), duration_ms = c(4.79999999999995, 3.63, 3.1339999999999
-        )), class = "data.frame", row.names = c(NA, -3L))))
+        ), duration_ms = c(4.59799999999996, 4.01999999999953, 
+        3.41100000000006)), class = "data.frame", row.names = c(NA, 
+    -3L))))
 ```
 
-Now the output is sightly different. For `develop` branch both files are in use (they match the pattern). For `feature1` and `feature2` only one file is in use. It can be useful when new tests are added during the development process and you need to run different tests for different versions.
+Now the output is sightly different. For `develop` branch both files (`test-set1` and `test-set2`) are in use since they match the `test-set[0-9]` pattern. For `feature1` and `feature2` only one file is in use since we directly requested `test-set1` and `test-set2` files respectively. It can be useful when new tests are added during the development process and you need to run different tests for different versions.
 
 ## Repetitions 
 
@@ -381,9 +426,11 @@ shinytest2_out <- benchmark(
   shinytest2_dir = testthat_dir,
   use_renv = FALSE,
   tests_pattern = "set1",
-  n_rep = 10
+  n_rep = 5
 )
 ```
+
+It is faster than running the benchmark several times since the test structure is created only once internally saving some execution time.
 
 Some methods are implemented to make it easy to explore the results. `summary` brings summarized statistics as mean, median, minimum and maximum while `plot` shows a plot with the average times for each `git` ref and test. Also it presents maximum and minimum range.
 
@@ -397,19 +444,20 @@ structure(list(commit = c("develop", "develop", "develop", "feature1",
 ), test_name = c("Out1 time elapsed - set1", "Out2 time elapsed - set1", 
 "Out3 time elapsed - set1", "Out1 time elapsed - set1", "Out2 time elapsed - set1", 
 "Out3 time elapsed - set1", "Out1 time elapsed - set1", "Out2 time elapsed - set1", 
-"Out3 time elapsed - set1"), n = c(10L, 10L, 10L, 10L, 10L, 10L, 
-10L, 10L, 10L), mean = c(12.2756, 7.64179999999999, 4.70679999999998, 
-7.18020000000001, 5.22919999999999, 3.46759999999995, 5.05980000000004, 
-3.75569999999996, 2.82280000000001), median = c(12.238, 7.62050000000005, 
-4.77099999999996, 7.14600000000007, 5.1925, 3.40049999999985, 
-5.06850000000009, 3.60749999999996, 2.79049999999997), sd = c(0.212946106901357, 
-0.145640195916746, 0.210462876114088, 0.253890527590115, 0.191039728270784, 
-0.215106278641769, 0.340268456108157, 0.484944910960702, 0.259766904059041
-), min = c(11.963, 7.46699999999998, 4.35799999999995, 6.89200000000005, 
-4.89699999999993, 3.19999999999982, 4.57500000000005, 3.19899999999984, 
-2.49700000000007), max = c(12.602, 7.95299999999997, 4.97799999999984, 
-7.61400000000003, 5.56999999999994, 3.81999999999994, 5.75900000000001, 
-4.97299999999996, 3.21599999999989)), class = c("tbl_df", "tbl", 
+"Out3 time elapsed - set1"), n = c(5L, 5L, 5L, 5L, 5L, 5L, 5L, 
+5L, 5L), mean = c(12.3748, 7.37940000000017, 5.71140000000014, 
+7.72180000000008, 5.35640000000003, 4.28839999999982, 5.36419999999998, 
+4.74899999999998, 4.52899999999991), median = c(12.2960000000003, 
+7.1279999999997, 6.1220000000003, 7.32099999999991, 5.4320000000007, 
+4.39900000000034, 5.34699999999975, 4.79299999999967, 4.5019999999995
+), sd = c(0.473558549706366, 0.628408147624124, 1.21808653223053, 
+1.07820856052986, 0.603523653223451, 0.775558379491765, 0.455512019599966, 
+0.748540246078935, 0.982901826227147), min = c(11.9110000000001, 
+6.91499999999996, 4.26799999999912, 7.01000000000022, 4.76000000000022, 
+3.1279999999997, 4.9340000000002, 3.70100000000002, 3.65899999999965
+), max = c(13.1099999999997, 8.45000000000073, 7.15100000000075, 
+9.61200000000008, 6.27800000000025, 5.26899999999932, 6.10800000000017, 
+5.50500000000011, 6.11400000000049)), class = c("tbl_df", "tbl", 
 "data.frame"), row.names = c(NA, -9L))
 ```
 
