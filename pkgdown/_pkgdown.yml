@@ -14,6 +14,9 @@ template:
         gtag('js', new Date());
         gtag('config', 'G-RS06EY8KNQ');
       </script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    before_navbar: |
+      <a href="https://shiny.tools/#shiny-benchmark" class="home"><i class="fa fa-lg fa-chevron-left"></i></a>
 
 url: https://github.com/Appsilon/shiny.benchmark/
 
@@ -34,6 +37,17 @@ navbar:
       href: https://github.com/Appsilon/shiny.benchmark
     - icon: fa-twitter fa-lg
       href: https://twitter.com/Appsilon
+    - icon: fab fa-mastodon fa-lg
+      href: https://fosstodon.org/@appsilon
+
+home:
+  sidebar:
+    structure: [star, links, license, community, citation, authors, dev]
+    components:
+      star:
+        title: GitHub
+        text: |
+          <a class="github-button" href="https://github.com/appsilon/shiny.benchmark" data-size="large" data-show-count="true" aria-label="Star appsilon/shiny.benchmark on GitHub">Star</a>
 
 reference:
 - title: Performance tests
@@ -52,3 +66,9 @@ reference:
 - title: Other
   contents:
   - '`load_example`'
+
+footer:
+  structure:
+    left: developed
+  components:
+    developed: "Developed with :heart: by [Appsilon](https://appsilon.com)."
