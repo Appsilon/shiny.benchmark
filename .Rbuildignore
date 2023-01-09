@@ -5,3 +5,4 @@
 tests/end2end
 pkgdown
 docs
+vignettes

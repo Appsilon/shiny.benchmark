@@ -23,6 +23,9 @@ navbar:
     - icon: fa-home
       href: index.html
       text: "Start"
+    - icon: fa-university
+      href: articles/tutorial/how-to-measure-apps-performance.html
+      text: "Tutorial"
     - icon: fa-file-code-o
       text: "Reference"
       href: reference/index.html
