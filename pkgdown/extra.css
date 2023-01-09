@@ -33,6 +33,17 @@ button.btn.btn-primary.btn-copy-ex {
   border-color: rgb(178, 9, 41);
 }
 
+.home {
+  left: 0px;
+  position: absolute;
+  padding: 8px 30px;
+  color: rgba(255,255,255,0.55);
+}
+
+.home:hover {
+  color: rgba(255,255,255,0.9);
+}
+
 .app-preview {
   margin: 1.5em 0.75em;
   padding: 0.25em;
