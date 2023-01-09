@@ -1,0 +1,74 @@
+title: shiny.benchmark
+template:
+  bootstrap: 5
+  bootswatch: pulse
+  bslib:
+    pkgdown-nav-height: 100px
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-RS06EY8KNQ"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-RS06EY8KNQ');
+      </script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    before_navbar: |
+      <a href="https://shiny.tools/#shiny-benchmark" class="home"><i class="fa fa-lg fa-chevron-left"></i></a>
+
+url: https://github.com/Appsilon/shiny.benchmark/
+
+navbar:
+  bg: primary
+  left:
+    - icon: fa-home
+      href: index.html
+      text: "Start"
+    - icon: fa-university
+      href: articles/tutorial/how-to-measure-apps-performance.html
+      text: "Tutorial"
+    - icon: fa-file-code-o
+      text: "Reference"
+      href: reference/index.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/Appsilon/shiny.benchmark
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/Appsilon
+    - icon: fab fa-mastodon fa-lg
+      href: https://fosstodon.org/@appsilon
+
+home:
+  sidebar:
+    structure: [star, links, license, community, citation, authors, dev]
+    components:
+      star:
+        title: GitHub
+        text: |
+          <a class="github-button" href="https://github.com/appsilon/shiny.benchmark" data-size="large" data-show-count="true" aria-label="Star appsilon/shiny.benchmark on GitHub">Star</a>
+
+reference:
+- title: Performance tests
+  contents:
+  - '`benchmark`'
+  - '`benchmark_cypress`'
+  - '`benchmark_shinytest2`'
+  - '`run_cypress_ptest`'
+  - '`run_shinytest2_ptest`'
+- title: Shiny Benchmark Class
+  contents:
+  - '`shiny_benchmark-class`'
+  - '`summary.shiny_benchmark`'
+  - '`plot.shiny_benchmark`'
+  - '`print.shiny_benchmark`'
+- title: Other
+  contents:
+  - '`load_example`'
+
+footer:
+  structure:
+    left: developed
+  components:
+    developed: "Developed with :heart: by [Appsilon](https://appsilon.com)."

@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.github
+.lintr
+tests/end2end
+pkgdown
+docs
+vignettes

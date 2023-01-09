@@ -9,3 +9,4 @@ get_commit_hash()
 \description{
 Find the hash code of the current commit
 }
+\keyword{internal}
