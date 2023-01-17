@@ -1,6 +1,6 @@
 # shiny.benchmark <a href="https://appsilon.github.io/shiny.benchmark/"><img src="man/figures/shiny_benchmark.png" align="right" alt="shiny.benchmark logo" style="height: 140px;"></a>
 
-> _Tools to measure performance improvements in Shiny apps._
+> _Tools to measure performance improvements in shiny apps._
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/shiny.benchmark)](https://cran.r-project.org/package=shiny.benchmark)

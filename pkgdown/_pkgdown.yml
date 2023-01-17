@@ -57,7 +57,7 @@ reference:
   - '`benchmark_shinytest2`'
   - '`run_cypress_ptest`'
   - '`run_shinytest2_ptest`'
-- title: Shiny Benchmark Class
+- title: shiny Benchmark Class
   contents:
   - '`shiny_benchmark-class`'
   - '`summary.shiny_benchmark`'
