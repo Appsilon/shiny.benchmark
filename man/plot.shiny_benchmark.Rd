@@ -11,6 +11,9 @@
 
 \item{...}{Other parameters}
 }
+\value{
+Return a \code{ggplot} object that compares different git refs
+}
 \description{
 Plot for shiny_benchmark class
 }

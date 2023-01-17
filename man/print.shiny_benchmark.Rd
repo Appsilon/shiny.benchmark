@@ -11,6 +11,9 @@
 
 \item{...}{Other parameters}
 }
+\value{
+Print on the console information about the \code{shiny_benchmark} object
+}
 \description{
 Print for shiny_benchmark class
 }

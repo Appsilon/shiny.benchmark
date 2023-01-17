@@ -11,6 +11,9 @@
 
 \item{...}{Other parameters}
 }
+\value{
+Return a \code{data.frame} with performance tests' summary statistics
+}
 \description{
 Summary for shiny_benchmark class
 }

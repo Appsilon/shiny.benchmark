@@ -3,6 +3,8 @@
 #' @param object shiny_benchmark object
 #' @param ... Other parameters
 #'
+#' @return Return a `data.frame` with performance tests' summary statistics
+#'
 #' @method summary shiny_benchmark
 #' @export
 summary.shiny_benchmark <- function(object, ...) {

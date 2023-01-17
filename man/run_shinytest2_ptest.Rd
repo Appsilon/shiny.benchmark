@@ -38,6 +38,9 @@ packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
+\value{
+Return a \code{data.frame} with the collected performance time
+}
 \description{
 Run the performance test based on a single commit using shinytest2
 }

@@ -16,6 +16,8 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @return Return a `list` with the collected performance times
+#'
 #' @export
 benchmark_cypress <- function(
     commit_list,
@@ -89,6 +91,8 @@ benchmark_cypress <- function(
 #' @param renv_prompt Prompt the user before taking any action?
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
+#'
+#' @return Return a `data.frame` with the collected performance time
 #'
 #' @importFrom utils read.table
 #' @export
