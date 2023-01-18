@@ -180,6 +180,8 @@ summarise_commit <- function(object) {
 #' @param path A character vector of full path name
 #' @param force Create example even if directory does not exist or is not empty
 #'
+#' @return Print on the console instructions to run the example
+#'
 #' @importFrom glue glue
 #' @importFrom utils menu
 #' @export
