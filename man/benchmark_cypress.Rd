@@ -41,6 +41,9 @@ packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
+\value{
+Return a \code{list} with the collected performance times
+}
 \description{
 Run the performance test based on multiple commits using Cypress
 }

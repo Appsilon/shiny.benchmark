@@ -3,10 +3,12 @@
 #' @param x shiny_benchmark object
 #' @param ... Other parameters
 #'
+#' @return Print on the console information about the `shiny_benchmark` object
+#'
 #' @method print shiny_benchmark
 #' @export
 print.shiny_benchmark <- function(x, ...) {
-  cat("Shiny benchmark: \n")
+  cat("shiny benchmark: \n")
   cat("\n")
   cat("Call:")
   cat("\n")

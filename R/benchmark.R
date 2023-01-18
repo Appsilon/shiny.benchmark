@@ -18,6 +18,9 @@
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
 #'
+#' @return Return a `shiny_benchmark` object containing the `benchmark` call,
+#' elapsed time and a `list` with the collected performance times
+#'
 #' @importFrom glue glue
 #' @export
 benchmark <- function(

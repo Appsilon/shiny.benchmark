@@ -3,6 +3,8 @@
 #' @param x shiny_benchmark object
 #' @param ... Other parameters
 #'
+#' @return Return a `ggplot` object that compares different git refs
+#'
 #' @method plot shiny_benchmark
 #' @import dplyr
 #' @import ggplot2

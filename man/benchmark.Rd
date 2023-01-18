@@ -45,6 +45,10 @@ packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 }
+\value{
+Return a \code{shiny_benchmark} object containing the \code{benchmark} call,
+elapsed time and a \code{list} with the collected performance times
+}
 \description{
 Execute performance tests for a list of commits
 }
