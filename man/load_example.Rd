@@ -11,6 +11,9 @@ load_example(path, force = FALSE)
 
 \item{force}{Create example even if directory does not exist or is not empty}
 }
+\value{
+Print on the console instructions to run the example
+}
 \description{
 This function aims to generate a template to be used
 by shiny.benchmark. It will create the necessary structure on \code{path} with
