@@ -13,6 +13,14 @@ The package is flexible enough to allow different sets of tests for the differen
 
 ## How to install?
 
+Stable version:
+
+```r
+install.packages("shiny.benchmark")
+```
+
+Development version:
+
 ```r
 remotes::install_github("Appsilon/shiny.benchmark")
 ```
