@@ -68,7 +68,7 @@ function(input, output, session) {
   # Sys.sleep
   react1 <- eventReactive(input$run1, {
     out <- system.time(
-      Sys.sleep(times[1] + rexp(n = 1, rate = 1)) # we will play with the time here
+      Sys.sleep(times[1] + rexp(n = 1, rate = 1))
     )
 
     return(out[3])
@@ -76,7 +76,7 @@ function(input, output, session) {
 
   react2 <- eventReactive(input$run2, {
     out <- system.time(
-      Sys.sleep(times[2] + rexp(n = 1, rate = 1)) # we will play with the time here
+      Sys.sleep(times[2] + rexp(n = 1, rate = 1))
     )
 
     return(out[3])
@@ -84,7 +84,7 @@ function(input, output, session) {
 
   react3 <- eventReactive(input$run3, {
     out <- system.time(
-      Sys.sleep(times[3] + rexp(n = 1, rate = 1)) # we will play with the time here
+      Sys.sleep(times[3] + rexp(n = 1, rate = 1))
     )
 
     return(out[1])
@@ -126,45 +126,47 @@ shiny::runApp()
 Save the following code as `tests/testthat/test-set1.R`:
 
 ```r
+app <- AppDriver$new(name = "test1", height = 975, width = 1619)
+
 test_that("Out1 time elapsed - set1", {
-  app <- AppDriver$new(name = "test1", height = 975, width = 1619)
   app$click("run1")
   app$expect_values(output = "out1")
 })
 
 test_that("Out2 time elapsed - set1", {
-  app <- AppDriver$new(name = "test2", height = 975, width = 1619)
   app$click("run2")
   app$expect_values(output = "out2")
 })
 
 test_that("Out3 time elapsed - set1", {
-  app <- AppDriver$new(name = "test3", height = 975, width = 1619)
   app$click("run3")
   app$expect_values(output = "out3")
 })
+
+app$stop()
 ```
 
 This code is simulating clicks in the three buttons we have in our application. Also it waits for the outputs to appear. In a new file, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well. It will be useful to present some functionalities later.
 
 ```r
+app <- AppDriver$new(name = "test1", height = 975, width = 1619)
+
 test_that("Out1 time elapsed - set2", {
-  app <- AppDriver$new(name = "test1", height = 975, width = 1619)
   app$click("run1")
   app$expect_values(output = "out1")
 })
 
 test_that("Out2 time elapsed - set2", {
-  app <- AppDriver$new(name = "test2", height = 975, width = 1619)
   app$click("run2")
   app$expect_values(output = "out2")
 })
 
 test_that("Out3 time elapsed - set2", {
-  app <- AppDriver$new(name = "test3", height = 975, width = 1619)
   app$click("run3")
   app$expect_values(output = "out3")
 })
+
+app$stop()
 ```
 
 ## Cypress
@@ -228,8 +230,7 @@ During the development process, it is normal to use different packages/package v
 
 ```r
 renv::init()
-renv::install("remotes")
-remotes::install_github("Appsilon/shiny.benchmark")
+renv::install("shiny.benchmark")
 renv::snapshot(prompt = FALSE)
 ```
 
@@ -243,7 +244,6 @@ In a regular project, you use `git` to maintain the code versioning. In this cas
 ```git
 .Rhistory
 .Rproj.user/
-.Rproj.user
 renv/
 ```
 
@@ -278,7 +278,7 @@ git checkout -b feature2
 Replace `times <- c(5, 2.5, 1)` by `times <- c(2.5, 1.25, 0.5)` in first row of `server.R`. Also, run the following code to downgrade `shiny`:
 
 ```r
-renv::install("shiny@1.0.0")
+renv::install("shiny@1.6.0")
 renv::snapshot(prompt = FALSE)
 ```
 
