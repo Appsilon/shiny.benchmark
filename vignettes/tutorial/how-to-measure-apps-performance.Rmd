@@ -141,9 +141,8 @@ test_that("Out2 time elapsed - set1", {
 test_that("Out3 time elapsed - set1", {
   app$click("run3")
   app$expect_values(output = "out3")
+  app$stop()
 })
-
-app$stop()
 ```
 
 This code is simulating clicks in the three buttons we have in our application. Also it waits for the outputs to appear. In a new file, replace `set1` by `set2` in the code and save it as `tests/testthat/test-set2.R` as well. It will be useful to present some functionalities later.
@@ -164,9 +163,8 @@ test_that("Out2 time elapsed - set2", {
 test_that("Out3 time elapsed - set2", {
   app$click("run3")
   app$expect_values(output = "out3")
+  app$stop()
 })
-
-app$stop()
 ```
 
 ## Cypress
@@ -230,7 +228,7 @@ During the development process, it is normal to use different packages/package v
 
 ```r
 renv::init()
-renv::install("shiny.benchmark")
+renv::install(c("shiny", "shiny.benchmark"))
 renv::snapshot(prompt = FALSE)
 ```
 

@@ -15,6 +15,5 @@ test_that("{shinytest2} recording: test2", {
 test_that("{shinytest2} recording: test3", {
   app$click("run3")
   app$expect_values(output = "out3")
+  app$close()
 })
-
-app$close()
