@@ -3,6 +3,7 @@
 > _Tools to measure performance improvements in Shiny apps._
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/shiny.benchmark)](https://cran.r-project.org/package=shiny.benchmark)
 [![R-CMD-check](https://github.com/Appsilon/shiny.benchmark/workflows/R-CMD-check/badge.svg)](https://github.com/Appsilon/shiny.benchmark/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
@@ -10,15 +11,13 @@
 
 The package is flexible enough to allow different sets of tests for the different refs as well as different package versions (via `renv`). Also, the user can replicate the tests to have more accurate measures of performance.
 
-How to install?
----------------
+## How to install?
 
 ```r
 remotes::install_github("Appsilon/shiny.benchmark")
 ```
 
-Dependencies
-------------
+## Dependencies
 
 `shiny.benchmark` can use two different engines to test the change in the performance of your application: [shinytest2](https://rstudio.github.io/shinytest2/) and [Cypress](https://www.cypress.io/).
 The latter requires `Node` (version 12 or higher) and `yarn` (version 1.22.17 or higher) to be available.
@@ -30,8 +29,7 @@ To install them on your computer, follow the guidelines on the documentation pag
 Besides that, on Linux, it might be required to install other `Cypress` dependencies.
 Check the [documentation](https://docs.cypress.io/guides/getting-started/installing-cypress#Linux-Prerequisites) to find out more.
 
-How to use it?
---------------
+## How to use it?
 
 The best way to start using `shiny.benchmark` is through an example. If you want a start point, you can use the `load_example` function. In order to use this, create a new folder in your computer and use the following code to generate an application to serve us as example for our performance checks:
 
@@ -159,21 +157,19 @@ summary(out)
 plot(out)
 ```
 
-How to contribute?
-------------------
+## How to contribute?
 
 If you want to contribute to this project please submit a regular PR, once you're done with new feature or bug fix.
 
 Reporting a bug is also helpful - please use [GitHub issues](https://github.com/Appsilon/shiny.benchmark/issues) and describe your problem as detailed as possible.
 
-Appsilon
-========
+## Appsilon
 
 <img src="https://avatars0.githubusercontent.com/u/6096772" align="right" alt="" width="6%" />
 
-Appsilon is the **Full Service Certified Posit Partner**. Learn more
+Appsilon is a **Posit (formerly RStudio) Full Service Certified Partner**. Learn more
 at [appsilon.com](https://appsilon.com).
 
-Get in touch [opensource@appsilon.com](opensource@appsilon.com)
+Get in touch [opensource@appsilon.com](mailto:opensource@appsilon.com)
 
 <a href = "https://appsilon.com/careers/" target="_blank"><img src="http://d2v95fjda94ghc.cloudfront.net/hiring.png" alt="We are hiring!"/></a>
