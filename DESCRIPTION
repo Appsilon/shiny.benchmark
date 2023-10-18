@@ -37,6 +37,7 @@ Imports:
   progress,
   quarto,
   renv,
+  rstudioapi,
   shinytest2,
   stringr,
   testthat,

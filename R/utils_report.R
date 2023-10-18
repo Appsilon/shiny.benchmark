@@ -7,11 +7,12 @@
 #' @param report_dir name of the folder where the report should be saved
 #'
 #' @importFrom quarto quarto_render
+#' @importFrom rstudioapi selectDirectory
 #' @export
 create_report <- function(report_params, report_name, report_dir) {
   if (report_dir == "") {
-    message("The name specified for the report's directory is an empty string.")
-    report_dir <- "performance_report"
+    message("The name specified for the report's directory cannot be an empty string.")
+    report_dir <- selectDirectory(caption = "Please pick the report's directory")
     message(glue("The report will be automatically saved in folder {report_dir}."))
   }
 

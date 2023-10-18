@@ -111,6 +111,8 @@ benchmark <- function(
     create_report(report_params = out$perf_file,
                   report_name = report_name,
                   report_dir = report_dir)
+  } else {
+    message("`report_dir` not passed, report will not be saved.")
   }
 
   return(out)
