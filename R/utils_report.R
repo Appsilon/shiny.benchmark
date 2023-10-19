@@ -10,9 +10,17 @@
 #' @importFrom rstudioapi selectDirectory
 #' @export
 create_report <- function(report_params, report_name, report_dir) {
-  if (report_dir == "") {
-    message("The name specified for the report's directory cannot be an empty string.")
+  if (report_dir == "" || is.na(report_dir)) {
+    message(
+      "The name specified for the report's directory cannot be an empty string or NA. ",
+      "Make sure you're using RStudio"
+    )
     report_dir <- selectDirectory(caption = "Please pick the report's directory")
+    if (is.null(report_dir)) {
+      return(
+        message("No directory selected. Process aborted.")
+      )
+    }
     message(glue("The report will be automatically saved in folder {report_dir}."))
   }
 
