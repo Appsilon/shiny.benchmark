@@ -2,15 +2,12 @@
 % Please edit documentation in R/utils_report.R
 \name{prepare_dir_and_template}
 \alias{prepare_dir_and_template}
-\title{Prepare user's directory for the report and copy the report template from
-the package to the user's directory}
+\title{Prepare directory for the report}
 \usage{
-prepare_dir_and_template(report_dir, file_paths)
+prepare_dir_and_template(report_dir)
 }
 \arguments{
 \item{report_dir}{name of the folder where the report should be saved}
-
-\item{file_paths}{two-element vector with paths to template reports}
 }
 \description{
 Prepare user's directory for the report and copy the report template from
