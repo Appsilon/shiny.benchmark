@@ -109,7 +109,7 @@ benchmark <- function(
   if (!is.null(report_file)) {
     create_report(
       report_params = list(performance = out$performance),
-      report_file = report_file
+      file = report_file
     )
   }
 
