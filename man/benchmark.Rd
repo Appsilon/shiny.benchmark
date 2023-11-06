@@ -15,7 +15,7 @@ benchmark(
   renv_prompt = TRUE,
   n_rep = 1,
   debug = FALSE,
-  report_dir = NULL
+  report_file = NULL
 )
 }
 \arguments{
@@ -46,7 +46,7 @@ packages will be used in all branches.}
 
 \item{debug}{Logical. TRUE to display all the system messages on runtime}
 
-\item{report_dir}{Name of the folder where the report should be saved,
+\item{report_file}{Name of the file (.html) where the report should be saved,
 when default (NULL), then report is not saved}
 }
 \description{
