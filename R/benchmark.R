@@ -23,17 +23,17 @@
 #' @importFrom glue glue
 #' @export
 benchmark <- function(
-    commit_list,
-    cypress_dir = NULL,
-    shinytest2_dir = NULL,
-    tests_pattern = NULL,
-    app_dir = getwd(),
-    port = 3333,
-    use_renv = TRUE,
-    renv_prompt = TRUE,
-    n_rep = 1,
-    debug = FALSE,
-    report_dir = NULL
+  commit_list,
+  cypress_dir = NULL,
+  shinytest2_dir = NULL,
+  tests_pattern = NULL,
+  app_dir = getwd(),
+  port = 3333,
+  use_renv = TRUE,
+  renv_prompt = TRUE,
+  n_rep = 1,
+  debug = FALSE,
+  report_dir = NULL
 ) {
   # Get the call parameters
   call_benchmark <- match.call()
@@ -111,6 +111,8 @@ benchmark <- function(
     create_report(report_params = out$perf_file,
                   report_name = report_name,
                   report_dir = report_dir)
+  } else {
+    message("`report_dir` not passed, report will not be saved.")
   }
 
   return(out)

@@ -17,14 +17,14 @@
 #'
 #' @export
 benchmark_shinytest2 <- function(
-    commit_list,
-    shinytest2_dir,
-    tests_pattern,
-    app_dir,
-    use_renv,
-    renv_prompt,
-    n_rep,
-    debug
+  commit_list,
+  shinytest2_dir,
+  tests_pattern,
+  app_dir,
+  use_renv,
+  renv_prompt,
+  n_rep,
+  debug
 ) {
 
   # creating the structure
@@ -91,15 +91,15 @@ benchmark_shinytest2 <- function(
 #' @importFrom shinytest2 test_app
 #' @export
 run_shinytest2_ptest <- function(
-    commit,
-    project_path,
-    app_dir,
-    shinytest2_dir,
-    tests_pattern,
-    use_renv,
-    renv_prompt,
-    n_rep,
-    debug
+  commit,
+  project_path,
+  app_dir,
+  shinytest2_dir,
+  tests_pattern,
+  use_renv,
+  renv_prompt,
+  n_rep,
+  debug
 ) {
   # checkout to the desired commit
   checkout(branch = commit, debug = debug)

@@ -29,34 +29,29 @@ create_cypress_structure <- function(app_dir, port, debug) {
   fs::dir_create(path = plugins_path)
 
   # create a path root linked to the main directory app
-  tryCatch(
-    expr = {
-      fs::link_create(app_dir, root_path, symbolic = TRUE)
-    },
-    error = function(e) {
-
-      choice <- menu(
-        choices = c("Yes", "No"),
-        title = glue(
-          "A symbolic link cannot be created, it is possible to clone ",
-          "the repository, but it can take some time and space on disk. ",
-          "Would you like to proceed with this operations?")
-      )
-
-      if (choice == 2)
-        stop("Process aborted by user.")
-
-      # If system cannot symlink then try to clone the repository
-      #  This may happen on some windows versions
-      #  This can be an expensive operation on big repositories
-      message(
-        "Could not create symbolic link with fs package, ",
-        "trying with git clone..."
-      )
-      system(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
-      system("git submodule init")
-      system("git submodule update ")
-    })
+  tryCatch(expr = {
+    fs::link_create(app_dir, root_path, symbolic = TRUE)
+  },
+  error = function(e) {
+    choice <- menu(
+      choices = c("Yes", "No"),
+      title = glue("A symbolic link cannot be created, it is possible to clone ",
+                   "the repository, but it can take some time and space on disk. ",
+                   "Would you like to proceed with this operations?")
+    )
+    if (choice == 2)
+      stop("Process aborted by user.")
+    # If system cannot symlink then try to clone the repository
+    #  This may happen on some windows versions
+    #  This can be an expensive operation on big repositories
+    message(
+      "Could not create symbolic link with fs package, ",
+      "trying with git clone..."
+    )
+    system(glue::glue("git clone \"{app_dir}\" \"{root_path}\""))
+    system("git submodule init")
+    system("git submodule update ")
+  })
 
   # create the packages.json file
   json_txt <- create_node_list(tests_path = tests_path, port = port)
