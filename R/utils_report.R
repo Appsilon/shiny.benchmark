@@ -61,7 +61,8 @@ prepare_dir_and_template <- function(report_dir) {
   # inform user about the report
   message(
     glue(
-      "Report template was created at `{report_dir}`. You can edit the and re-render it in {file_paths$user}"
+      "Report template was created at `{report_dir}`.
+      You can edit the and re-render it in {file_paths$user}"
     )
   )
 
