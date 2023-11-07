@@ -16,15 +16,23 @@ create_report <- function(report_params, file = NULL) {
 
   # manage template in roder to create the report
   report_dir <- dirname(file)
+  report_file <- basename(file)
   report_template_file <- prepare_dir_and_template(
     report_dir = report_dir
   )
+  report_template_file <- basename(report_template_file)
 
   # generate HTML
   # move work directory in order to run quarto
+  wb <- getwd()
+  on.exit(expr = {
+    setwd(dir = wb)
+  })
+
+  setwd(dir = report_dir)
   quarto_render(
     input = report_template_file,
-    output_file = file,
+    output_file = report_file,
     execute_params = report_params
   )
 }
