@@ -106,7 +106,7 @@ benchmark <- function(
   class(out) <- "shiny_benchmark"
 
   # create report conditionally
-  if (!is.null(report_file)) {
+  if (!is.null(report_file) && !is.null(out$performance)) {
     create_report(
       report_params = list(performance = out$performance),
       file = report_file
