@@ -1,3 +1,30 @@
+#' @title Combine list of performances in a single data.frame
+#'
+#' @param performance_list list of tests containing commits with dates, duration
+#' time and test name
+#'
+#' @export
+combine_performances <- function(performance_list) {
+  # create an unique data.frame for all branches and repetitions
+  df_all <- mapply(
+    performance_list,
+    names(performance_list),
+    FUN = function(x, y) {
+      df <- bind_rows(x)
+      df$branch <- y
+
+      return(df)
+    },
+    SIMPLIFY = FALSE
+  )
+
+  # bind rows
+  df_all <- bind_rows(df_all)
+
+  # return a single data.frame
+  return(df_all)
+}
+
 #' @title Create a performance report for the tests that were run
 #'
 #' @param report_params list of tests containing commits with dates, duration
@@ -14,7 +41,7 @@ create_report <- function(report_params, file = NULL) {
     )
   }
 
-  # manage template in roder to create the report
+  # manage template in order to create the report
   report_dir <- dirname(file)
   report_file <- basename(file)
   report_template_file <- prepare_dir_and_template(

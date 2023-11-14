@@ -106,9 +106,15 @@ benchmark <- function(
   class(out) <- "shiny_benchmark"
 
   # create report conditionally
-  if (!is.null(report_file) && !is.null(out$performance)) {
+  if (!is.null(report_file)) {
+    # combine performances into a single data.frame
+    performance <- combine_performances(
+      performance <- out$performance
+    )
+
+    # create report
     create_report(
-      report_params = list(performance = out$performance),
+      report_params = list(performance = performance),
       file = report_file
     )
   }

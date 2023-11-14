@@ -27,20 +27,7 @@ DT_options <- list(
 This report aims to compare different versions of your Shiny application. Here is the list of versions and the development dates (last commit for each version):
 
 ```{r data_prep, echo = FALSE}
-# create an unique data.frame for all branches and repetitions
-df_all <- mapply(
-  params$performance,
-  names(params$performance),
-  FUN = function(x, y) {
-    df <- bind_rows(x)
-    df$branch <- y
-
-    return(df)
-  },
-  SIMPLIFY = FALSE
-)
-
-df_all <- bind_rows(df_all)
+df_all <- as.data.frame(params$performance)
 df_all$duration_ms <- round(x = df_all$duration_ms, digits = 4)
 df_all$date <- as.POSIXct(
   df_all$date,
@@ -49,7 +36,7 @@ df_all$date <- as.POSIXct(
 )
 
 # we assume that the first branch/hash is the baseline
-baseline <- names(params$performance)[1]
+baseline <- df_all$branch[1]
 df_all <- df_all %>%
   filter(branch == baseline) %>%
   group_by(test_name) %>%
