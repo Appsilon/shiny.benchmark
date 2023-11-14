@@ -43,7 +43,7 @@ df_all <- df_all %>%
   summarise(baseline = min(duration_ms)) %>%
   ungroup() %>%
   right_join(df_all, by = "test_name") %>%
-  mutate(tf = baseline/duration_ms)
+  mutate(tf = baseline / duration_ms)
 ```
 
 ```{r tab, echo = FALSE}
@@ -76,7 +76,7 @@ df_display <- df_all %>%
 datatable(
   data = df_display,
   rownames = FALSE,
-  colnames = c("Branch", "Test name", "Duration (ms)"), 
+  colnames = c("Branch", "Test name", "Duration (ms)"),
   options = DT_options
 )
 ```
