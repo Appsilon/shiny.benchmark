@@ -27,7 +27,10 @@ dt_options <- list(
 This report aims to compare different versions of your Shiny application. Here is the list of versions and the development dates (last commit for each version):
 
 ```{r data_prep, echo = FALSE}
-df_all <- as.data.frame(params$performance)
+args <- lapply(X = params$performance, FUN = unlist)
+df_all <- cbind.data.frame(args)
+names(df_all) <- names(params$performance)
+
 df_all$duration_ms <- round(x = df_all$duration_ms, digits = 4)
 df_all$date <- as.POSIXct(
   df_all$date,
