@@ -31,6 +31,8 @@ combine_performances <- function(performance_list) {
 #' time and test name
 #' @param file name of the file to which the report should be saved (.html)
 #'
+#' @return None. This function is called for side effects
+#'
 #' @importFrom quarto quarto_render
 #' @export
 create_report <- function(report_params, file = NULL) {
@@ -50,17 +52,16 @@ create_report <- function(report_params, file = NULL) {
   report_template_file <- basename(report_template_file)
 
   # generate HTML
-  # move work directory in order to run quarto
-  wb <- getwd()
-  on.exit(expr = {
-    setwd(dir = wb)
-  })
-
-  setwd(dir = report_dir)
-  quarto_render(
-    input = report_template_file,
-    output_file = report_file,
-    execute_params = report_params
+  # execute order in the destination
+  with_dir(
+    new = report_dir,
+    code = {
+      quarto_render(
+        input = report_template_file,
+        output_file = report_file,
+        execute_params = report_params
+      )
+    }
   )
 }
 

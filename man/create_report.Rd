@@ -12,6 +12,9 @@ time and test name}
 
 \item{file}{name of the file to which the report should be saved (.html)}
 }
+\value{
+None. This function is called for side effects
+}
 \description{
 Create a performance report for the tests that were run
 }
