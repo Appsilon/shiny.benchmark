@@ -110,9 +110,8 @@ prepare_file_paths <- function(report_dir) {
   )
   template_file_usr <- file.path(report_dir, "report.qmd")
 
-  out <- list(
+  list(
     package = template_file_pkg,
     user = template_file_usr
   )
-  return(out)
 }
