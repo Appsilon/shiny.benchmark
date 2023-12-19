@@ -3,6 +3,19 @@
 #' @param performance_list list of tests containing commits with dates, duration
 #' time and test name
 #'
+#' @return data.frame combining all the elements from performance list. Also, it
+#' adds the branch name for each one of the tables.
+#'
+#' @examples
+#' performance1 <- data.frame(t1 = 1, t2 = 2)
+#' performance2 <- data.frame(t1 = 3, t2 = 4)
+#' performance_list <- list(
+#'   branch1 = performance1,
+#'   branch2 = performance2
+#' )
+#'
+#' combine_performances(performance_list)
+#'
 #' @export
 combine_performances <- function(performance_list) {
   # create an unique data.frame for all branches and repetitions
@@ -33,7 +46,23 @@ combine_performances <- function(performance_list) {
 #'
 #' @return None. This function is called for side effects
 #'
+#' report_params <- list(
+#'   performance = data.frame(
+#'     date = Sys.time(),
+#'     rep_id = 1,
+#'     test_name = rep(c("t1", "t2"), each = 10),
+#'     duration_ms = rpois(n = 20, lambda = 10),
+#'     branch = paste0("b", 1:10)
+#'   )
+#' )
+#'
+#' create_report(
+#'   report_params = report_params,
+#'   file = tempfile(fileext = ".html")
+#' )
+#'
 #' @importFrom quarto quarto_render
+#' @importFrom withr with_dir
 #' @export
 create_report <- function(report_params, file = NULL) {
   # stop execution in case file is not provided
@@ -70,6 +99,13 @@ create_report <- function(report_params, file = NULL) {
 #' the package to the user's directory
 #'
 #' @param report_dir name of the folder where the report should be saved
+#'
+#' @return character. Path to report.qmd
+#'
+#' @examples
+#' if (interactive()) {
+#'   prepare_dir_and_template(report_dir = tempdir())
+#' }
 prepare_dir_and_template <- function(report_dir) {
   # create folders if needed
   file_paths <- prepare_file_paths(report_dir)
@@ -103,6 +139,11 @@ prepare_dir_and_template <- function(report_dir) {
 #' @param report_dir name of the folder where the report should be saved
 #'
 #' @return two-element vector with paths to template reports
+#'
+#' @examples
+#' if (interactive()) {
+#'   prepare_file_paths(report_dir = tempdir())
+#' }
 prepare_file_paths <- function(report_dir) {
   template_file_pkg <- system.file(
     "templates",

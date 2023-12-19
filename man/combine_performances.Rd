@@ -10,6 +10,21 @@ combine_performances(performance_list)
 \item{performance_list}{list of tests containing commits with dates, duration
 time and test name}
 }
+\value{
+data.frame combining all the elements from performance list. Also, it
+adds the branch name for each one of the tables.
+}
 \description{
 Combine list of performances in a single data.frame
+}
+\examples{
+performance1 <- data.frame(t1 = 1, t2 = 2)
+performance2 <- data.frame(t1 = 3, t2 = 4)
+performance_list <- list(
+  branch1 = performance1,
+  branch2 = performance2
+)
+
+combine_performances(performance_list)
+
 }

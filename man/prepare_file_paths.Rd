@@ -15,3 +15,8 @@ two-element vector with paths to template reports
 \description{
 Prepare file paths for package and user sides report templates
 }
+\examples{
+if (interactive()) {
+  prepare_file_paths(report_dir = tempdir())
+}
+}

@@ -9,7 +9,15 @@ prepare_dir_and_template(report_dir)
 \arguments{
 \item{report_dir}{name of the folder where the report should be saved}
 }
+\value{
+character. Path to report.qmd
+}
 \description{
 Prepare user's directory for the report and copy the report template from
 the package to the user's directory
+}
+\examples{
+if (interactive()) {
+  prepare_dir_and_template(report_dir = tempdir())
+}
 }
