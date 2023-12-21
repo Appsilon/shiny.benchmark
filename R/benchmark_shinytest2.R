@@ -145,5 +145,6 @@ run_shinytest2_ptest <- function(
   checkout_files(debug = debug)
 
   # return times
+  names(perf_file) <- paste0("rep", 1:n_rep)
   return(perf_file)
 }

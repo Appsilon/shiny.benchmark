@@ -4,16 +4,31 @@
 \alias{create_report}
 \title{Create a performance report for the tests that were run}
 \usage{
-create_report(report_params, report_name, report_dir)
+create_report(report_params, file = NULL)
 }
 \arguments{
 \item{report_params}{list of tests containing commits with dates, duration
 time and test name}
 
-\item{report_name}{name of the file to which the report should be saved, without
-the extension}
+\item{file}{name of the file to which the report should be saved (.html)}
+}
+\value{
+None. This function is called for side effects
 
-\item{report_dir}{name of the folder where the report should be saved}
+report_params <- list(
+performance = data.frame(
+date = Sys.time(),
+rep_id = 1,
+test_name = rep(c("t1", "t2"), each = 10),
+duration_ms = rpois(n = 20, lambda = 10),
+branch = paste0("b", 1:10)
+)
+)
+
+create_report(
+report_params = report_params,
+file = tempfile(fileext = ".html")
+)
 }
 \description{
 Create a performance report for the tests that were run

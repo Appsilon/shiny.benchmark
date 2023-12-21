@@ -30,6 +30,7 @@ Suggests:
   spelling
 Imports:
   dplyr,
+  fs,
   ggplot2,
   glue,
   jsonlite,
@@ -37,9 +38,8 @@ Imports:
   progress,
   quarto,
   renv,
-  rstudioapi,
   shinytest2,
   stringr,
   testthat,
-  fs
+  withr
 Language: en-US

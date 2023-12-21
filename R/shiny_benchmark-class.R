@@ -7,7 +7,6 @@
 #' @importFrom methods new
 #'
 #' @export
-
 shiny_benchmark_class <- setClass(
   Class = "shiny_benchmark",
   representation(

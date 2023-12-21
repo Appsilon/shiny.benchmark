@@ -11,3 +11,9 @@ renv
 repo
 sendTime
 shinytest
+fileext
+params
+qmd
+rpois
+Sys
+tempfile
