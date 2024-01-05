@@ -1,68 +1,70 @@
 ---
-title: "Performance comparison"
+title: "Performance report"
 format:
   html:
     toc: true
     toc_float: true
 params:
-  test_output: ""
+  performance: ""
 ---
 
 ```{r include = FALSE}
-suppressPackageStartupMessages({
-  library(DT)
-  library(dplyr)
-  library(echarts4r)
-})
-DT_options <- list(
+library(DT)
+library(dplyr)
+library(echarts4r)
+
+dt_options <- list(
   initComplete = JS(
     "function(settings, json) {",
     "$(this.api().table().header()).css({'background-color': '#1a384c', 'color': '#fff'});",
-    "}")
+    "}"
+  )
 )
 ```
 
-## Versions
+## App's Versions
 
-This report aims to compare different versions of the app. Here is the list of versions and the development dates:
+This report aims to compare different versions of your Shiny application. Here is the list of versions and the development dates (last commit for each version):
 
 ```{r data_prep, echo = FALSE}
-out <- params$test_output
-df_all_branches <- NULL
-for (n in range(1:length(out))) {
-  tmp_list <- out[[n]][[1]]
-  tmp_df <- data.frame(matrix(
-    unlist(tmp_list),
-    nrow = length(tmp_list$date),
-    byrow = FALSE
-  ))
-  colnames(tmp_df) <- names(tmp_list)
-  tmp_df$branch <- names(out)[n]
-  df_all_branches <- bind_rows(df_all_branches, tmp_df)
-}
-df_all_branches$date <-
-  format(as.POSIXct(
-    as.numeric(df_all_branches$date),
-    origin = "1970-01-01",
-    tz = "UTC"
-  ),
-  "%Y-%m-%d %H:%M:%S")
-df_all_branches$duration_ms <-
-  as.numeric(df_all_branches$duration_ms)
+args <- lapply(X = params$performance, FUN = unlist)
+df_all <- cbind.data.frame(args)
+names(df_all) <- names(params$performance)
+
+df_all$duration_ms <- round(x = df_all$duration_ms, digits = 4)
+df_all$date <- as.POSIXct(
+  df_all$date,
+  origin = "1970-01-01",
+  tz = "UTC"
+)
+
+# we assume that the first branch/hash is the baseline
+baseline <- df_all$branch[1]
+df_all <- df_all %>%
+  filter(branch == baseline) %>%
+  group_by(test_name) %>%
+  summarise(baseline = min(duration_ms)) %>%
+  ungroup() %>%
+  right_join(df_all, by = "test_name") %>%
+  mutate(tf = baseline / duration_ms)
 ```
 
 ```{r tab, echo = FALSE}
-df_by_dates <- df_all_branches %>%
-  select(rep_id, branch, date) %>%
+df_by_dates <- df_all %>%
+  select(branch, date) %>%
   unique() %>%
   arrange(desc(date))
+
 datatable(
   data = df_by_dates,
   rownames = FALSE,
-  colnames = c("Repository", "Branch", "Date"),
-  options = DT_options,
-  ) %>%
-  formatDate(columns = "date", method = "toLocaleString")
+  colnames = c("Branch", "Date"),
+  options = dt_options,
+) %>%
+  formatDate(
+    columns = "date",
+    method = "toLocaleString"
+  )
 ```
 
 ## Raw data
@@ -70,60 +72,42 @@ datatable(
 The time spent to compute each of the tests is displayed below as well as their respective branch.
 
 ```{r raw data, echo=FALSE}
-df_display <- df_all_branches %>%
+df_display <- df_all %>%
   select(branch, test_name, duration_ms) %>%
   arrange(test_name, branch)
+
 datatable(
   data = df_display,
   rownames = FALSE,
-  colnames = c("Branch", "Test name", "Duration (ms)"), 
-  options = DT_options
+  colnames = c("Branch", "Test name", "Duration (ms)"),
+  options = dt_options
 )
 ```
 
 ## Visualizations
 
-```{r preparing data, echo=FALSE}
-baseline <- min(df_all_branches$duration_ms)
-df_baseline <- df_all_branches %>% 
-  filter(duration_ms == baseline) %>%
-  select(test_name, duration_ms) %>%
-  rename(baseline = duration_ms)
-# join it with the main dataset
-times_faster <- function(a, b) b/a
-df_comp <- df_all_branches %>% left_join(df_baseline, by = character(), suffix = c("", ".y")) %>%
-  select(-test_name.y) %>%
-  mutate(tf = times_faster(duration_ms, baseline))
-```
-
 ### Comparing the tests across branches
 
 ```{r comp branches, echo=FALSE}
-df_comp %>%
-  group_by(branch) %>%
-  e_charts(x = test_name) %>%
-  e_bar(serie = duration_ms) %>%
+# maybe boxplot is not the best idea here
+df_all %>%
+  mutate(x_axis = paste0(branch, ": ", test_name)) %>%
+  group_by(x_axis) %>%
+  e_charts() %>%
+  e_boxplot(serie = duration_ms) %>%
   e_axis_labels(y = "Time (ms)") %>%
-  e_x_axis(axisLabel = list(interval = 0, rotate = 10)) %>%
-  e_mark_line(data = list(yAxis = df_comp$baseline[1]), 
-              title = "Baseline",
-              lineStyle = list(color = "#757575"))
-```
-
-```{r comp branches by test, echo=FALSE}
-df_comp %>%
-  group_by(test_name) %>%
-  e_charts(branch) %>%
-  e_scatter(duration_ms, symbol_size = 6) %>%
-  e_facet(rows = ceiling(length(unique(df_comp$test_name))/4), cols = 4,
-          legend_pos = "top", legend_space = 12)
-
+  e_x_axis(
+    axisLabel = list(
+      interval = 0,
+      rotate = 10
+    )
+  )
 ```
 
 ### Comparing the durations of particular tests over time
 
 ```{r comp over time, echo=FALSE, warning=FALSE}
-df_comp %>%
+df_all %>%
   select(test_name, date, duration_ms) %>%
   group_by(test_name) %>%
   arrange(date) %>%

@@ -1,73 +1,159 @@
-#' Create a performance report for the tests that were run
+#' @title Combine list of performances in a single data.frame
+#'
+#' @param performance_list list of tests containing commits with dates, duration
+#' time and test name
+#'
+#' @return data.frame combining all the elements from performance list. Also, it
+#' adds the branch name for each one of the tables.
+#'
+#' @examples
+#' performance1 <- data.frame(t1 = 1, t2 = 2)
+#' performance2 <- data.frame(t1 = 3, t2 = 4)
+#' performance_list <- list(
+#'   branch1 = performance1,
+#'   branch2 = performance2
+#' )
+#'
+#' combine_performances(performance_list)
+#'
+#' @export
+combine_performances <- function(performance_list) {
+  # create an unique data.frame for all branches and repetitions
+  df_all <- mapply(
+    performance_list,
+    names(performance_list),
+    FUN = function(x, y) {
+      df <- bind_rows(x)
+      df$branch <- y
+
+      return(df)
+    },
+    SIMPLIFY = FALSE
+  )
+
+  # bind rows
+  df_all <- bind_rows(df_all)
+
+  # return a single data.frame
+  return(df_all)
+}
+
+#' @title Create a performance report for the tests that were run
 #'
 #' @param report_params list of tests containing commits with dates, duration
 #' time and test name
-#' @param report_name name of the file to which the report should be saved, without
-#' the extension
-#' @param report_dir name of the folder where the report should be saved
+#' @param file name of the file to which the report should be saved (.html)
+#'
+#' @return None. This function is called for side effects
+#'
+#' report_params <- list(
+#'   performance = data.frame(
+#'     date = Sys.time(),
+#'     rep_id = 1,
+#'     test_name = rep(c("t1", "t2"), each = 10),
+#'     duration_ms = rpois(n = 20, lambda = 10),
+#'     branch = paste0("b", 1:10)
+#'   )
+#' )
+#'
+#' create_report(
+#'   report_params = report_params,
+#'   file = tempfile(fileext = ".html")
+#' )
 #'
 #' @importFrom quarto quarto_render
-#' @importFrom rstudioapi selectDirectory
+#' @importFrom withr with_dir
 #' @export
-create_report <- function(report_params, report_name, report_dir) {
-  if (report_dir == "" || is.na(report_dir)) {
-    message(
-      "The name specified for the report's directory cannot be an empty string or NA. ",
-      "Make sure you're using RStudio"
+create_report <- function(report_params, file = NULL) {
+  # stop execution in case file is not provided
+  if (is.null(file)) {
+    return(
+      message("`file` cannot be NULL")
     )
-    report_dir <- selectDirectory(caption = "Please pick the report's directory")
-    if (is.null(report_dir)) {
-      return(
-        message("No directory selected. Process aborted.")
-      )
-    }
-    message(glue("The report will be automatically saved in folder {report_dir}."))
   }
 
-  file_paths <- prepare_file_paths(report_dir)
-  prepare_dir_and_template(report_dir = report_dir,
-                           file_paths = file_paths)
-  message(
-    glue(
-      "Report template was copied for you. ",
-      "You can edit and re-render it in {file_paths[2]}"
-    )
+  # manage template in order to create the report
+  report_dir <- dirname(file)
+  report_file <- basename(file)
+  report_template_file <- prepare_dir_and_template(
+    report_dir = report_dir
   )
-  message(
-    glue(
-      "You're creating a report named {report_name}. ",
-      "It'll be created in the following dir: {report_dir}"
-    )
-  )
-  message("This function is experimental!")
+  report_template_file <- basename(report_template_file)
 
-  report_file <- file.path(report_dir, glue(report_name, ".html"))
-  quarto_render(input = file_paths[2],
-                output_file = report_file,
-                execute_params = report_params)
+  # generate HTML
+  # execute order in the destination
+  with_dir(
+    new = report_dir,
+    code = {
+      quarto_render(
+        input = report_template_file,
+        output_file = report_file,
+        execute_params = report_params
+      )
+    }
+  )
 }
 
-
-#' Prepare user's directory for the report and copy the report template from
+#' @title Prepare directory for the report
+#' @description Prepare user's directory for the report and copy the report template from
 #' the package to the user's directory
 #'
 #' @param report_dir name of the folder where the report should be saved
-#' @param file_paths two-element vector with paths to template reports
-prepare_dir_and_template <- function(report_dir, file_paths) {
-  dir.create(path = report_dir, showWarnings = FALSE)
-  file.copy(from = file_paths[1],
-            to = file_paths[2],
-            overwrite = TRUE)
+#'
+#' @return character. Path to report.qmd
+#'
+#' @examples
+#' if (interactive()) {
+#'   prepare_dir_and_template(report_dir = tempdir())
+#' }
+prepare_dir_and_template <- function(report_dir) {
+  # create folders if needed
+  file_paths <- prepare_file_paths(report_dir)
+  dir.create(
+    path = report_dir,
+    recursive = TRUE,
+    showWarnings = FALSE
+  )
+
+  # copy file from template to report dir
+  file.copy(
+    from = file_paths$package,
+    to = file_paths$user,
+    overwrite = TRUE
+  )
+
+  # inform user about the report
+  message(
+    glue(
+      "Report template was created at `{report_dir}`.
+      You can edit the and re-render it in {file_paths$user}"
+    )
+  )
+
+  # return template path
+  return(file_paths$user)
 }
 
-#' Prepare file paths for package and user sides report templates
+#' @title Prepare file paths for package and user sides report templates
 #'
 #' @param report_dir name of the folder where the report should be saved
 #'
 #' @return two-element vector with paths to template reports
+#'
+#' @examples
+#' if (interactive()) {
+#'   prepare_file_paths(report_dir = tempdir())
+#' }
 prepare_file_paths <- function(report_dir) {
-  template_file_pkg <- system.file("templates", "report_template.qmd",
-                                   package = "shiny.benchmark")
+  template_file_pkg <- system.file(
+    "templates",
+    "report_template.qmd",
+    package = "shiny.benchmark"
+  )
   template_file_usr <- file.path(report_dir, "report.qmd")
-  return(c(template_file_pkg, template_file_usr))
+
+  list(
+    package = template_file_pkg,
+    user = template_file_usr
+  )
 }
