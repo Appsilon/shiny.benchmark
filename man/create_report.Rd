@@ -14,22 +14,24 @@ time and test name}
 }
 \value{
 None. This function is called for side effects
-
-report_params <- list(
-performance = data.frame(
-date = Sys.time(),
-rep_id = 1,
-test_name = rep(c("t1", "t2"), each = 10),
-duration_ms = rpois(n = 20, lambda = 10),
-branch = paste0("b", 1:10)
-)
-)
-
-create_report(
-report_params = report_params,
-file = tempfile(fileext = ".html")
-)
 }
 \description{
 Create a performance report for the tests that were run
+}
+\examples{
+report_params <- list(
+  performance = data.frame(
+    date = Sys.time(),
+    rep_id = 1,
+    test_name = rep(c("t1", "t2"), each = 10),
+    duration_ms = rpois(n = 20, lambda = 10),
+    branch = paste0("b", 1:10)
+  )
+)
+
+create_report(
+  report_params = report_params,
+  file = tempfile(fileext = ".html")
+)
+
 }

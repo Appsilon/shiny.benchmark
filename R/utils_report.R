@@ -46,6 +46,7 @@ combine_performances <- function(performance_list) {
 #'
 #' @return None. This function is called for side effects
 #'
+#' @examples
 #' report_params <- list(
 #'   performance = data.frame(
 #'     date = Sys.time(),
