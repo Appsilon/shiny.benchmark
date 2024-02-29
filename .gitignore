@@ -38,6 +38,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# Rendered reports
+performance_report/*
+
 # documentation page
 docs
 inst/doc

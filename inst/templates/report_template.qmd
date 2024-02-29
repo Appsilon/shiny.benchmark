@@ -1,0 +1,117 @@
+---
+title: "Performance report"
+format:
+  html:
+    toc: true
+    toc_float: true
+params:
+  performance: ""
+---
+
+```{r include = FALSE}
+library(DT)
+library(dplyr)
+library(echarts4r)
+
+dt_options <- list(
+  initComplete = JS(
+    "function(settings, json) {",
+    "$(this.api().table().header()).css({'background-color': '#1a384c', 'color': '#fff'});",
+    "}"
+  )
+)
+```
+
+## App's Versions
+
+This report aims to compare different versions of your Shiny application. Here is the list of versions and the development dates (last commit for each version):
+
+```{r data_prep, echo = FALSE}
+args <- lapply(X = params$performance, FUN = unlist)
+df_all <- cbind.data.frame(args)
+names(df_all) <- names(params$performance)
+
+df_all$duration_ms <- round(x = df_all$duration_ms, digits = 4)
+df_all$date <- as.POSIXct(
+  df_all$date,
+  origin = "1970-01-01",
+  tz = "UTC"
+)
+
+# we assume that the first branch/hash is the baseline
+baseline <- df_all$branch[1]
+df_all <- df_all %>%
+  filter(branch == baseline) %>%
+  group_by(test_name) %>%
+  summarise(baseline = min(duration_ms)) %>%
+  ungroup() %>%
+  right_join(df_all, by = "test_name") %>%
+  mutate(tf = baseline / duration_ms)
+```
+
+```{r tab, echo = FALSE}
+df_by_dates <- df_all %>%
+  select(branch, date) %>%
+  unique() %>%
+  arrange(desc(date))
+
+datatable(
+  data = df_by_dates,
+  rownames = FALSE,
+  colnames = c("Branch", "Date"),
+  options = dt_options,
+) %>%
+  formatDate(
+    columns = "date",
+    method = "toLocaleString"
+  )
+```
+
+## Raw data
+
+The time spent to compute each of the tests is displayed below as well as their respective branch.
+
+```{r raw data, echo=FALSE}
+df_display <- df_all %>%
+  select(branch, test_name, duration_ms) %>%
+  arrange(test_name, branch)
+
+datatable(
+  data = df_display,
+  rownames = FALSE,
+  colnames = c("Branch", "Test name", "Duration (ms)"),
+  options = dt_options
+)
+```
+
+## Visualizations
+
+### Comparing the tests across branches
+
+```{r comp branches, echo=FALSE}
+# maybe boxplot is not the best idea here
+df_all %>%
+  mutate(x_axis = paste0(branch, ": ", test_name)) %>%
+  group_by(x_axis) %>%
+  e_charts() %>%
+  e_boxplot(serie = duration_ms) %>%
+  e_axis_labels(y = "Time (ms)") %>%
+  e_x_axis(
+    axisLabel = list(
+      interval = 0,
+      rotate = 10
+    )
+  )
+```
+
+### Comparing the durations of particular tests over time
+
+```{r comp over time, echo=FALSE, warning=FALSE}
+df_all %>%
+  select(test_name, date, duration_ms) %>%
+  group_by(test_name) %>%
+  arrange(date) %>%
+  e_charts(x = date) %>%
+  e_line(serie = duration_ms) %>%
+  e_axis_labels(y = "Time (ms)")
+```

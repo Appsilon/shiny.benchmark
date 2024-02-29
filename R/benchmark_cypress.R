@@ -18,15 +18,15 @@
 #'
 #' @export
 benchmark_cypress <- function(
-    commit_list,
-    cypress_dir,
-    tests_pattern,
-    app_dir,
-    port,
-    use_renv,
-    renv_prompt,
-    n_rep,
-    debug
+  commit_list,
+  cypress_dir,
+  tests_pattern,
+  app_dir,
+  port,
+  use_renv,
+  renv_prompt,
+  n_rep,
+  debug
 ) {
   # creating the structure
   project_path <- create_cypress_structure(
@@ -93,14 +93,14 @@ benchmark_cypress <- function(
 #' @importFrom utils read.table
 #' @export
 run_cypress_ptest <- function(
-    commit,
-    project_path,
-    cypress_dir,
-    tests_pattern,
-    use_renv,
-    renv_prompt,
-    n_rep,
-    debug
+  commit,
+  project_path,
+  cypress_dir,
+  tests_pattern,
+  use_renv,
+  renv_prompt,
+  n_rep,
+  debug
 ) {
   # checkout to the desired commit
   checkout(branch = commit, debug = debug)
@@ -144,5 +144,6 @@ run_cypress_ptest <- function(
   checkout_files(debug = debug)
 
   # return times
+  names(perf_file) <- paste0("rep", 1:n_rep)
   return(perf_file)
 }

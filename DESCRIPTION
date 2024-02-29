@@ -1,6 +1,6 @@
 Package: shiny.benchmark
 Title: Benchmark the Performance of Shiny Applications
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R:
   c(
     person(given = "Douglas", family = "Azevedo", email = "opensource+douglas@appsilon.com", role = c("aut", "cre")),
@@ -20,6 +20,8 @@ Depends:
   R (>= 3.1.0)
 Suggests:
   covr,
+  DT,
+  echarts4r,
   knitr,
   lintr,
   rcmdcheck,
@@ -28,14 +30,16 @@ Suggests:
   spelling
 Imports:
   dplyr,
+  fs,
   ggplot2,
   glue,
   jsonlite,
   methods,
   progress,
+  quarto,
   renv,
   shinytest2,
   stringr,
   testthat,
-  fs
+  withr
 Language: en-US

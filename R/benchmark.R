@@ -17,20 +17,23 @@
 #' @param renv_prompt Prompt the user before taking any action?
 #' @param n_rep Number of replications desired
 #' @param debug Logical. TRUE to display all the system messages on runtime
+#' @param report_file Name of the file (.html) where the report should be saved,
+#' when default (NULL), then report is not saved
 #'
 #' @importFrom glue glue
 #' @export
 benchmark <- function(
-    commit_list,
-    cypress_dir = NULL,
-    shinytest2_dir = NULL,
-    tests_pattern = NULL,
-    app_dir = getwd(),
-    port = 3333,
-    use_renv = TRUE,
-    renv_prompt = TRUE,
-    n_rep = 1,
-    debug = FALSE
+  commit_list,
+  cypress_dir = NULL,
+  shinytest2_dir = NULL,
+  tests_pattern = NULL,
+  app_dir = getwd(),
+  port = 3333,
+  use_renv = TRUE,
+  renv_prompt = TRUE,
+  n_rep = 1,
+  debug = FALSE,
+  report_file = NULL
 ) {
   # Get the call parameters
   call_benchmark <- match.call()
@@ -101,6 +104,20 @@ benchmark <- function(
     performance = perf_list
   )
   class(out) <- "shiny_benchmark"
+
+  # create report conditionally
+  if (!is.null(report_file)) {
+    # combine performances into a single data.frame
+    performance <- combine_performances(
+      performance <- out$performance
+    )
+
+    # create report
+    create_report(
+      report_params = list(performance = performance),
+      file = report_file
+    )
+  }
 
   return(out)
 }
